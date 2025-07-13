@@ -25,7 +25,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
 export const Navbar = () => {
   const features = [
     {
@@ -64,19 +63,9 @@ export const Navbar = () => {
     <section className="py-4">
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
-          <a
-            href="https://www.shadcnblocks.com"
-            className="flex items-center gap-2"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=32&h=32&fit=crop&crop=center"
-              className="max-h-8 rounded"
-              alt="CodeCrafters Logo"
-            />
-            <span className="text-lg font-semibold tracking-tighter">
-              CodeCrafters
-            </span>
-          </a>
+          <span className="text-lg font-semibold tracking-tighter font-mono">
+            CodeCrafters
+          </span>
           <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -206,4 +195,4 @@ export const Navbar = () => {
       </div>
     </section>
   );
-}; 
+};
