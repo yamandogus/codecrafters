@@ -25,37 +25,38 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Link from "next/link";
 export const Navbar = () => {
   const features = [
     {
-      title: "Dashboard",
-      description: "Overview of your activity",
-      href: "#",
+      title: "Projeler",
+      description: "Topluluk projelerini keşfet",
+      href: "/pages/projects",
     },
     {
-      title: "Analytics",
-      description: "Track your performance",
-      href: "#",
+      title: "Eğitimler",
+      description: "Yazılım öğrenme kaynakları",
+      href: "/pages/tutorials",
     },
     {
-      title: "Settings",
-      description: "Configure your preferences",
-      href: "#",
+      title: "Etkinlikler",
+      description: "Yaklaşan topluluk etkinlikleri",
+      href: "/pages/events",
     },
     {
-      title: "Integrations",
-      description: "Connect with other tools",
-      href: "#",
+      title: "Forum",
+      description: "Soru-cevap ve tartışmalar",
+      href: "/pages/forum",
     },
     {
-      title: "Storage",
-      description: "Manage your files",
-      href: "#",
+      title: "Mentorluk",
+      description: "Deneyimli geliştiricilerle bağlantı",
+      href: "/pages/mentorship",
     },
     {
-      title: "Support",
-      description: "Get help when needed",
-      href: "#",
+      title: "İş İlanları",
+      description: "Yazılım sektörü kariyer fırsatları",
+      href: "/pages/jobs",
     },
   ];
 
@@ -63,9 +64,11 @@ export const Navbar = () => {
     <section className="py-4">
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
-          <span className="text-lg font-semibold tracking-tighter font-mono">
-            CodeCrafters
-          </span>
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-lg font-semibold tracking-tighter font-mono">
+              CodeCrafters
+            </span>
+          </Link>
           <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -93,33 +96,37 @@ export const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  href="#"
+                  href="/pages/blog"
                   className={navigationMenuTriggerStyle()}
                 >
-                  Ürünler
+                  Blog
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  href="#"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Kaynaklar
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="#"
+                  href="/pages/contact"
                   className={navigationMenuTriggerStyle()}
                 >
                   İletişim
                 </NavigationMenuLink>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  href="/pages/about"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Hakkımızda
+                </NavigationMenuLink>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
           <div className="hidden items-center gap-4 lg:flex">
-            <Button variant="outline">Giriş Yap</Button>
-            <Button>Ücretsiz Başla</Button>
+            <Button variant="outline" asChild>
+              <Link href="/pages/login">Giriş Yap</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/pages/register">Ücretsiz Başla</Link>
+            </Button>
           </div>
           <Sheet>
             <SheetTrigger asChild className="lg:hidden">
@@ -130,19 +137,9 @@ export const Navbar = () => {
             <SheetContent side="top" className="max-h-screen overflow-auto">
               <SheetHeader>
                 <SheetTitle>
-                  <a
-                    href="https://www.shadcnblocks.com"
-                    className="flex items-center gap-2"
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=32&h=32&fit=crop&crop=center"
-                      className="max-h-8 rounded"
-                      alt="CodeCrafters"
-                    />
-                    <span className="text-lg font-semibold tracking-tighter">
-                      CodeCrafters
-                    </span>
-                  </a>
+                  <span className="text-lg font-semibold tracking-tighter">
+                    CodeCrafters
+                  </span>
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col p-4">
@@ -174,19 +171,23 @@ export const Navbar = () => {
                   </AccordionItem>
                 </Accordion>
                 <div className="flex flex-col gap-6">
-                  <a href="#" className="font-medium">
-                    Şablonlar
-                  </a>
-                  <a href="#" className="font-medium">
+                  <a href="/pages/blog" className="font-medium">
                     Blog
                   </a>
-                  <a href="#" className="font-medium">
-                    Fiyatlandırma
+                  <a href="/pages/contact" className="font-medium">
+                    İletişim
+                  </a>
+                  <a href="/pages/about" className="font-medium">
+                    Hakkımızda
                   </a>
                 </div>
                 <div className="mt-6 flex flex-col gap-4">
-                  <Button variant="outline">Giriş Yap</Button>
-                  <Button>Ücretsiz Başla</Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/login">Giriş Yap</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href="/register">Ücretsiz Başla</Link>
+                  </Button>
                 </div>
               </div>
             </SheetContent>
