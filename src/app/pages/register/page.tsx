@@ -1,9 +1,9 @@
-import React from 'react'
+import { Register } from "@/components/auth/register";
 
-const Register = () => {
+export default function RegisterPage() {
   return (
-    <div>Register</div>
-  )
+    <div className="flex items-center justify-center min-h-screen py-8">
+      <Register />
+    </div>
+  );
 }
-
-export default Register

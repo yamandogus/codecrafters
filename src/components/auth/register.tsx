@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 
-export function Login() {
+export function Register() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
@@ -17,13 +17,23 @@ export function Login() {
   return (
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
       <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-        CodeCrafters&apos;a Hoş Geldiniz
+        CodeCrafters&apos;a Katılın
       </h2>
       <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-        Yazılım geliştirme topluluğuna katılın ve kariyerinizi ilerletmek için giriş yapın
+        Ücretsiz hesap oluşturun ve yazılım geliştirme topluluğuna katılın
       </p>
 
       <form className="my-8" onSubmit={handleSubmit}>
+        <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+          <LabelInputContainer>
+            <Label htmlFor="firstname">Ad</Label>
+            <Input id="firstname" placeholder="Ahmet" type="text" />
+          </LabelInputContainer>
+          <LabelInputContainer>
+            <Label htmlFor="lastname">Soyad</Label>
+            <Input id="lastname" placeholder="Yılmaz" type="text" />
+          </LabelInputContainer>
+        </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">E-posta Adresi</Label>
           <Input id="email" placeholder="ornek@codecrafters.com" type="email" />
@@ -32,32 +42,39 @@ export function Login() {
           <Label htmlFor="password">Şifre</Label>
           <Input id="password" placeholder="••••••••" type="password" />
         </LabelInputContainer>
+        <LabelInputContainer className="mb-6">
+          <Label htmlFor="confirmPassword">Şifreyi Tekrar Girin</Label>
+          <Input
+            id="confirmPassword"
+            placeholder="••••••••"
+            type="password"
+          />
+        </LabelInputContainer>
 
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-            />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-              Beni hatırla
-            </label>
-          </div>
-          <Link 
-            href="/forgot-password"
-            className="text-sm text-purple-600 hover:text-purple-500"
-          >
-            Şifremi unuttum
-          </Link>
+        <div className="flex items-center mb-6">
+          <input
+            id="terms"
+            name="terms"
+            type="checkbox"
+            className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+          />
+          <label htmlFor="terms" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+            <Link href="/terms" className="text-purple-600 hover:text-purple-500">
+              Kullanım Şartları
+            </Link>
+                         &apos;nı ve{" "}
+             <Link href="/privacy" className="text-purple-600 hover:text-purple-500">
+               Gizlilik Politikası
+             </Link>
+             &apos;nı kabul ediyorum
+          </label>
         </div>
 
         <button
           className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-purple-600 to-purple-800 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-gradient-to-br dark:from-purple-700 dark:to-purple-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
         >
-          Giriş Yap &rarr;
+          Ücretsiz Hesap Oluştur &rarr;
           <BottomGradient />
         </button>
 
@@ -70,7 +87,7 @@ export function Login() {
           >
             <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              GitHub ile Giriş Yap
+              GitHub ile Kayıt Ol
             </span>
             <BottomGradient />
           </button>
@@ -80,7 +97,7 @@ export function Login() {
           >
             <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              Google ile Giriş Yap
+              Google ile Kayıt Ol
             </span>
             <BottomGradient />
           </button>
@@ -88,12 +105,12 @@ export function Login() {
         
         <div className="mt-6 text-center">
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Henüz hesabınız yok mu?{" "}
+            Zaten hesabınız var mı?{" "}
             <Link 
-              href="/pages/register"
+              href="/pages/login"
               className="font-medium text-purple-600 hover:text-purple-500"
             >
-              Ücretsiz kayıt olun
+              Giriş yapın
             </Link>
           </p>
         </div>
@@ -123,4 +140,4 @@ const LabelInputContainer = ({
       {children}
     </div>
   );
-};
+}; 
