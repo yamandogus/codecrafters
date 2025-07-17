@@ -105,7 +105,7 @@ const CommentsGallery = ({
   return (
     <section className="py-32">
       <div className="container mx-auto">
-        <div className="mb-8 flex items-end justify-between md:mb-14 lg:mb-16">
+        <div className="mb-8 flex items-end justify-between md:mb-14 lg:mb-16 container mx-auto max-w-7xl">
           <div>
             <h2 className="text-2xl font-semibold md:text-3xl lg:text-4xl">
               Müşteri Yorumları
