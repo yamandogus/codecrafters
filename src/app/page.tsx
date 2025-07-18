@@ -1,6 +1,6 @@
 import { CardHoverEffect } from "@/components/home/card";
-import { Comments } from "@/components/home/galleryCarousel";
 import Header from "@/components/home/header";
+import CommunityShowcase from "@/components/home/community-showcase";
 
 export default function Home() {
   return (
@@ -15,9 +15,7 @@ export default function Home() {
           </h2>
           <CardHoverEffect />
         </div>
-        <div>
-          <Comments />
-        </div>
+        <CommunityShowcase />
       </div>
     </div>
   );
