@@ -76,7 +76,7 @@ export default function DeveloperShowcase() {
             <motion.div
               layoutId={`card-${active.name}-${id}`}
               ref={ref}
-              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+              className="w-full max-w-[700px] h-[90vh] max-h-[800px] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden shadow-2xl"
             >
               <motion.div layoutId={`image-${active.name}-${id}`}>
                 <img
@@ -84,13 +84,13 @@ export default function DeveloperShowcase() {
                   height={200}
                   src={active.avatar}
                   alt={active.name}
-                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-center"
+                  className="w-full h-64 sm:h-72 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-center"
                 />
               </motion.div>
 
-              <div className="flex flex-col h-full">
-                <div className="flex justify-between items-start p-6">
-                  <div className="flex-1">
+              <div className="flex flex-col flex-1 min-h-0">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start p-6 border-b border-gray-200 dark:border-gray-700 shrink-0">
+                  <div className="flex-1 mb-4 sm:mb-0">
                     <motion.h3
                       layoutId={`title-${active.name}-${id}`}
                       className="font-bold text-xl text-neutral-700 dark:text-neutral-200"
@@ -99,11 +99,11 @@ export default function DeveloperShowcase() {
                     </motion.h3>
                     <motion.p
                       layoutId={`description-${active.role}-${id}`}
-                      className="text-neutral-600 dark:text-neutral-400 font-medium"
+                      className="text-neutral-600 dark:text-neutral-400 font-medium mb-3"
                     >
                       {active.role} @ {active.company}
                     </motion.p>
-                    <div className="flex flex-wrap gap-2 mt-3">
+                    <div className="flex flex-wrap gap-2">
                       {active.skills.slice(0, 3).map((skill, index) => (
                         <span
                           key={index}
@@ -115,13 +115,13 @@ export default function DeveloperShowcase() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 sm:ml-4">
                     <motion.a
                       layoutId={`github-${active.name}-${id}`}
                       href={active.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 text-sm rounded-full font-bold bg-gray-900 hover:bg-gray-800 text-white whitespace-nowrap"
+                      className="px-4 py-2 text-sm rounded-full font-bold bg-gray-900 hover:bg-gray-800 text-white whitespace-nowrap transition-colors"
                     >
                       GitHub
                     </motion.a>
@@ -130,36 +130,37 @@ export default function DeveloperShowcase() {
                       href={active.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 text-sm rounded-full font-bold bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap"
+                      className="px-4 py-2 text-sm rounded-full font-bold bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap transition-colors"
                     >
                       LinkedIn
                     </motion.a>
                   </div>
                 </div>
-                <div className="pt-4 relative px-6 pb-6 flex-1 overflow-y-auto">
+                
+                <div className="flex-1 overflow-y-auto p-6 min-h-0">
                   <motion.div
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-sm lg:text-base flex-1 flex flex-col items-start gap-4 dark:text-neutral-400"
+                    className="text-neutral-600 text-sm lg:text-base space-y-6 dark:text-neutral-400"
                   >
                     <div>
-                      <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+                      <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-3 text-lg">
                         Hakkında
                       </h4>
-                      <p className="mb-4">{active.bio}</p>
+                      <p className="leading-relaxed">{active.bio}</p>
                     </div>
                     
                     <div>
-                      <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+                      <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-3 text-lg">
                         Yetenekler
                       </h4>
-                      <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="flex flex-wrap gap-2">
                         {active.skills.map((skill, index) => (
                           <span
                             key={index}
-                            className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm rounded-full"
+                            className="px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm rounded-lg border border-gray-200 dark:border-gray-700"
                           >
                             {skill}
                           </span>
@@ -168,23 +169,23 @@ export default function DeveloperShowcase() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+                      <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-3 text-lg">
                         Projeler
                       </h4>
-                      <div className="space-y-3">
+                      <div className="space-y-4">
                         {active.projects.map((project, index) => (
-                          <div key={index} className="border-l-2 border-blue-500 pl-4">
-                            <h5 className="font-medium text-neutral-800 dark:text-neutral-200">
+                          <div key={index} className="border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-r-lg">
+                            <h5 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
                               {project.name}
                             </h5>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3 leading-relaxed">
                               {project.description}
                             </p>
                             <div className="flex flex-wrap gap-1">
                               {project.tech.map((tech, techIndex) => (
                                 <span
                                   key={techIndex}
-                                  className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded"
+                                  className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded border border-green-200 dark:border-green-700"
                                 >
                                   {tech}
                                 </span>
