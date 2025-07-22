@@ -283,7 +283,7 @@ export default function ContactPage() {
       {/* Call to Action */}
       <section className="py-20 px-4 bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        <div className="container mx-auto max-w-4xl text-center relative">
+        <div className="container mx-auto max-w-6xl text-center relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

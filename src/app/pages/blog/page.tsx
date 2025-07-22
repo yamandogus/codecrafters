@@ -13,8 +13,8 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="max-w-7xl mx-auto">
+      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div>
           {/* Filtreleme ve Arama */}
           <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between mb-8">
             <BlogFilter

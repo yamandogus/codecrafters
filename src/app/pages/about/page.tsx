@@ -236,7 +236,7 @@ export default function AboutPage() {
               Ekibimiz
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              CodeCrafters'ı yöneten deneyimli ekip üyelerimiz
+              CodeCrafters&apos;ı yöneten deneyimli ekip üyelerimiz
             </p>
           </motion.div>
 
@@ -272,7 +272,7 @@ export default function AboutPage() {
 
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 text-white">
-        <div className="container mx-auto max-w-4xl text-center">
+        <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

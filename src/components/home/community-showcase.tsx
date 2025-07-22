@@ -10,7 +10,7 @@ export default function CommunityShowcase() {
     <div className="min-h-screen">
       {/* Grid Layout: Developer Showcase + Comments */}
       <section className="py-16 px-4">
-        <div className="container mx-auto max-w-7xl">
+        <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col">
             {/* Developer Showcase - Takes 2/3 of the space */}
             <div className="mb-8">
