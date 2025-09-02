@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   MenuIcon,
   User,
@@ -54,6 +54,7 @@ export const Navbar = () => {
   // Mock user state - gerçek uygulamada context/state management'dan gelecek
   const { theme, setTheme } = useTheme();
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Test için true
+  const [isScrolled, setIsScrolled] = useState(false);
   const [user] = useState({
     name: "Ahmet Yılmaz",
     username: "ahmetyilmaz",
@@ -61,6 +62,16 @@ export const Navbar = () => {
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format",
     notifications: 3,
   });
+
+  // Scroll listener
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const features = [
     {
@@ -101,7 +112,9 @@ export const Navbar = () => {
 
 
   return (
-    <section className="py-4">
+    <section className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 transition-shadow duration-200 ${
+      isScrolled ? 'shadow-md' : 'shadow-none'
+    }`}>
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
