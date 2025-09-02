@@ -23,93 +23,94 @@ export default function TutorialsPage() {
 
   const categories = [
     { id: "all", name: "Tümü", icon: BookOpen, color: "bg-purple-100 dark:bg-purple-900" },
-    { id: "frontend", name: "Frontend", icon: Code, color: "bg-blue-100 dark:bg-blue-900" },
-    { id: "backend", name: "Backend", icon: Code, color: "bg-green-100 dark:bg-green-900" },
-    { id: "mobile", name: "Mobile", icon: Code, color: "bg-orange-100 dark:bg-orange-900" },
-    { id: "devops", name: "DevOps", icon: Code, color: "bg-red-100 dark:bg-red-900" },
-    { id: "ai", name: "AI/ML", icon: Code, color: "bg-pink-100 dark:bg-pink-900" }
+    { id: "git", name: "Git & GitHub", icon: Code, color: "bg-blue-100 dark:bg-blue-900" },
+    { id: "web", name: "Web Temelleri", icon: Code, color: "bg-green-100 dark:bg-green-900" },
+    { id: "backend", name: "Backend Temelleri", icon: Code, color: "bg-orange-100 dark:bg-orange-900" },
+    { id: "database", name: "Veritabanı", icon: Code, color: "bg-red-100 dark:bg-red-900" },
+    { id: "api", name: "API Kullanımı", icon: Code, color: "bg-pink-100 dark:bg-pink-900" },
+    { id: "deploy", name: "Deploy & Hosting", icon: Code, color: "bg-indigo-100 dark:bg-indigo-900" }
   ];
 
   const tutorials = [
     {
       id: 1,
-      title: "React ile Modern Web Uygulamaları",
-      description: "React 18'in en yeni özelliklerini kullanarak modern web uygulamaları geliştirin.",
-      category: "frontend",
-      duration: "8 saat",
+      title: "Git & GitHub Temelleri",
+      description: "Versiyon kontrolü, commit, branch, merge ve pull request süreçlerini öğrenin.",
+      category: "git",
+      duration: "3 saat",
       level: "Başlangıç",
       rating: 4.8,
       students: 1250,
       image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop",
-      tags: ["React", "JavaScript", "Hooks", "Context"]
+      tags: ["Git", "GitHub", "Version Control", "Collaboration"]
     },
     {
       id: 2,
-      title: "Node.js ve Express.js ile API Geliştirme",
-      description: "RESTful API'ler geliştirin ve veritabanı entegrasyonu yapın.",
-      category: "backend",
+      title: "HTML, CSS ve JavaScript Temelleri",
+      description: "Web geliştirmenin temel taşlarını öğrenin ve ilk projelerinizi yapın.",
+      category: "web",
       duration: "6 saat",
-      level: "Orta",
+      level: "Başlangıç",
       rating: 4.7,
-      students: 890,
+      students: 1890,
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop",
-      tags: ["Node.js", "Express", "MongoDB", "JWT"]
+      tags: ["HTML", "CSS", "JavaScript", "Web Development"]
     },
     {
       id: 3,
-      title: "TypeScript ile Tip Güvenli Geliştirme",
-      description: "TypeScript'in güçlü tip sistemi ile daha güvenli kod yazın.",
-      category: "frontend",
+      title: "Node.js ile Backend Geliştirme",
+      description: "Sunucu tarafı programlama ve API geliştirme temellerini öğrenin.",
+      category: "backend",
       duration: "5 saat",
-      level: "Orta",
+      level: "Başlangıç",
       rating: 4.9,
       students: 1100,
       image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=250&fit=crop",
-      tags: ["TypeScript", "JavaScript", "Types", "Interfaces"]
+      tags: ["Node.js", "Express", "API", "Backend"]
     },
     {
       id: 4,
-      title: "Docker ve Kubernetes ile Containerization",
-      description: "Uygulamalarınızı containerize edin ve orchestrate edin.",
-      category: "devops",
-      duration: "7 saat",
-      level: "İleri",
+      title: "SQL ve Veritabanı Temelleri",
+      description: "Veritabanı tasarımı, SQL sorguları ve veri yönetimi öğrenin.",
+      category: "database",
+      duration: "4 saat",
+      level: "Başlangıç",
       rating: 4.6,
-      students: 650,
+      students: 950,
       image: "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=400&h=250&fit=crop",
-      tags: ["Docker", "Kubernetes", "Containers", "Microservices"]
+      tags: ["SQL", "Database", "MySQL", "Data Management"]
     },
     {
       id: 5,
-      title: "Flutter ile Cross-Platform Mobil Geliştirme",
-      description: "Tek kod tabanı ile iOS ve Android uygulamaları geliştirin.",
-      category: "mobile",
-      duration: "10 saat",
+      title: "REST API ve HTTP Temelleri",
+      description: "API kullanımı, HTTP metodları ve veri alışverişi öğrenin.",
+      category: "api",
+      duration: "3 saat",
       level: "Başlangıç",
       rating: 4.8,
-      students: 950,
+      students: 850,
       image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=250&fit=crop",
-      tags: ["Flutter", "Dart", "Mobile", "Cross-platform"]
+      tags: ["REST API", "HTTP", "JSON", "API Integration"]
     },
     {
       id: 6,
-      title: "Python ile Makine Öğrenmesi",
-      description: "Scikit-learn ve TensorFlow ile makine öğrenmesi modelleri geliştirin.",
-      category: "ai",
-      duration: "12 saat",
-      level: "İleri",
+      title: "Vercel ve Netlify ile Deploy",
+      description: "Projelerinizi canlıya alın ve hosting süreçlerini öğrenin.",
+      category: "deploy",
+      duration: "2 saat",
+      level: "Başlangıç",
       rating: 4.7,
       students: 780,
       image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=250&fit=crop",
-      tags: ["Python", "ML", "TensorFlow", "Scikit-learn"]
+      tags: ["Deploy", "Hosting", "Vercel", "Netlify"]
     }
   ];
 
   const features = [
     {
       icon: Play,
-      title: "Video Eğitimler",
-      description: "Uzman eğitmenler tarafından hazırlanmış kaliteli video içerikler"
+      title: "Topluluk Kaynakları",
+      description: "Topluluk üyeleri tarafından paylaşılan kaliteli öğrenme materyalleri"
     },
     {
       icon: Code,
@@ -118,13 +119,13 @@ export default function TutorialsPage() {
     },
     {
       icon: Users,
-      title: "Topluluk Desteği",
-      description: "Soru-cevap forumları ve mentorluk desteği"
+      title: "Mentorluk Desteği",
+      description: "Deneyimli geliştiricilerden mentorluk ve rehberlik alın"
     },
     {
       icon: Target,
-      title: "Sertifika",
-      description: "Tamamladığınız eğitimler için dijital sertifikalar"
+      title: "Kariyer Rehberliği",
+      description: "Junior'dan senior'a kariyer yolculuğunuzda rehberlik"
     }
   ];
 
@@ -147,14 +148,14 @@ export default function TutorialsPage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Yazılım{" "}
+              Öğrenme{" "}
               <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 bg-clip-text text-transparent">
-                Eğitimleri
+                Merkezi
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-              Modern teknolojileri öğrenin, pratik projeler geliştirin ve kariyerinizi 
-              hızlandırın. Uzman eğitmenler tarafından hazırlanmış kapsamlı eğitimler.
+              Junior yazılımcılar için temel konuları öğrenin. Topluluk tarafından paylaşılan 
+              kaynaklar ve mentorluk desteği ile kariyerinizi başlatın.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white">
@@ -207,10 +208,10 @@ export default function TutorialsPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Eğitimleri Keşfedin
+              Öğrenme Kaynaklarını Keşfedin
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              İhtiyacınıza uygun eğitimi bulun ve öğrenmeye başlayın
+              Junior yazılımcılar için hazırlanmış temel konuları keşfedin
             </p>
           </motion.div>
 
@@ -220,7 +221,7 @@ export default function TutorialsPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Eğitim ara..."
+                placeholder="Kaynak ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -305,7 +306,7 @@ export default function TutorialsPage() {
                      </div>
 
                     <Button className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700">
-                      Eğitime Başla
+                      Kaynağı İncele
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </CardContent>
@@ -321,7 +322,7 @@ export default function TutorialsPage() {
               className="text-center py-12"
             >
               <p className="text-gray-600 dark:text-gray-400">
-                Arama kriterlerinize uygun eğitim bulunamadı.
+                Arama kriterlerinize uygun kaynak bulunamadı.
               </p>
             </motion.div>
           )}
@@ -337,10 +338,10 @@ export default function TutorialsPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Yazılım Kariyerinizi Hızlandırın
+              Yazılım Kariyerinizi Başlatın
             </h2>
             <p className="text-lg md:text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-              Modern teknolojileri öğrenin, pratik deneyim kazanın ve 
+              Temel konuları öğrenin, pratik deneyim kazanın ve 
               topluluk desteği ile kariyerinizi bir üst seviyeye taşıyın.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -34,9 +34,9 @@ export const Navbar = () => {
       href: "/pages/projects",
     },
     {
-      title: "Eğitimler",
-      description: "Yazılım öğrenme kaynakları",
-      href: "/pages/tutorials",
+      title: "Öğrenme Merkezi",
+      description: "Junior odaklı yazılım kaynakları",
+      href: "/pages/learning",
     },
     {
       title: "Etkinlikler",
@@ -49,9 +49,9 @@ export const Navbar = () => {
       href: "/pages/forum",
     },
     {
-      title: "Mentorluk",
-      description: "Deneyimli geliştiricilerle bağlantı",
-      href: "/pages/mentorship",
+      title: "Topluluk",
+      description: "Kullanıcı profilleri ve mentorluk",
+      href: "/pages/community",
     },
     {
       title: "İş İlanları",
