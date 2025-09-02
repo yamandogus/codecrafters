@@ -1,6 +1,19 @@
 "use client";
 
-import { MenuIcon } from "lucide-react";
+import { useState } from "react";
+import {
+  MenuIcon,
+  User,
+  Settings,
+  LogOut,
+  Bell,
+  Heart,
+  Calendar,
+  Code,
+  ChevronDown,
+  Moon,
+  Sun,
+} from "lucide-react";
 
 import {
   Accordion,
@@ -25,8 +38,30 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+
 export const Navbar = () => {
+  // Mock user state - gerçek uygulamada context/state management'dan gelecek
+  const { theme, setTheme } = useTheme();
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Test için true
+  const [user] = useState({
+    name: "Ahmet Yılmaz",
+    username: "ahmetyilmaz",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format",
+    notifications: 3,
+  });
+
   const features = [
     {
       title: "Projeler",
@@ -59,6 +94,11 @@ export const Navbar = () => {
       href: "/pages/jobs",
     },
   ];
+
+ const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+ }
+
 
   return (
     <section className="py-4">
@@ -121,12 +161,133 @@ export const Navbar = () => {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="hidden items-center gap-4 lg:flex">
-            <Button variant="outline" asChild>
-              <Link href="/pages/login">Giriş Yap</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/pages/register">Ücretsiz Başla</Link>
-            </Button>
+            {/* Theme Toggle - Her zaman görünür */}
+            <div className="flex items-center space-x-2">
+              <Button
+                id="dark-mode"
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="data-[state=checked]:bg-primary cursor-pointer"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-4 w-4 text-yellow-500" />
+                ) : (
+                  <Moon className="h-4 w-4 text-blue-500" />
+                )}
+              </Button>
+            </div>
+
+            {isLoggedIn ? (
+              <>
+                {/* Notifications */}
+                <Button variant="ghost" size="icon" className="relative">
+                  <Bell className="h-5 w-5" />
+                  {user.notifications > 0 && (
+                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs text-white flex items-center justify-center">
+                      {user.notifications}
+                    </span>
+                  )}
+                </Button>
+
+                {/* User Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-2 px-2"
+                    >
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarFallback>
+                          {user.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="hidden md:block text-sm font-medium">
+                        {user.name}
+                      </span>
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {user.name}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          @{user.username}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/pages/profile" className="flex items-center">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profilim</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/pages/my-events"
+                        className="flex items-center"
+                      >
+                        <Calendar className="mr-2 h-4 w-4" />
+                        <span>Etkinliklerim</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/pages/my-projects"
+                        className="flex items-center"
+                      >
+                        <Code className="mr-2 h-4 w-4" />
+                        <span>Projelerim</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/pages/favorites"
+                        className="flex items-center"
+                      >
+                        <Heart className="mr-2 h-4 w-4" />
+                        <span>Favorilerim</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/pages/settings"
+                        className="flex items-center"
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Ayarlar</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => setIsLoggedIn(false)}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Çıkış Yap</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" asChild>
+                  <Link href="/pages/login">Giriş Yap</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/pages/register">Ücretsiz Başla</Link>
+                </Button>
+              </>
+            )}
           </div>
           <Sheet>
             <SheetTrigger asChild className="lg:hidden">
@@ -182,12 +343,55 @@ export const Navbar = () => {
                   </a>
                 </div>
                 <div className="mt-6 flex flex-col gap-4">
-                  <Button variant="outline" asChild>
-                    <Link href="/login">Giriş Yap</Link>
-                  </Button>
-                  <Button asChild>
-                    <Link href="/register">Ücretsiz Başla</Link>
-                  </Button>
+                  {isLoggedIn ? (
+                    <>
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={user.avatar} alt={user.name} />
+                          <AvatarFallback>
+                            {user.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">{user.name}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            @{user.username}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button variant="outline" size="sm" asChild>
+                          <Link href="/pages/profile">Profilim</Link>
+                        </Button>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link href="/pages/my-events">Etkinliklerim</Link>
+                        </Button>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link href="/pages/settings">Ayarlar</Link>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsLoggedIn(false)}
+                          className="text-red-600 border-red-200 hover:bg-red-50"
+                        >
+                          Çıkış Yap
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="outline" asChild>
+                        <Link href="/pages/login">Giriş Yap</Link>
+                      </Button>
+                      <Button asChild>
+                        <Link href="/pages/register">Ücretsiz Başla</Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>
