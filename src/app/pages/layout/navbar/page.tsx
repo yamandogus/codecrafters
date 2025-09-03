@@ -125,7 +125,7 @@ export const Navbar = () => {
           <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Özellikler</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Özelliklerr</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid w-[600px] grid-cols-2 p-3">
                     {features.map((feature, index) => (
