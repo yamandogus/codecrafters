@@ -1,17 +1,20 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { store } from "@/store/store";
+import { persistor, store } from "@/store/store";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
+import { PersistGate } from "redux-persist/integration/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
         {children}
         <Toaster />
       </ThemeProvider>
+      </PersistGate>
     </Provider>
   );
 }

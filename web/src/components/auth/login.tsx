@@ -7,6 +7,8 @@ import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setUsername } from "@/store/user/userSlice";
 
 const testUser = {
   username: "testuser@gmail.com",
@@ -15,6 +17,7 @@ const testUser = {
 
 export function Login() {
   const router = useRouter();
+  const dispacth = useDispatch()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -24,6 +27,7 @@ export function Login() {
     const username = formData.get("username");
     const password = formData.get("password");
     if (username === testUser.username && password === testUser.password) {
+      dispacth(setUsername(username))
       toast("Giriş Başarılı", {
         description: "CodeCrafters'e Hoş Geldiniz " + username,
         action: {

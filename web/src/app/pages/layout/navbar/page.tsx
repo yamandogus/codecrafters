@@ -49,11 +49,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { deleteUsername } from "@/store/user/userSlice";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
-  // Mock user state - gerçek uygulamada context/state management'dan gelecek
+  const userName = useSelector((state: RootState) => state.user.username);
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Test için true
   const [isScrolled, setIsScrolled] = useState(false);
   const [user] = useState({
     name: "Ahmet Yılmaz",
@@ -62,6 +67,11 @@ export const Navbar = () => {
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format",
     notifications: 3,
   });
+
+  const logout = () => {
+    dispatch(deleteUsername());
+    router.push("/");
+  };
 
   // Scroll listener
   React.useEffect(() => {
@@ -106,10 +116,9 @@ export const Navbar = () => {
     },
   ];
 
- const toggleTheme = () => {
+  const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
- }
-
+  };
 
   return (
     <section className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 transition-shadow duration-200 ${
@@ -125,7 +134,7 @@ export const Navbar = () => {
           <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Özelliklerr</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Özellikler</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid w-[600px] grid-cols-2 p-3">
                     {features.map((feature, index) => (
@@ -191,7 +200,7 @@ export const Navbar = () => {
               </Button>
             </div>
 
-            {isLoggedIn ? (
+            {userName ? (
               <>
                 {/* Notifications */}
                 <Button variant="ghost" size="icon" className="relative">
@@ -220,7 +229,7 @@ export const Navbar = () => {
                         </AvatarFallback>
                       </Avatar>
                       <span className="hidden md:block text-sm font-medium">
-                        {user.name}
+                        {userName}
                       </span>
                       <ChevronDown className="h-4 w-4" />
                     </Button>
@@ -232,7 +241,7 @@ export const Navbar = () => {
                           {user.name}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          @{user.username}
+                          @{userName}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -282,7 +291,7 @@ export const Navbar = () => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => setIsLoggedIn(false)}
+                      onClick={logout}
                       className="text-red-600 focus:text-red-600"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
@@ -356,7 +365,7 @@ export const Navbar = () => {
                   </a>
                 </div>
                 <div className="mt-6 flex flex-col gap-4">
-                  {isLoggedIn ? (
+                  {userName ? (
                     <>
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                         <Avatar className="h-10 w-10">
@@ -371,7 +380,7 @@ export const Navbar = () => {
                         <div>
                           <p className="font-medium text-sm">{user.name}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
-                            @{user.username}
+                            @{userName}
                           </p>
                         </div>
                       </div>
@@ -388,7 +397,7 @@ export const Navbar = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setIsLoggedIn(false)}
+                          onClick={logout}
                           className="text-red-600 border-red-200 hover:bg-red-50"
                         >
                           Çıkış Yap
