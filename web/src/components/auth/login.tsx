@@ -3,22 +3,45 @@ import React from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import {
-  IconBrandGithub,
-  IconBrandGoogle
-} from "@tabler/icons-react";
+import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-
-// const testUser = {
-//   username: 'testuser',
-//   password: '123456'
-// }
+const testUser = {
+  username: "testuser@gmail.com",
+  password: "123456",
+};
 
 export function Login() {
+  const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    console.log("data", data);
+
+    const username = formData.get("username");
+    const password = formData.get("password");
+    if (username === testUser.username && password === testUser.password) {
+      toast("Giriş Başarılı", {
+        description: "CodeCrafters'e Hoş Geldiniz " + username,
+        action: {
+          label: "Kapat",
+          onClick: () => console.log("Kapat tıklandı"),
+        },
+      });
+      router.push("/");
+    } else {
+      console.log("Giriş başarısız");
+      toast("Giriş Başarısız", {
+        description: "Kullanıcı Adı veya Şifre Hatalı",
+        action: {
+          label: "Kapat",
+          onClick: () => console.log("Kapat tıklandı"),
+        },
+      });
+    }
   };
   return (
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
@@ -26,17 +49,28 @@ export function Login() {
         CodeCrafters&apos;a Hoş Geldiniz
       </h2>
       <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-        Yazılım geliştirme topluluğuna katılın ve kariyerinizi ilerletmek için giriş yapın
+        Yazılım geliştirme topluluğuna katılın ve kariyerinizi ilerletmek için
+        giriş yapın
       </p>
 
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">E-posta Adresi</Label>
-          <Input id="email" placeholder="ornek@codecrafters.com" type="email" />
+          <Label htmlFor="username">Kullanıcı Adı</Label>
+          <Input
+            name="username"
+            id="username"
+            placeholder="ornek@codecrafters.com"
+            type="email"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Şifre</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
+          <Input
+            name="password"
+            id="password"
+            placeholder="••••••••"
+            type="password"
+          />
         </LabelInputContainer>
 
         <div className="flex items-center justify-between mb-6">
@@ -47,11 +81,14 @@ export function Login() {
               type="checkbox"
               className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+            <label
+              htmlFor="remember-me"
+              className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
+            >
               Beni hatırla
             </label>
           </div>
-          <Link 
+          <Link
             href="/forgot-password"
             className="text-sm text-purple-600 hover:text-purple-500"
           >
@@ -91,11 +128,11 @@ export function Login() {
             <BottomGradient />
           </button>
         </div>
-        
+
         <div className="mt-6 text-center">
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Henüz hesabınız yok mu?{" "}
-            <Link 
+            <Link
               href="/pages/register"
               className="font-medium text-purple-600 hover:text-purple-500"
             >
