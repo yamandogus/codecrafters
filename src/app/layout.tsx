@@ -1,0 +1,41 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import Footer from "./pages/layout/footer/page";
+import { Navbar } from "./pages/layout/navbar/page";
+import { ThemeProvider } from "next-themes";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "CodeCrafters",
+  description: "Yazılım Geliştirme Topluluğu",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="tr">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <Navbar />
+          <main className="min-h-screen pt-0">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
