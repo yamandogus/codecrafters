@@ -79,8 +79,8 @@ export const Navbar = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const features = [
@@ -121,16 +121,22 @@ export const Navbar = () => {
   };
 
   return (
-    <section className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 transition-shadow duration-200 ${
-      isScrolled ? 'shadow-md' : 'shadow-none'
-    }`}>
+    <section
+      className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 transition-shadow duration-200 ${
+        isScrolled ? "shadow-md" : "shadow-none"
+      }`}
+    >
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-2 border-b-2 border-transparent hover:border-[#974eff] transition-colors duration-400"
+          >
             <span className="text-lg font-semibold tracking-tighter font-mono">
               CodeCrafters
             </span>
           </Link>
+
           <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
               <NavigationMenuItem>

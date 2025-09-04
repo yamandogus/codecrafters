@@ -16,6 +16,7 @@ import {
   Target
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function TutorialsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -258,9 +259,11 @@ export default function TutorialsPage() {
               >
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer group">
                   <div className="relative">
-                    <img
+                    <Image
                       src={tutorial.image}
                       alt={tutorial.title}
+                      width={400}
+                      height={250}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                                          <div className="absolute top-4 left-4">

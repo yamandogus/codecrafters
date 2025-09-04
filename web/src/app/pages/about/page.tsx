@@ -14,6 +14,7 @@ import {
   TrendingUp
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AboutPage() {
   const stats = [
@@ -249,10 +250,12 @@ export default function AboutPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <Card className="p-6 text-center hover:shadow-lg transition-shadow duration-300">
-                  <img
+                  <Image
                     src={member.image}
                     alt={member.name}
                     className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+                    width={128}
+                    height={128}
                   />
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
                     {member.name}

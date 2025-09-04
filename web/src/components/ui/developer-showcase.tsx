@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import Image from "next/image";
 
 export interface DeveloperCard {
   id: string;
@@ -79,7 +80,7 @@ export default function DeveloperShowcase() {
               className="w-full max-w-[700px] h-[90vh] max-h-[800px] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden shadow-2xl"
             >
               <motion.div layoutId={`image-${active.name}-${id}`}>
-                <img
+                <Image
                   width={200}
                   height={200}
                   src={active.avatar}
@@ -212,7 +213,7 @@ export default function DeveloperShowcase() {
           >
             <div className="flex items-center gap-4 mb-4">
               <motion.div layoutId={`image-${developer.name}-${id}`}>
-                <img
+                <Image
                   width={60}
                   height={60}
                   src={developer.avatar}

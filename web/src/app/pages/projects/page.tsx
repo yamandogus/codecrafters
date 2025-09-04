@@ -20,6 +20,7 @@ import {
   Zap
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -243,9 +244,11 @@ export default function ProjectsPage() {
                 >
                   <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     <div className="relative">
-                      <img
+                      <Image
                         src={project.image}
                         alt={project.title}
+                        width={400}
+                        height={250}
                         className="w-full h-64 object-cover"
                       />
                       <div className="absolute top-4 right-4">
@@ -375,9 +378,11 @@ export default function ProjectsPage() {
               >
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
                   <div className="relative">
-                    <img
+                    <Image
                       src={project.image}
                       alt={project.title}
+                      width={400}
+                      height={250}
                       className="w-full h-48 object-cover"
                     />
                     <div className="absolute top-4 left-4">

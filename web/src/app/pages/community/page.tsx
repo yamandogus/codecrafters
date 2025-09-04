@@ -16,6 +16,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function CommunityPage() {
   const [selectedTab, setSelectedTab] = useState("members");
@@ -186,10 +187,12 @@ export default function CommunityPage() {
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
                   <div className="p-6">
                     <div className="flex items-center gap-4 mb-4">
-                      <img
+                      <Image
                         src={member.avatar}
                         alt={member.name}
                         className="w-16 h-16 rounded-full object-cover"
+                        width={32}
+                        height={32} 
                       />
                       <div>
                         <h3 className="font-semibold text-gray-900 dark:text-white">
