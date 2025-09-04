@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Bu dosya Prisma şema dosyasıdır,
+// daha fazla bilgi için: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -10,4 +10,475 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Bu dosyayı kendiniz dolduracaksınız - model tanımları buraya gelecek
+// ========================================
+// ENUMS
+// ========================================
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum JobCategory {
+  FRONTEND
+  BACKEND
+  FULLSTACK
+  MOBILE
+  DEVOPS
+  DATA
+  OTHER
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
+}
+
+enum JobStatus {
+  ACTIVE
+  INACTIVE
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum ProjectCategory {
+  WEB
+  MOBILE
+  BACKEND
+  AI
+  DEVOPS
+  OTHER
+}
+
+enum EventCategory {
+  HACKATHON
+  WORKSHOP
+  MEETUP
+  CONFERENCE
+  WEBINAR
+  OTHER
+}
+
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum BlogCategory {
+  WEB_DEVELOPMENT
+  PROGRAMMING
+  FRONTEND
+  BACKEND
+  DESIGN
+  CAREER
+  OTHER
+}
+
+enum ForumCategory {
+  FRONTEND
+  BACKEND
+  MOBILE
+  DEVOPS
+  CAREER
+  PROJECTS
+  OTHER
+}
+
+// ========================================
+// USER MODEL
+// ========================================
+
+model User {
+  id          String   @id @default(cuid())
+  username    String   @unique
+  email       String   @unique
+  password    String
+  name        String
+  bio         String?
+  avatar      String?
+  coverImage  String?
+  location    String?
+  phone       String?
+  joinDate    DateTime @default(now())
+  isVerified  Boolean  @default(false)
+  isMentor    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  role        UserRole @default(USER)
+  
+  // Social Links
+  github      String?
+  linkedin    String?
+  twitter     String?
+  website     String?
+  
+  // İstatistikler (ilişkilerden hesaplanabilir alanlar)
+  projects    Int      @default(0)
+  events      Int      @default(0)
+  followers   Int      @default(0)
+  following   Int      @default(0)
+  posts       Int      @default(0)
+  likes       Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  skills      UserSkill[]
+  achievements UserAchievement[]
+  jobApplications JobApplication[]
+  projectsCreated Project[]
+  eventsRegistered EventRegistration[]
+  blogPosts   BlogPost[]
+  forumPosts ForumPost[]
+  comments   Comment[]
+  followersRelation Follow[] @relation("UserFollowers")
+  followingRelation Follow[] @relation("UserFollowing")
+  
+  @@map("users")
+}
+
+model UserSkill {
+  id      String   @id @default(cuid())
+  userId  String
+  name    String
+  level   SkillLevel
+  color   String?
+  
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, name])
+  @@map("user_skills")
+}
+
+model UserAchievement {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  icon        String?
+  earnedAt    DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_achievements")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  
+  follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+// ========================================
+// JOB MODELS
+// ========================================
+
+model Job {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  company     String
+  logo        String?
+  location    String
+  type        JobType
+  salary      String?
+  experience  String?
+  category    JobCategory
+  skills      String[] // Beceri adları dizisi
+  postedDate  DateTime @default(now())
+  isRemote    Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  status      JobStatus @default(ACTIVE)
+  
+  // Detaylı bilgiler
+  requirements String[]
+  responsibilities String[]
+  benefits    String[]
+  
+  // Şirket bilgileri
+  companyDescription String?
+  companyEmployees   String?
+  companyIndustry    String?
+  companyFounded     String?
+  companyWebsite     String?
+  
+  // Stats
+  views       Int      @default(0)
+  applicationCount Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  applications JobApplication[]
+  
+  @@map("jobs")
+}
+
+model JobApplication {
+  id          String   @id @default(cuid())
+  jobId       String
+  userId      String
+  status      ApplicationStatus @default(PENDING)
+  
+  // Kişisel bilgiler
+  firstName   String
+  lastName    String
+  email       String
+  phone       String?
+  portfolio   String?
+  linkedin    String?
+  github      String?
+  
+  // Profesyonel bilgiler
+  experience  String
+  skills      String
+  coverLetter String?
+  resume      String? // Dosya yolu
+  availability String @default("immediate")
+  salary      String?
+  
+  // zaman damgaları
+  appliedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // ilişkiler
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("job_applications")
+}
+
+// ========================================
+// PROJECT MODEL
+// ========================================
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    ProjectCategory
+  image       String?
+  tech        String[] // Teknoloji adları dizisi
+  demo        String?
+  github      String?
+  stars       Int      @default(0)
+  forks       Int      @default(0)
+  views       Int      @default(0)
+  featured    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  
+  // zaman damgaları
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // ilişkiler
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  
+  @@map("projects")
+}
+
+// ========================================
+// EVENT MODELS
+// ========================================
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  longDescription String?
+  category    EventCategory
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  address     String?
+  isOnline    Boolean  @default(false)
+  maxParticipants Int?
+  currentParticipants Int @default(0)
+  organizer   String
+  organizerEmail String?
+  organizerPhone String?
+  organizerWebsite String?
+  organizerDescription String?
+  tags        String[]
+  image       String?
+  status      EventStatus @default(UPCOMING)
+  price       String?
+  requirements String[]
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  registrations EventRegistration[]
+  
+  @@map("events")
+}
+
+model EventRegistration {
+  id          String   @id @default(cuid())
+  eventId     String
+  userId      String
+  status      String @default("registered") // kayıtlı, katıldı, iptal edildi
+  
+  // Registration details
+  experience  String?
+  motivation  String?
+  
+  // Timestamps
+  registeredAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([eventId, userId])
+  @@map("event_registrations")
+}
+
+// ========================================
+// BLOG MODEL
+// ========================================
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  excerpt     String
+  content     String
+  author      String
+  date        DateTime @default(now())
+  category    BlogCategory
+  image       String?
+  readTime    String?
+  tags        String[]
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  isPublished Boolean  @default(true)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  
+  @@map("blog_posts")
+}
+
+// ========================================
+// FORUM MODEL
+// ========================================
+
+model ForumPost {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  category    ForumCategory
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  replies     Int      @default(0)
+  isPinned    Boolean  @default(false)
+  isLocked    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  
+  @@map("forum_posts")
+}
+
+// ========================================
+// COMMENT MODEL
+// ========================================
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  likes       Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Farklı gönderi türleri için ayrı ilişkiler
+  blogPostId  String?
+  forumPostId String?
+  projectId   String?
+  
+  blogPost    BlogPost? @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  forumPost   ForumPost? @relation(fields: [forumPostId], references: [id], onDelete: Cascade)
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@map("comments")
+}
+
+// ========================================
+// LEARNING RESOURCE MODEL
+// ========================================
+
+model LearningResource {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  duration    String?
+  level       String?
+  rating      Float    @default(0)
+  students    Int      @default(0)
+  image       String?
+  tags        String[]
+  content     String?
+  isActive    Boolean  @default(true)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("learning_resources")
+}
