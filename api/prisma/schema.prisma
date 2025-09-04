@@ -112,7 +112,7 @@ model User {
   id          String   @id @default(cuid())
   username    String   @unique
   email       String   @unique
-  password    String
+  password    String?  // Optional for OAuth users
   name        String
   bio         String?
   avatar      String?
@@ -131,6 +131,10 @@ model User {
   twitter     String?
   website     String?
   
+  // OAuth Fields
+  googleId    String?  @unique
+  provider    String?  @default("local") // "local", "google"
+  
   // İstatistikler (ilişkilerden hesaplanabilir alanlar)
   projects    Int      @default(0)
   events      Int      @default(0)
@@ -139,11 +143,11 @@ model User {
   posts       Int      @default(0)
   likes       Int      @default(0)
   
-  // Timestamps
+  // zaman damgaları
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations
+  // ilişkiler
   skills      UserSkill[]
   achievements UserAchievement[]
   jobApplications JobApplication[]
