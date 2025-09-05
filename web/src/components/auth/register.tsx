@@ -16,7 +16,7 @@ export function Register() {
     console.log("Form submitted");
   };
   return (
-    <Card className="shadow-input mx-auto w-full max-w-md rounded-none md:rounded-2xl md:p-8 bg-card">
+        <Card className="shadow-input mx-auto w-full max-w-md rounded-none p-4 md:rounded-2xl md:p-8 bg-card">
       <h2 className="text-xl font-bold text-card-foreground">
         CodeCrafters&apos;a Katılın
       </h2>
@@ -108,7 +108,7 @@ export function Register() {
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Zaten hesabınız var mı?{" "}
             <Link 
-              href="/login"
+              href="/auth/login"
               className="font-medium text-purple-600 hover:text-purple-500"
             >
               Giriş yapın

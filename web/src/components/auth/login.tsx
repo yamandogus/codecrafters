@@ -49,7 +49,7 @@ export function Login() {
     }
   };
   return (
-    <Card className="shadow-input mx-auto w-full max-w-md rounded-none  md:rounded-2xl md:p-8 bg-card">
+        <Card className="shadow-input mx-auto w-full md:max-w-md rounded-none p-4 md:rounded-2xl md:p-8 bg-card">
       <h2 className="text-xl font-bold text-card-foreground">
         CodeCrafters&apos;a Hoş Geldiniz
       </h2>
@@ -94,7 +94,7 @@ export function Login() {
             </label>
           </div>
           <Link
-            href="/forgot-password"
+            href="/auth/forgot-password"
             className="text-sm text-purple-600 hover:text-purple-500"
           >
             Şifremi unuttum
@@ -138,7 +138,7 @@ export function Login() {
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Henüz hesabınız yok mu?{" "}
             <Link
-              href="/register"
+              href="/auth/register"
               className="font-medium text-purple-600 hover:text-purple-500"
             >
               Ücretsiz kayıt olun
