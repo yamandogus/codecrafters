@@ -181,7 +181,7 @@ export default function ProjectsPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/pages/contact">Proje Öner</Link>
+                <Link href="/contact">Proje Öner</Link>
               </Button>
             </div>
           </motion.div>
@@ -475,7 +475,7 @@ export default function ProjectsPage() {
                 className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/contact">
+                <Link href="/contact">
                   Proje Öner
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -486,7 +486,7 @@ export default function ProjectsPage() {
                 className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/register">Topluluğa Katıl</Link>
+                <Link href="/register">Topluluğa Katıl</Link>
               </Button>
             </div>
           </motion.div>

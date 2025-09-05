@@ -87,32 +87,32 @@ export const Navbar = () => {
     {
       title: "Projeler",
       description: "Topluluk projelerini keşfet",
-      href: "/pages/projects",
+      href: "/projects",
     },
     {
       title: "Öğrenme Merkezi",
       description: "Junior odaklı yazılım kaynakları",
-      href: "/pages/learning",
+      href: "/learning",
     },
     {
       title: "Etkinlikler",
       description: "Yaklaşan topluluk etkinlikleri",
-      href: "/pages/events",
+      href: "/events",
     },
     {
       title: "Forum",
       description: "Soru-cevap ve tartışmalar",
-      href: "/pages/forum",
+      href: "/forum",
     },
     {
       title: "Topluluk",
       description: "Kullanıcı profilleri ve mentorluk",
-      href: "/pages/community",
+      href: "/community",
     },
     {
       title: "İş İlanları",
       description: "Yazılım sektörü kariyer fırsatları",
-      href: "/pages/jobs",
+      href: "/jobs",
     },
   ];
 
@@ -164,7 +164,7 @@ export const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  href="/pages/blog"
+                  href="/blog"
                   className={navigationMenuTriggerStyle()}
                 >
                   Blog
@@ -172,7 +172,7 @@ export const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  href="/pages/contact"
+                  href="/contact"
                   className={navigationMenuTriggerStyle()}
                 >
                   İletişim
@@ -180,7 +180,7 @@ export const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  href="/pages/about"
+                  href="/about"
                   className={navigationMenuTriggerStyle()}
                 >
                   Hakkımızda
@@ -253,14 +253,14 @@ export const Navbar = () => {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/pages/profile" className="flex items-center">
+                      <Link href="/profile" className="flex items-center">
                         <User className="mr-2 h-4 w-4" />
                         <span>Profilim</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link
-                        href="/pages/my-events"
+                        href="/my-events"
                         className="flex items-center"
                       >
                         <Calendar className="mr-2 h-4 w-4" />
@@ -269,7 +269,7 @@ export const Navbar = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link
-                        href="/pages/my-projects"
+                        href="/my-projects"
                         className="flex items-center"
                       >
                         <Code className="mr-2 h-4 w-4" />
@@ -278,7 +278,7 @@ export const Navbar = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link
-                        href="/pages/favorites"
+                        href="/favorites"
                         className="flex items-center"
                       >
                         <Heart className="mr-2 h-4 w-4" />
@@ -288,7 +288,7 @@ export const Navbar = () => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link
-                        href="/pages/settings"
+                        href="/settings"
                         className="flex items-center"
                       >
                         <Settings className="mr-2 h-4 w-4" />
@@ -309,10 +309,10 @@ export const Navbar = () => {
             ) : (
               <>
                 <Button variant="outline" asChild>
-                  <Link href="/pages/login">Giriş Yap</Link>
+                  <Link href="/login">Giriş Yap</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/pages/register">Ücretsiz Başla</Link>
+                  <Link href="/register">Ücretsiz Başla</Link>
                 </Button>
               </>
             )}
@@ -360,13 +360,13 @@ export const Navbar = () => {
                   </AccordionItem>
                 </Accordion>
                 <div className="flex flex-col gap-6">
-                  <a href="/pages/blog" className="font-medium">
+                  <a href="/blog" className="font-medium">
                     Blog
                   </a>
-                  <a href="/pages/contact" className="font-medium">
+                  <a href="/contact" className="font-medium">
                     İletişim
                   </a>
-                  <a href="/pages/about" className="font-medium">
+                  <a href="/about" className="font-medium">
                     Hakkımızda
                   </a>
                 </div>
@@ -392,13 +392,13 @@ export const Navbar = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <Button variant="outline" size="sm" asChild>
-                          <Link href="/pages/profile">Profilim</Link>
+                          <Link href="/profile">Profilim</Link>
                         </Button>
                         <Button variant="outline" size="sm" asChild>
-                          <Link href="/pages/my-events">Etkinliklerim</Link>
+                          <Link href="/my-events">Etkinliklerim</Link>
                         </Button>
                         <Button variant="outline" size="sm" asChild>
-                          <Link href="/pages/settings">Ayarlar</Link>
+                          <Link href="/settings">Ayarlar</Link>
                         </Button>
                         <Button
                           variant="outline"
@@ -413,10 +413,10 @@ export const Navbar = () => {
                   ) : (
                     <>
                       <Button variant="outline" asChild>
-                        <Link href="/pages/login">Giriş Yap</Link>
+                        <Link href="/login">Giriş Yap</Link>
                       </Button>
                       <Button asChild>
-                        <Link href="/pages/register">Ücretsiz Başla</Link>
+                        <Link href="/register">Ücretsiz Başla</Link>
                       </Button>
                     </>
                   )}

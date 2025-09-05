@@ -100,7 +100,7 @@ export default function AboutPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/pages/contact">İletişime Geç</Link>
+                <Link href="/contact">İletişime Geç</Link>
               </Button>
             </div>
           </motion.div>
@@ -294,7 +294,7 @@ export default function AboutPage() {
                 className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/register">
+                <Link href="/register">
                   Ücretsiz Katıl
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -305,7 +305,7 @@ export default function AboutPage() {
                 className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/contact">Daha Fazla Bilgi</Link>
+                <Link href="/contact">Daha Fazla Bilgi</Link>
               </Button>
             </div>
           </motion.div>

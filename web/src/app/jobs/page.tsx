@@ -216,7 +216,7 @@ export default function JobsPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/pages/contact">İş İlanı Ver</Link>
+                <Link href="/contact">İş İlanı Ver</Link>
               </Button>
             </div>
           </motion.div>
@@ -406,7 +406,7 @@ export default function JobsPage() {
                               {formatDate(job.postedDate)}
                             </span>
                                                          <Button className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700" asChild>
-                               <Link href={`/pages/jobs/${job.id}`}>
+                               <Link href={`/jobs/${job.id}`}>
                                  Başvur
                                  <ExternalLink className="w-4 h-4 ml-2" />
                                </Link>
@@ -467,7 +467,7 @@ export default function JobsPage() {
                 className="bg-white text-green-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/contact">
+                <Link href="/contact">
                   İş İlanı Ver
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -478,7 +478,7 @@ export default function JobsPage() {
                 className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/register">Ücretsiz Üye Ol</Link>
+                <Link href="/register">Ücretsiz Üye Ol</Link>
               </Button>
             </div>
           </motion.div>

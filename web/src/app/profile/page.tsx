@@ -400,7 +400,7 @@ export default function ProfilePage() {
                         Kullanıcının katıldığı etkinlikler burada görüntülenecek
                       </p>
                       <Button asChild>
-                        <Link href="/pages/my-events">
+                        <Link href="/my-events">
                           Etkinliklerimi Gör
                         </Link>
                       </Button>

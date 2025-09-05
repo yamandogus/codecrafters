@@ -85,13 +85,13 @@ function Footerdemo() {
             <nav className="space-y-3">
               {[
                 { href: "/", label: "Ana Sayfa" },
-                { href: "/pages/about", label: "Hakkımızda" },
-                { href: "/pages/tutorials", label: "Eğitimler" },
-                { href: "/pages/projects", label: "Projeler" },
-                { href: "/pages/community", label: "Topluluk" },
-                { href: "/pages/events", label: "Etkinlikler" },
-                { href: "/pages/jobs", label: "İş İlanları" },
-                { href: "/pages/contact", label: "İletişim" }
+                { href: "/about", label: "Hakkımızda" },
+                { href: "/tutorials", label: "Eğitimler" },
+                { href: "/projects", label: "Projeler" },
+                { href: "/community", label: "Topluluk" },
+                { href: "/events", label: "Etkinlikler" },
+                { href: "/jobs", label: "İş İlanları" },
+                { href: "/contact", label: "İletişim" }
               ].map((link) => (
                 <Link 
                   key={link.href}

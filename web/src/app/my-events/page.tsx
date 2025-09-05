@@ -344,7 +344,7 @@ export default function MyEventsPage() {
                         className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                         asChild
                       >
-                        <Link href={`/pages/events/${event.id}`}>
+                        <Link href={`/events/${event.id}`}>
                           Detayları Gör
                         </Link>
                       </Button>
@@ -384,7 +384,7 @@ export default function MyEventsPage() {
               {selectedTab === "cancelled" && "İptal edilen etkinliğiniz bulunmuyor."}
             </p>
             <Button asChild>
-              <Link href="/pages/events">
+              <Link href="/events">
                 Etkinlikleri Keşfet
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>

@@ -103,7 +103,7 @@ export default function CommunityPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/pages/projects">Projeleri Keşfet</Link>
+                <Link href="/projects">Projeleri Keşfet</Link>
               </Button>
             </div>
           </motion.div>
@@ -278,7 +278,7 @@ export default function CommunityPage() {
                 className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/register">
+                <Link href="/register">
                   Hemen Katıl
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -289,7 +289,7 @@ export default function CommunityPage() {
                 className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/forum">Forum&apos;a Git</Link>
+                <Link href="/forum">Forum&apos;a Git</Link>
               </Button>
             </div>
           </motion.div>

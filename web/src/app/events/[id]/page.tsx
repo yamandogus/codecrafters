@@ -207,7 +207,7 @@ export default function EventDetailPage() {
       <div className="bg-white dark:bg-gray-900 border-b">
         <div className="container mx-auto max-w-6xl px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/pages/events" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+            <Link href="/events" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
               <ArrowLeft className="w-5 h-5" />
               Etkinliklere Dön
             </Link>

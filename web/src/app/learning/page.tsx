@@ -164,7 +164,7 @@ export default function TutorialsPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/pages/contact">Danışmanlık Al</Link>
+                <Link href="/contact">Danışmanlık Al</Link>
               </Button>
             </div>
           </motion.div>
@@ -353,7 +353,7 @@ export default function TutorialsPage() {
                 className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/register">
+                <Link href="/register">
                   Ücretsiz Başla
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -364,7 +364,7 @@ export default function TutorialsPage() {
                 className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/contact">Danışmanlık Al</Link>
+                <Link href="/contact">Danışmanlık Al</Link>
               </Button>
             </div>
           </motion.div>

@@ -246,16 +246,16 @@ export default function ForumPage() {
                  <CardTitle className="text-lg dark:text-white">Hızlı Linkler</CardTitle>
                </CardHeader>
                <CardContent className="space-y-3">
-                 <Link href="/pages/tutorials" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                 <Link href="/tutorials" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                    → Eğitim Materyalleri
                  </Link>
-                 <Link href="/pages/projects" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                 <Link href="/projects" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                    → Açık Kaynak Projeler
                  </Link>
-                 <Link href="/pages/mentorship" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                 <Link href="/mentorship" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                    → Mentorluk Programı
                  </Link>
-                 <Link href="/pages/events" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                 <Link href="/events" className="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                    → Yaklaşan Etkinlikler
                  </Link>
               </CardContent>

@@ -108,7 +108,7 @@ export function Register() {
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Zaten hesabınız var mı?{" "}
             <Link 
-              href="/pages/login"
+              href="/login"
               className="font-medium text-purple-600 hover:text-purple-500"
             >
               Giriş yapın

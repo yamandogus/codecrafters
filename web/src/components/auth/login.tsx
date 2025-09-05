@@ -138,7 +138,7 @@ export function Login() {
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Henüz hesabınız yok mu?{" "}
             <Link
-              href="/pages/register"
+              href="/register"
               className="font-medium text-purple-600 hover:text-purple-500"
             >
               Ücretsiz kayıt olun

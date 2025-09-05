@@ -201,7 +201,7 @@ export default function EventsPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/pages/events">Etkinlik Düzenle</Link>
+                <Link href="/events">Etkinlik Düzenle</Link>
               </Button>
             </div>
           </motion.div>
@@ -332,7 +332,7 @@ export default function EventsPage() {
                     </div>
 
                     <Button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700" asChild>
-                      <Link href={`/pages/events/${event.id}`}>
+                      <Link href={`/events/${event.id}`}>
                         Detayları Gör
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Link>
@@ -378,7 +378,7 @@ export default function EventsPage() {
                 className="bg-white text-green-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/register">
+                <Link href="/register">
                   Etkinlik Düzenle
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
@@ -389,7 +389,7 @@ export default function EventsPage() {
                 className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
-                <Link href="/pages/contact">İletişime Geç</Link>
+                <Link href="/contact">İletişime Geç</Link>
               </Button>
             </div>
           </motion.div>
