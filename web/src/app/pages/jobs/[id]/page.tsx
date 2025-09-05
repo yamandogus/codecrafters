@@ -15,19 +15,13 @@ import {
   Building, 
   Users, 
   ArrowLeft,
-  Star,
   Bookmark,
   Share2,
   ExternalLink,
-  Mail,
-  Phone,
   Globe,
-  FileText,
   Upload,
   CheckCircle,
-  AlertCircle
 } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
