@@ -114,6 +114,7 @@ model User {
   email       String   @unique
   password    String?  // Optional for OAuth users
   name        String
+  surname     String?
   bio         String?
   avatar      String?
   coverImage  String?
