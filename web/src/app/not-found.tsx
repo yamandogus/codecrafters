@@ -14,7 +14,7 @@ const NotFound = () => {
         Sayfa Bulunamadı
       </h2>
       <p className="mt-4 max-w-md text-gray-600 dark:text-gray-400">
-        Aradığınız sayfayı bulamadık. URL'yi kontrol edebilir veya ana sayfaya dönebilirsiniz.
+        Aradığınız sayfayı bulamadık. URL&apos;yi kontrol edebilir veya ana sayfaya dönebilirsiniz.
       </p>
       <Link href="/">
         <button className="group/btn relative mt-8 inline-block h-12 rounded-md bg-gradient-to-br from-purple-600 to-purple-800 px-8 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-gradient-to-br dark:from-purple-700 dark:to-purple-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]">
