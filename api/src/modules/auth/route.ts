@@ -3,7 +3,7 @@ import { AuthController } from "./controller";
 
 
 const router = Router();
-const ctrl = new AuthController
+const ctrl = new AuthController();
 
 
 router.post("/register", (req, res)=> ctrl.register(req, res));

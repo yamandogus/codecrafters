@@ -20,6 +20,17 @@ export class AuthService {
       throw e;
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Generate unique username
+    const baseUsername = email.split('@')[0];
+    let username = baseUsername;
+    let counter = 1;
+    
+    while (await prisma.user.findUnique({ where: { username } })) {
+      username = `${baseUsername}_${counter}`;
+      counter++;
+    }
+    
     // Create new user
     const newUser = await prisma.user.create({
       data: {
@@ -27,6 +38,8 @@ export class AuthService {
         surname,
         email,
         password: hashedPassword,
+        username,
+        provider: 'local'
       },
       select: {
         id: true,
@@ -39,8 +52,8 @@ export class AuthService {
     });
 
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
-      process.env.JWT_SECRET || "dev-secret",
+      { userId: newUser.id, email: newUser.email },
+      process.env.JWT_ACCESS_SECRET || "dev-secret",
       { expiresIn: "7d" }
     );
 
@@ -57,17 +70,17 @@ export class AuthService {
       throw e;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password || '');
 
-    if (!isPasswordValid) {
+    if (!user.password || !isPasswordValid) {
       const e: any = new Error("Geçersiz e-posta veya şifre");
       e.status = 401;
       throw e;
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET || "dev-secret",
+      { userId: user.id, email: user.email },
+      process.env.JWT_ACCESS_SECRET || "dev-secret",
       { expiresIn: "7d" }
     );
     return {

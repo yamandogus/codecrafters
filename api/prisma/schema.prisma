@@ -134,7 +134,8 @@ model User {
   
   // OAuth Fields
   googleId    String?  @unique
-  provider    String?  @default("local") // "local", "google"
+  githubId       String? @unique
+  provider    String?  @default("local") // "local", "google" , "github"
   
   // İstatistikler (ilişkilerden hesaplanabilir alanlar)
   projects    Int      @default(0)
