@@ -7,6 +7,7 @@ import githubRoutes from './modules/github';
 
 // Import existing routes
 import authRoutes from './routes/auth';
+import userRoutes from './routes/users';
 
 const app = express();
 
@@ -49,13 +50,16 @@ app.get('/', (req, res) => {
       '/api/auth/register',
       '/api/auth/login', 
       '/api/auth/google',
-      '/api/auth/github'
+      '/api/auth/github',
+      '/api/users/profile',
+      '/api/users/list'
     ]
   });
 });
 
 // API Routes
 app.use('/api', authRoutes);
+app.use('/api', userRoutes);
 
 // OAuth Routes
 app.use('/api', googleRoutes);

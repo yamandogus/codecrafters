@@ -49,27 +49,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { deleteUsername } from "@/store/user/userSlice";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
-  const userName = useSelector((state: RootState) => state.user.username);
-  const dispatch = useDispatch();
+  const { user, isAuthenticated, logout: authLogout } = useAuth();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [user] = useState({
-    name: "Ahmet Yılmaz",
-    username: "ahmetyilmaz",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format",
-    notifications: 3,
-  });
+  const [notifications] = useState(3); // Bu gelecekte backend'den gelecek
 
-  const logout = () => {
-    dispatch(deleteUsername());
+  const logout = async () => {
+    await authLogout();
     router.push("/");
   };
 
@@ -206,14 +197,14 @@ export const Navbar = () => {
               </Button>
             </div>
 
-            {userName ? (
+            {isAuthenticated && user ? (
               <>
                 {/* Notifications */}
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="h-5 w-5" />
-                  {user.notifications > 0 && (
+                  {notifications > 0 && (
                     <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs text-white flex items-center justify-center">
-                      {user.notifications}
+                      {notifications}
                     </span>
                   )}
                 </Button>
@@ -226,16 +217,13 @@ export const Navbar = () => {
                       className="flex items-center gap-2 px-2"
                     >
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarImage src="" alt={`${user.name} ${user.surname}`} />
                         <AvatarFallback>
-                          {user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
+                          {user.name[0]}{user.surname[0]}
                         </AvatarFallback>
                       </Avatar>
                       <span className="hidden md:block text-sm font-medium">
-                        {userName}
+                        {user.name} {user.surname}
                       </span>
                       <ChevronDown className="h-4 w-4" />
                     </Button>
@@ -244,10 +232,10 @@ export const Navbar = () => {
                     <DropdownMenuLabel>
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          {user.name}
+                          {user.name} {user.surname}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          @{userName}
+                          @{user.username}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -309,10 +297,10 @@ export const Navbar = () => {
             ) : (
               <>
                 <Button variant="outline" asChild>
-                  <Link href="/login">Giriş Yap</Link>
+                  <Link href="/auth/login">Giriş Yap</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/register">Ücretsiz Başla</Link>
+                  <Link href="/auth/register">Ücretsiz Başla</Link>
                 </Button>
               </>
             )}
@@ -371,22 +359,19 @@ export const Navbar = () => {
                   </a>
                 </div>
                 <div className="mt-6 flex flex-col gap-4">
-                  {userName ? (
+                  {isAuthenticated && user ? (
                     <>
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                         <Avatar className="h-10 w-10">
-                          <AvatarImage src={user.avatar} alt={user.name} />
+                          <AvatarImage src="" alt={`${user.name} ${user.surname}`} />
                           <AvatarFallback>
-                            {user.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
+                            {user.name[0]}{user.surname[0]}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-sm">{user.name}</p>
+                          <p className="font-medium text-sm">{user.name} {user.surname}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
-                            @{userName}
+                            @{user.username}
                           </p>
                         </div>
                       </div>
@@ -413,10 +398,10 @@ export const Navbar = () => {
                   ) : (
                     <>
                       <Button variant="outline" asChild>
-                        <Link href="/login">Giriş Yap</Link>
+                        <Link href="/auth/login">Giriş Yap</Link>
                       </Button>
                       <Button asChild>
-                        <Link href="/register">Ücretsiz Başla</Link>
+                        <Link href="/auth/register">Ücretsiz Başla</Link>
                       </Button>
                     </>
                   )}

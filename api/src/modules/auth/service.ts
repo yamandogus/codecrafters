@@ -8,6 +8,9 @@ const prisma = new PrismaClient();
 export class AuthService {
   async register(data: RegisterDTO) {
     const { name, surname, email, password } = data;
+    
+    // Debug: Gelen veriyi kontrol et
+    console.log('Register data:', { name, surname, email });
 
     const existing = await prisma.user.findUnique({
       where: { email },

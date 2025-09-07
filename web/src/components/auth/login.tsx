@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
@@ -7,45 +7,96 @@ import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
-import { setUsername } from "@/store/user/userSlice";
+import { useAuth } from "@/hooks/useAuth";
 import { Card } from "../ui/card";
-
-const testUser = {
-  username: "testuser@gmail.com",
-  password: "123456",
-};
 
 export function Login() {
   const router = useRouter();
-  const dispacth = useDispatch()
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log("data", data);
+  const { login, loading, error, clearAuthError } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
 
-    const username = formData.get("username");
-    const password = formData.get("password");
-    if (username === testUser.username && password === testUser.password) {
-      dispacth(setUsername(username))
-      toast("Giriş Başarılı", {
-        description: "CodeCrafters'e Hoş Geldiniz " + username,
-        action: {
-          label: "Kapat",
-          onClick: () => console.log("Kapat tıklandı"),
-        },
+  // Zaten giriş yapmışsa ana sayfaya yönlendir - Test için devre dışı
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     router.push("/");
+  //   }
+  // }, [isAuthenticated, router]);
+
+  // Hata mesajını temizle
+  useEffect(() => {
+    if (error) {
+      toast.error("Giriş Başarısız", {
+        description: error,
       });
-      router.push("/");
-    } else {
-      console.log("Giriş başarısız");
-      toast("Giriş Başarısız", {
-        description: "Kullanıcı Adı veya Şifre Hatalı",
-        action: {
-          label: "Kapat",
-          onClick: () => console.log("Kapat tıklandı"),
-        },
+      clearAuthError();
+    }
+  }, [error, clearAuthError]);
+
+  const validateForm = () => {
+    const errors: {[key: string]: string} = {};
+    
+    if (!formData.email) {
+      errors.email = "E-posta adresi gerekli";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = "Geçerli bir e-posta adresi girin";
+    }
+    
+    if (!formData.password) {
+      errors.password = "Şifre gerekli";
+    } else if (formData.password.length < 6) {
+      errors.password = "Şifre en az 6 karakter olmalı";
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Hata mesajını temizle
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+  };
+
+  const handleOAuthLogin = (provider: 'google' | 'github') => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+    window.location.href = `${apiUrl}/auth/${provider}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    try {
+      const result = await login({
+        email: formData.email,
+        password: formData.password,
       });
+      
+      if (result.type === 'user/login/fulfilled') {
+        toast.success("Giriş Başarılı", {
+          description: `CodeCrafters'e Hoş Geldiniz!`,
+        });
+        router.push("/");
+      }
+    } catch {
+      // Hata zaten useEffect'te yakalanacak
     }
   };
   return (
@@ -60,13 +111,20 @@ export function Login() {
 
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="username">Kullanıcı Adı</Label>
+          <Label htmlFor="email">E-posta Adresi</Label>
           <Input
-            name="username"
-            id="username"
+            name="email"
+            id="email"
             placeholder="ornek@codecrafters.com"
             type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            className={formErrors.email ? "border-red-500" : ""}
+            disabled={loading}
           />
+          {formErrors.email && (
+            <span className="text-sm text-red-500">{formErrors.email}</span>
+          )}
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Şifre</Label>
@@ -75,7 +133,14 @@ export function Login() {
             id="password"
             placeholder="••••••••"
             type="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            className={formErrors.password ? "border-red-500" : ""}
+            disabled={loading}
           />
+          {formErrors.password && (
+            <span className="text-sm text-red-500">{formErrors.password}</span>
+          )}
         </LabelInputContainer>
 
         <div className="flex items-center justify-between mb-6">
@@ -102,10 +167,11 @@ export function Login() {
         </div>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-purple-600 to-purple-800 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-gradient-to-br dark:from-purple-700 dark:to-purple-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-purple-600 to-purple-800 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-gradient-to-br dark:from-purple-700 dark:to-purple-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
+          disabled={loading}
         >
-          Giriş Yap &rarr;
+          {loading ? "Giriş Yapılıyor..." : "Giriş Yap"} &rarr;
           <BottomGradient />
         </button>
 
@@ -115,6 +181,8 @@ export function Login() {
           <button
             className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
             type="button"
+            onClick={() => handleOAuthLogin('github')}
+            disabled={loading}
           >
             <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -125,6 +193,8 @@ export function Login() {
           <button
             className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
             type="button"
+            onClick={() => handleOAuthLogin('google')}
+            disabled={loading}
           >
             <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
