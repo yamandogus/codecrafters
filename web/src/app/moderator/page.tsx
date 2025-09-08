@@ -14,13 +14,13 @@ export default function ModeratorPage() {
       router.replace('/auth/login');
       return;
     }
-    const role = (user as any)?.role;
+    const role = user?.role;
     if (role !== 'MODERATOR' && role !== 'ADMIN') {
       router.replace('/');
     }
   }, [isAuthenticated, user, router]);
 
-  const role = (user as any)?.role;
+  const role = user?.role;
   if (!isAuthenticated || (role !== 'MODERATOR' && role !== 'ADMIN')) return null;
 
   return (

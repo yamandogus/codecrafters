@@ -8,6 +8,7 @@ export interface User {
   surname: string;
   email: string;
   username: string;
+  role?: 'USER' | 'ADMIN' | 'MODERATOR';
 }
 
 export interface UserState {

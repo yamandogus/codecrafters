@@ -15,12 +15,12 @@ export default function AdminPage() {
       return;
     }
     // Basit guard: role alanı user objesine backend login/refresh ile gelir
-    if ((user as any)?.role !== 'ADMIN') {
+    if (user?.role !== 'ADMIN') {
       router.replace('/');
     }
   }, [isAuthenticated, user, router]);
 
-  if (!isAuthenticated || (user as any)?.role !== 'ADMIN') return null;
+  if (!isAuthenticated || user?.role !== 'ADMIN') return null;
 
   return (
     <div className="py-10">
