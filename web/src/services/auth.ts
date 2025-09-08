@@ -9,6 +9,9 @@ export class AuthService {
       // Başarılı giriş durumunda token'ı localStorage'a kaydet
       if (response.success && response.data?.token) {
         localStorage.setItem('auth_token', response.data.token);
+        if (response.data.refreshToken) {
+          localStorage.setItem('refresh_token', response.data.refreshToken);
+        }
       }
       
       return response;
@@ -25,6 +28,9 @@ export class AuthService {
       // Başarılı kayıt durumunda token'ı localStorage'a kaydet
       if (response.success && response.data?.token) {
         localStorage.setItem('auth_token', response.data.token);
+        if (response.data.refreshToken) {
+          localStorage.setItem('refresh_token', response.data.refreshToken);
+        }
       }
       
       return response;
@@ -38,6 +44,7 @@ export class AuthService {
     try {
       // Token'ı localStorage'dan kaldır
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('refresh_token');
       localStorage.removeItem('persist:root'); // Redux persist'ten de temizle
     } catch {
       console.error('Logout hatası');
@@ -47,6 +54,28 @@ export class AuthService {
   // Token kontrolü
   static getToken(): string | null {
     return localStorage.getItem('auth_token');
+  }
+
+  static getRefreshToken(): string | null {
+    return localStorage.getItem('refresh_token');
+  }
+
+  static async refreshTokens(): Promise<boolean> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) return false;
+    try {
+      const res = await apiClient.post<AuthResponse>('/api/auth/refresh', { refreshToken });
+      if (res.success && res.data?.token) {
+        localStorage.setItem('auth_token', res.data.token);
+        if (res.data.refreshToken) {
+          localStorage.setItem('refresh_token', res.data.refreshToken);
+        }
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
   }
 
   // Kullanıcının giriş yapıp yapmadığını kontrol et

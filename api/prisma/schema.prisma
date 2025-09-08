@@ -160,8 +160,24 @@ model User {
   comments   Comment[]
   followersRelation Follow[] @relation("UserFollowers")
   followingRelation Follow[] @relation("UserFollowing")
+  refreshTokens RefreshToken[]
   
   @@map("users")
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
 }
 
 model UserSkill {

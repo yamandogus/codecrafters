@@ -1,12 +1,13 @@
+import { PrismaClient } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 interface JwtPayload {
   userId: string;
   email: string;
+  role?: string;
   iat?: number;
   exp?: number;
 }
@@ -46,6 +47,7 @@ export const authenticate = async (req: any, res: Response, next: NextFunction) 
         name: true,
         surname: true,
         username: true,
+        role: true,
       }
     });
 
@@ -63,6 +65,7 @@ export const authenticate = async (req: any, res: Response, next: NextFunction) 
       name: user.name,
       surname: user.surname,
       username: user.username,
+      role: (decoded as JwtPayload).role || user.role,
     };
 
     next();
@@ -118,6 +121,7 @@ export const optionalAuth = async (req: any, res: Response, next: NextFunction) 
         name: true,
         surname: true,
         username: true,
+        role: true,
       }
     });
 
@@ -129,6 +133,7 @@ export const optionalAuth = async (req: any, res: Response, next: NextFunction) 
         name: user.name,
         surname: user.surname,
         username: user.username,
+        role: (decoded as JwtPayload).role || user.role,
       };
     }
 
@@ -137,4 +142,17 @@ export const optionalAuth = async (req: any, res: Response, next: NextFunction) 
     // Hata olursa token'ı yok say ve devam et
     next();
   }
+};
+
+export const authorizeRoles = (...roles: string[]) => {
+  return (req: any, res: Response, next: NextFunction) => {
+    const userRole: string | undefined = req?.user?.role;
+    if (!userRole) {
+      return res.status(403).json({ success: false, message: 'Yetkisiz erişim' });
+    }
+    if (!roles.includes(userRole)) {
+      return res.status(403).json({ success: false, message: 'Bu işlem için yetkiniz yok' });
+    }
+    next();
+  };
 };

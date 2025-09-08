@@ -53,4 +53,18 @@ export class AuthController {
       });
     }
   }
+
+  async refresh(req: Request, res: Response) {
+    try {
+      const { refreshToken } = (req.body || {}) as { refreshToken?: string };
+      if (!refreshToken) {
+        return res.status(400).json({ success: false, message: 'refreshToken gerekli' });
+      }
+      const result = await authService.refresh(refreshToken);
+      return res.status(200).json({ success: true, message: 'Token yenilendi', data: result });
+    } catch (error: any) {
+      const status = error?.status || 401;
+      return res.status(status).json({ success: false, message: error?.message || 'Yenileme sırasında hata oluştu' });
+    }
+  }
 }

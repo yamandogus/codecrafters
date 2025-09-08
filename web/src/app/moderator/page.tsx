@@ -1,0 +1,34 @@
+"use client";
+
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+export default function ModeratorPage() {
+  const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/auth/login');
+      return;
+    }
+    const role = (user as any)?.role;
+    if (role !== 'MODERATOR' && role !== 'ADMIN') {
+      router.replace('/');
+    }
+  }, [isAuthenticated, user, router]);
+
+  const role = (user as any)?.role;
+  if (!isAuthenticated || (role !== 'MODERATOR' && role !== 'ADMIN')) return null;
+
+  return (
+    <div className="py-10">
+      <h1 className="text-2xl font-semibold">Moderator Panel</h1>
+      <p className="text-sm text-muted-foreground">Temel moderasyon iskeleti</p>
+    </div>
+  );
+}
+
+

@@ -2,10 +2,28 @@ import { LoginDTO, RegisterDTO } from "../../dto/authDto";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
 
 export class AuthService {
+  private signAccessToken(payload: { userId: string; email: string; role: string }) {
+    return jwt.sign(payload, process.env.JWT_ACCESS_SECRET || "dev-secret", {
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
+    });
+  }
+
+  private signRefreshToken(payload: { userId: string }) {
+    const token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET || "dev-refresh-secret", {
+      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+    });
+    return token;
+  }
+
+  private hashToken(token: string) {
+    return crypto.createHash("sha256").update(token).digest("hex");
+  }
+
   async register(data: RegisterDTO) {
     const { name, surname, email, password } = data;
     
@@ -50,17 +68,23 @@ export class AuthService {
         surname: true,
         email: true,
         username: true,
+        role: true,
         createdAt: true,
       },
     });
 
-    const token = jwt.sign(
-      { userId: newUser.id, email: newUser.email },
-      process.env.JWT_ACCESS_SECRET || "dev-secret",
-      { expiresIn: "7d" }
-    );
+    const accessToken = this.signAccessToken({ userId: newUser.id, email: newUser.email, role: (newUser as any).role });
+    const refreshToken = this.signRefreshToken({ userId: newUser.id });
 
-    return { newUser, token };
+    await prisma.refreshToken.create({
+      data: {
+        userId: newUser.id,
+        tokenHash: this.hashToken(refreshToken),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+    });
+
+    return { user: newUser, token: accessToken, refreshToken };
   }
 
   async login(data: LoginDTO) {
@@ -81,11 +105,17 @@ export class AuthService {
       throw e;
     }
 
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_ACCESS_SECRET || "dev-secret",
-      { expiresIn: "7d" }
-    );
+    const accessToken = this.signAccessToken({ userId: user.id, email: user.email, role: user.role });
+    const refreshToken = this.signRefreshToken({ userId: user.id });
+
+    await prisma.refreshToken.create({
+      data: {
+        userId: user.id,
+        tokenHash: this.hashToken(refreshToken),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+    });
+
     return {
       user: {
         id: user.id,
@@ -93,8 +123,56 @@ export class AuthService {
         surname: user.surname,
         email: user.email,
         username: user.username,
+        role: user.role,
       },
-      token,
+      token: accessToken,
+      refreshToken,
     };
+  }
+
+  async refresh(token: string) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET || "dev-refresh-secret") as { userId: string; iat: number; exp: number };
+      const tokenHash = this.hashToken(token);
+
+      const stored = await prisma.refreshToken.findFirst({
+        where: {
+          userId: decoded.userId,
+          tokenHash,
+          revokedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+        include: { user: true },
+      });
+
+      if (!stored || !stored.user) {
+        const e: any = new Error("Geçersiz veya süresi dolmuş yenileme tokenı");
+        e.status = 401;
+        throw e;
+      }
+
+      // rotate refresh token (optional simple strategy: revoke and issue new)
+      await prisma.refreshToken.update({
+        where: { id: stored.id },
+        data: { revokedAt: new Date() },
+      });
+
+      const newRefresh = this.signRefreshToken({ userId: stored.user.id });
+      await prisma.refreshToken.create({
+        data: {
+          userId: stored.user.id,
+          tokenHash: this.hashToken(newRefresh),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      const newAccess = this.signAccessToken({ userId: stored.user.id, email: stored.user.email, role: stored.user.role });
+
+      return { token: newAccess, refreshToken: newRefresh };
+    } catch (err: any) {
+      const e: any = new Error("Yenileme başarısız");
+      e.status = 401;
+      throw e;
+    }
   }
 }

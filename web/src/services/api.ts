@@ -32,6 +32,7 @@ export interface User {
 export interface AuthResponse {
   user: User;
   token: string;
+  refreshToken?: string;
 }
 
 class ApiClient {
@@ -65,7 +66,22 @@ class ApiClient {
     }
 
     try {
-      const response = await fetch(url, config);
+      let response = await fetch(url, config);
+      if (response.status === 401) {
+        // access token expired -> try refresh
+        const refreshed = await (await import('./auth')).default.refreshTokens();
+        if (refreshed) {
+          const newToken = localStorage.getItem('auth_token');
+          if (newToken) {
+            config.headers = {
+              ...config.headers,
+              Authorization: `Bearer ${newToken}`,
+            };
+          }
+          response = await fetch(url, config);
+        }
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
