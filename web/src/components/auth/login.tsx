@@ -90,8 +90,9 @@ export function Login() {
       });
       
       if (result.type === 'user/login/fulfilled') {
+        // Access user role from redux store instead of result payload
         toast.success("Giriş Başarılı", {
-          description: `CodeCrafters'e Hoş Geldiniz!`,
+          description: 'CodeCrafters\'e Hoş Geldiniz!',
         });
         router.push("/");
       }

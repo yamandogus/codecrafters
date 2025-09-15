@@ -1,22 +1,27 @@
-import { CardHoverEffect } from "@/components/home/card";
-import Header from "@/components/home/header";
-import CommunityShowcase from "@/components/home/community-showcase";
+"use client";
+
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import UserHome from '@/components/home/user-home';
+import ModeratorHome from '@/components/home/moderator-home';
+import AdminHome from '@/components/home/admin-home';
 
 export default function Home() {
-  return (
-    <div className="w-full">
-      <Header />
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.user);
 
-      {/* Ana içerik bölümü */}
-      <div className="py-16">
-        <div className="container max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
-            Neler Sunuyoruz?
-          </h2>
-          <CardHoverEffect />
-        </div>
-        <CommunityShowcase />
-      </div>
-    </div>
-  );
+  // If not authenticated or no user, show default user home
+  if (!isAuthenticated || !user) {
+    return <UserHome />;
+  }
+
+  // Role-based rendering
+  switch (user.role) {
+    case 'ADMIN':
+      return <AdminHome />;
+    case 'MODERATOR':
+      return <ModeratorHome />;
+    case 'USER':
+    default:
+      return <UserHome />;
+  }
 }

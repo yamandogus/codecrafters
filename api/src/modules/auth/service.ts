@@ -42,15 +42,8 @@ export class AuthService {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // Generate unique username
-    const baseUsername = email.split('@')[0];
-    let username = baseUsername;
-    let counter = 1;
-    
-    while (await prisma.user.findUnique({ where: { username } })) {
-      username = `${baseUsername}_${counter}`;
-      counter++;
-    }
+    // Use full email as username
+    const username = email;
     
     // Create new user
     const newUser = await prisma.user.create({
