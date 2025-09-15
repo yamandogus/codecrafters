@@ -4,7 +4,7 @@ export class AuthService {
   // Kullanıcı girişi
   static async login(credentials: LoginRequest): Promise<ApiResponse<AuthResponse>> {
     try {
-      const response = await apiClient.post<AuthResponse>('/api/auth/login', credentials);
+      const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
       
       // Başarılı giriş durumunda token'ı localStorage'a kaydet
       if (response.success && response.data?.token) {
@@ -23,7 +23,7 @@ export class AuthService {
   // Kullanıcı kayıt
   static async register(userData: RegisterRequest): Promise<ApiResponse<AuthResponse>> {
     try {
-      const response = await apiClient.post<AuthResponse>('/api/auth/register', userData);
+      const response = await apiClient.post<AuthResponse>('/auth/register', userData);
       
       // Başarılı kayıt durumunda token'ı localStorage'a kaydet
       if (response.success && response.data?.token) {
@@ -64,7 +64,7 @@ export class AuthService {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) return false;
     try {
-      const res = await apiClient.post<AuthResponse>('/api/auth/refresh', { refreshToken });
+      const res = await apiClient.post<AuthResponse>('/auth/refresh', { refreshToken });
       if (res.success && res.data?.token) {
         localStorage.setItem('auth_token', res.data.token);
         if (res.data.refreshToken) {
