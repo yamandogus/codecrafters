@@ -90,11 +90,27 @@ export function Login() {
       });
       
       if (result.type === 'user/login/fulfilled') {
-        // Access user role from redux store instead of result payload
+        // Access user role from the result payload for immediate redirection
+        const payload = result.payload as { user: { role: 'USER' | 'ADMIN' | 'MODERATOR' } };
+        const userRole = payload.user.role;
+        
         toast.success("Giriş Başarılı", {
           description: 'CodeCrafters\'e Hoş Geldiniz!',
         });
-        router.push("/");
+        
+        // Role-based redirection
+        switch (userRole) {
+          case 'ADMIN':
+            router.push("/admin");
+            break;
+          case 'MODERATOR':
+            router.push("/moderator");
+            break;
+          case 'USER':
+          default:
+            router.push("/");
+            break;
+        }
       }
     } catch {
       // Hata zaten useEffect'te yakalanacak

@@ -134,7 +134,20 @@ export function Register() {
         toast.success("Kayıt Başarılı", {
           description: `CodeCrafters'e hoş geldiniz!`,
         });
-        router.push("/");
+        
+        // Role-based redirection (same as login)
+        switch (userRole) {
+          case 'ADMIN':
+            router.push("/admin");
+            break;
+          case 'MODERATOR':
+            router.push("/moderator");
+            break;
+          case 'USER':
+          default:
+            router.push("/");
+            break;
+        }
       }
     } catch {
       // Hata zaten useEffect'te yakalanacak

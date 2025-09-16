@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { AdminDashboard } from '@/components/admin/admin-dashboard';
+// import { AdminDashboard } from '@/components/admin/admin-dashboard';
 
 export default function AdminPage() {
   const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
@@ -22,12 +24,8 @@ export default function AdminPage() {
 
   if (!isAuthenticated || user?.role !== 'ADMIN') return null;
 
-  return (
-    <div className="py-10">
-      <h1 className="text-2xl font-semibold">Admin Panel</h1>
-      <p className="text-sm text-muted-foreground">Temel yönetim iskeleti</p>
-    </div>
-  );
+
+  return <AdminDashboard />;
 }
 
 

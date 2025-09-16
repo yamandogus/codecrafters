@@ -13,6 +13,7 @@ import {
   ChevronDown,
   Moon,
   Sun,
+  Shield,
 } from "lucide-react";
 
 import {
@@ -274,6 +275,21 @@ export const Navbar = () => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    {/* Admin/Moderator specific menu items */}
+                    {(user.role === 'ADMIN' || user.role === 'MODERATOR') && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href={user.role === 'ADMIN' ? '/admin' : '/moderator'}
+                            className="flex items-center"
+                          >
+                            <Shield className="mr-2 h-4 w-4" />
+                            <span>{user.role === 'ADMIN' ? 'Admin Panel' : 'Moderator Panel'}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                      </>
+                    )}
                     <DropdownMenuItem asChild>
                       <Link
                         href="/settings"
@@ -382,6 +398,14 @@ export const Navbar = () => {
                         <Button variant="outline" size="sm" asChild>
                           <Link href="/my-events">Etkinliklerim</Link>
                         </Button>
+                        {/* Admin/Moderator Panel Buttons for Mobile */}
+                        {(user.role === 'ADMIN' || user.role === 'MODERATOR') && (
+                          <Button variant="outline" size="sm" asChild>
+                            <Link href={user.role === 'ADMIN' ? '/admin' : '/moderator'}>
+                              {user.role === 'ADMIN' ? 'Admin Panel' : 'Moderator Panel'}
+                            </Link>
+                          </Button>
+                        )}
                         <Button variant="outline" size="sm" asChild>
                           <Link href="/settings">Ayarlar</Link>
                         </Button>

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { ModeratorDashboard } from '@/components/moderator/moderator-dashboard';
 
 export default function ModeratorPage() {
   const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
@@ -23,12 +24,7 @@ export default function ModeratorPage() {
   const role = user?.role;
   if (!isAuthenticated || (role !== 'MODERATOR' && role !== 'ADMIN')) return null;
 
-  return (
-    <div className="py-10">
-      <h1 className="text-2xl font-semibold">Moderator Panel</h1>
-      <p className="text-sm text-muted-foreground">Temel moderasyon iskeleti</p>
-    </div>
-  );
+  return <ModeratorDashboard />;
 }
 
 
