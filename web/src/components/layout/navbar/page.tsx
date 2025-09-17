@@ -3,17 +3,11 @@
 import React, { useState } from "react";
 import {
   MenuIcon,
-  User,
-  Settings,
   LogOut,
   Bell,
-  Heart,
-  Calendar,
-  Code,
   ChevronDown,
   Moon,
   Sun,
-  Shield,
 } from "lucide-react";
 
 import {
@@ -52,6 +46,11 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { 
+  getRoleBasedNavigation, 
+  getRoleBasedUserMenu, 
+  getRoleBasedQuickActions 
+} from "./role-based-navigation";
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout: authLogout } = useAuth();
@@ -59,6 +58,11 @@ export const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [notifications] = useState(3); // Bu gelecekte backend'den gelecek
+
+  // Get role-based navigation
+  const navigation = getRoleBasedNavigation(user?.role);
+  const userMenuItems = getRoleBasedUserMenu(user?.role);
+  const quickActions = getRoleBasedQuickActions(user?.role);
 
   const logout = async () => {
     await authLogout();
@@ -74,39 +78,6 @@ export const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const features = [
-    {
-      title: "Projeler",
-      description: "Topluluk projelerini keşfet",
-      href: "/projects",
-    },
-    {
-      title: "Öğrenme Merkezi",
-      description: "Junior odaklı yazılım kaynakları",
-      href: "/learning",
-    },
-    {
-      title: "Etkinlikler",
-      description: "Yaklaşan topluluk etkinlikleri",
-      href: "/events",
-    },
-    {
-      title: "Forum",
-      description: "Soru-cevap ve tartışmalar",
-      href: "/forum",
-    },
-    {
-      title: "Topluluk",
-      description: "Kullanıcı profilleri ve mentorluk",
-      href: "/community",
-    },
-    {
-      title: "İş İlanları",
-      description: "Yazılım sektörü kariyer fırsatları",
-      href: "/jobs",
-    },
-  ];
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -131,53 +102,49 @@ export const Navbar = () => {
 
           <NavigationMenu className="hidden lg:block">
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Özellikler</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid w-[600px] grid-cols-2 p-3">
-                    {features.map((feature, index) => (
-                      <NavigationMenuLink
-                        href={feature.href}
-                        key={index}
-                        className="rounded-md p-3 transition-colors hover:bg-muted/70"
-                      >
-                        <div key={feature.title}>
-                          <p className="mb-1 font-semibold text-foreground">
-                            {feature.title}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {feature.description}
-                          </p>
+              {navigation.map((item, index) => {
+                if (item.children && item.children.length > 0) {
+                  return (
+                    <NavigationMenuItem key={index}>
+                      <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <div className="grid w-[600px] grid-cols-2 p-3">
+                          {item.children.map((child, childIndex) => (
+                            <NavigationMenuLink
+                              href={child.href}
+                              key={childIndex}
+                              className="rounded-md p-3 transition-colors hover:bg-muted/70"
+                            >
+                              <div className="flex items-center gap-2">
+                                {child.icon && <child.icon className="h-4 w-4" />}
+                                <div>
+                                  <p className="mb-1 font-semibold text-foreground">
+                                    {child.title}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {child.description}
+                                  </p>
+                                </div>
+                              </div>
+                            </NavigationMenuLink>
+                          ))}
                         </div>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  );
+                } else {
+                  return (
+                    <NavigationMenuItem key={index}>
+                      <NavigationMenuLink
+                        href={item.href}
+                        className={navigationMenuTriggerStyle()}
+                      >
+                        {item.title}
                       </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/blog"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Blog
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/contact"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  İletişim
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/about"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Hakkımızda
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+                    </NavigationMenuItem>
+                  );
+                }
+              })}
             </NavigationMenuList>
           </NavigationMenu>
           <div className="hidden items-center gap-4 lg:flex">
@@ -241,64 +208,19 @@ export const Navbar = () => {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Profilim</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/my-events"
-                        className="flex items-center"
-                      >
-                        <Calendar className="mr-2 h-4 w-4" />
-                        <span>Etkinliklerim</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/my-projects"
-                        className="flex items-center"
-                      >
-                        <Code className="mr-2 h-4 w-4" />
-                        <span>Projelerim</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/favorites"
-                        className="flex items-center"
-                      >
-                        <Heart className="mr-2 h-4 w-4" />
-                        <span>Favorilerim</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    {/* Admin/Moderator specific menu items */}
-                    {(user.role === 'ADMIN' || user.role === 'MODERATOR') && (
-                      <>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            href={user.role === 'ADMIN' ? '/admin' : '/moderator'}
-                            className="flex items-center"
-                          >
-                            <Shield className="mr-2 h-4 w-4" />
-                            <span>{user.role === 'ADMIN' ? 'Admin Panel' : 'Moderator Panel'}</span>
+                    {userMenuItems.map((item, index) => {
+                      if (item.separator) {
+                        return <DropdownMenuSeparator key={index} />;
+                      }
+                      return (
+                        <DropdownMenuItem asChild key={index}>
+                          <Link href={item.href} className="flex items-center">
+                            {item.icon && <item.icon className="mr-2 h-4 w-4" />}
+                            <span>{item.title}</span>
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                      </>
-                    )}
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/settings"
-                        className="flex items-center"
-                      >
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Ayarlar</span>
-                      </Link>
-                    </DropdownMenuItem>
+                      );
+                    })}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={logout}
@@ -337,42 +259,53 @@ export const Navbar = () => {
               </SheetHeader>
               <div className="flex flex-col p-4">
                 <Accordion type="single" collapsible className="mt-4 mb-2">
-                  <AccordionItem value="solutions" className="border-none">
-                    <AccordionTrigger className="text-base hover:no-underline">
-                      Özellikler
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="grid md:grid-cols-2">
-                        {features.map((feature, index) => (
-                          <a
-                            href={feature.href}
-                            key={index}
-                            className="rounded-md p-3 transition-colors hover:bg-muted/70"
-                          >
-                            <div key={feature.title}>
-                              <p className="mb-1 font-semibold text-foreground">
-                                {feature.title}
-                              </p>
-                              <p className="text-sm text-muted-foreground">
-                                {feature.description}
-                              </p>
+                  {navigation.map((item, index) => {
+                    if (item.children && item.children.length > 0) {
+                      return (
+                        <AccordionItem value={`nav-${index}`} className="border-none" key={index}>
+                          <AccordionTrigger className="text-base hover:no-underline">
+                            {item.title}
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid md:grid-cols-2">
+                              {item.children.map((child, childIndex) => (
+                                <a
+                                  href={child.href}
+                                  key={childIndex}
+                                  className="rounded-md p-3 transition-colors hover:bg-muted/70"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    {child.icon && <child.icon className="h-4 w-4" />}
+                                    <div>
+                                      <p className="mb-1 font-semibold text-foreground">
+                                        {child.title}
+                                      </p>
+                                      <p className="text-sm text-muted-foreground">
+                                        {child.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </a>
+                              ))}
                             </div>
-                          </a>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    }
+                    return null;
+                  })}
                 </Accordion>
                 <div className="flex flex-col gap-6">
-                  <a href="/blog" className="font-medium">
-                    Blog
-                  </a>
-                  <a href="/contact" className="font-medium">
-                    İletişim
-                  </a>
-                  <a href="/about" className="font-medium">
-                    Hakkımızda
-                  </a>
+                  {navigation.map((item, index) => {
+                    if (!item.children || item.children.length === 0) {
+                      return (
+                        <a href={item.href} className="font-medium" key={index}>
+                          {item.title}
+                        </a>
+                      );
+                    }
+                    return null;
+                  })}
                 </div>
                 <div className="mt-6 flex flex-col gap-4">
                   {isAuthenticated && user ? (
@@ -392,23 +325,11 @@ export const Navbar = () => {
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href="/profile">Profilim</Link>
-                        </Button>
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href="/my-events">Etkinliklerim</Link>
-                        </Button>
-                        {/* Admin/Moderator Panel Buttons for Mobile */}
-                        {(user.role === 'ADMIN' || user.role === 'MODERATOR') && (
-                          <Button variant="outline" size="sm" asChild>
-                            <Link href={user.role === 'ADMIN' ? '/admin' : '/moderator'}>
-                              {user.role === 'ADMIN' ? 'Admin Panel' : 'Moderator Panel'}
-                            </Link>
+                        {quickActions.map((action, index) => (
+                          <Button variant="outline" size="sm" asChild key={index}>
+                            <Link href={action.href}>{action.title}</Link>
                           </Button>
-                        )}
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href="/settings">Ayarlar</Link>
-                        </Button>
+                        ))}
                         <Button
                           variant="outline"
                           size="sm"

@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { ModeratorDashboard } from '@/components/moderator/moderator-dashboard';
 
-export default function ModeratorPage() {
+export default function ModeratorDashboardPage() {
   const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
   const router = useRouter();
 
@@ -17,13 +18,11 @@ export default function ModeratorPage() {
     const role = user?.role;
     if (role !== 'MODERATOR' && role !== 'ADMIN') {
       router.replace('/');
-      return;
     }
-    // Redirect to dashboard
-    router.replace('/moderator/dashboard');
   }, [isAuthenticated, user, router]);
 
-  return null;
+  const role = user?.role;
+  if (!isAuthenticated || (role !== 'MODERATOR' && role !== 'ADMIN')) return null;
+
+  return <ModeratorDashboard />;
 }
-
-
