@@ -92,7 +92,7 @@ export function ModeratorDashboard() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="container mx-auto max-w-7xl p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -146,7 +146,7 @@ export function ModeratorDashboard() {
 
         {/* Pending Content Tab */}
         <TabsContent value="pending" className="space-y-6">
-          <Card>
+          <Card className="p-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
@@ -202,7 +202,7 @@ export function ModeratorDashboard() {
 
         {/* Reports Tab */}
         <TabsContent value="reports" className="space-y-6">
-          <Card>
+          <Card className="p-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Flag className="h-5 w-5" />
@@ -252,7 +252,7 @@ export function ModeratorDashboard() {
 
         {/* Recent Actions Tab */}
         <TabsContent value="actions" className="space-y-6">
-          <Card>
+          <Card className="p-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
