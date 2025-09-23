@@ -5,6 +5,7 @@ import "./globals.css";
 import Footer from "../components/layout/footer/page";
 import { Providers } from "./providers";
 import { Navbar } from "../components/layout/navbar/page";
+import { AI } from "@/components/ai/page";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,9 @@ export default function RootLayout({
             <main className="min-h-screen pt-0">
               {children}
             </main>
+          </div>
+          <div className="fixed bottom-5 right-0 right-0 z-50">
+              <AI/>
           </div>
           <Footer />
         </Providers>
