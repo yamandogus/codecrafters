@@ -135,6 +135,10 @@ export function Register() {
           description: `CodeCrafters'e hoş geldiniz!`,
         });
         
+        // Access user role from the result payload for immediate redirection
+        const payload = result.payload as { user: { role: 'USER' | 'ADMIN' | 'MODERATOR' } };
+        const userRole = payload.user.role;
+        
         // Role-based redirection (same as login)
         switch (userRole) {
           case 'ADMIN':

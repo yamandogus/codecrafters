@@ -85,13 +85,6 @@ export function AI() {
     }
   };
 
-  const removeAttachedFile = () => {
-    setAttachedFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -102,7 +95,7 @@ export function AI() {
         </div>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-[420px] h-[550px] flex flex-col p-0 rounded-xl overflow-hidden border border-gray-200 shadow-2xl" 
+        className="w-[380px] h-[500px] flex flex-col p-0 rounded-xl overflow-hidden border border-gray-200 shadow-2xl" 
         align="end"
         side="top"
         sideOffset={10}
@@ -128,7 +121,7 @@ export function AI() {
         </div>
         
         {/* Messages area with gradient background */}
-        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-white to-gray-50 p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-white to-gray-50 p-4 space-y-4 scrollbar-hide">
           {messages.map((message) => (
             <div 
               key={message.id} 
@@ -166,30 +159,17 @@ export function AI() {
         </div>
         
         {/* Input area */}
-        <div className="border-t border-gray-200 p-4 bg-white">
-          {attachedFile && (
-            <div className="flex items-center gap-2 mb-2 p-2 bg-gray-100 rounded-lg">
-              <Paperclip className="text-gray-500" size={16} />
-              <span className="text-sm truncate flex-1">{attachedFile.name}</span>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-6 w-6 text-gray-500 hover:text-gray-700"
-                onClick={removeAttachedFile}
-              >
-                <X size={14} />
-              </Button>
-            </div>
-          )}
+        <div className="border-t border-gray-200 p-4 bg-white overflow-hidden">
+
           
           <div className="flex items-end gap-2">
-            <div className="flex-1 relative">
+            <div className="flex-1 relative max-w-[85%]">
               <Textarea
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Mesajınızı yazın..."
-                className="min-h-12 resize-none pr-12 pl-4 py-3 rounded-2xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"
+                className="min-h-12 max-h-18 resize-none pr-12 pl-4 py-3 rounded-2xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm overflow-y-auto overflow-x-hidden whitespace-normal break-words scrollbar-hide"
                 disabled={isSending}
               />
               <input
@@ -202,7 +182,7 @@ export function AI() {
               <Button
                 size="icon"
                 variant="ghost"
-                className="absolute left-2 bottom-2 h-8 w-8 text-gray-500 hover:text-gray-700"
+                className="absolute right-1 -bottom-1 h-8 w-8 text-gray-500 hover:text-gray-700"
                 onClick={handleFileAttach}
                 disabled={isSending}
               >
