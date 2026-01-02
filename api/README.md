@@ -1,70 +1,82 @@
 # CodeCrafters API
 
-Bu proje CodeCrafters topluluk sitesi için backend API'dir.
+Bu proje, **CodeCrafters** topluluk platformunun backend (arka uç) servisidir. Node.js, Express ve PostgreSQL kullanılarak geliştirilmiştir.
+
+## Özellikler
+
+- **Kimlik Doğrulama:** JWT tabanlı güvenli oturum yönetimi.
+- **Veritabanı Yönetimi:** Prisma ORM ile güçlü ve tip güvenli veritabanı işlemleri.
+- **Modüler Yapı:** Controller, Service ve Route katmanlarına ayrılmış temiz mimari.
 
 ## Kurulum
 
-1. Bağımlılıkları yükleyin:
-```bash
-npm install
-```
+Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin:
 
-2. Environment dosyasını oluşturun:
-```bash
-cp env.example .env
-```
+1. **Bağımlılıkları yükleyin:**
+   ```bash
+   npm install
+   ```
 
-3. .env dosyasını düzenleyin (veritabanı bağlantısı, JWT secret vs.)
+2. **Çevresel Değişkenleri Ayarlayın:**
+   `env.example` dosyasını kopyalayarak `.env` dosyasını oluşturun:
+   ```bash
+   cp env.example .env
+   ```
+   `.env` dosyasını kendi veritabanı bağlantı bilgileriniz ve JWT secret anahtarınızla güncelleyin.
 
-4. Prisma client'ı oluşturun:
-```bash
-npm run prisma:generate
-```
+3. **Prisma Client'ı Oluşturun:**
+   ```bash
+   npm run prisma:generate
+   ```
 
-5. Veritabanını oluşturun:
-```bash
-npm run prisma:migrate
-```
+4. **Veritabanı Migrasyonlarını Çalıştırın:**
+   ```bash
+   npm run prisma:migrate
+   ```
 
 ## Çalıştırma
 
-Development modunda:
+**Geliştirme Modu (Development):**
+Değişiklikleri anlık olarak izleyen nodemon ile çalışır:
 ```bash
 npm run dev
 ```
 
-Production modunda:
+**Prodüksiyon Modu (Production):**
+Derlenmiş dosyalar üzerinden çalışır:
 ```bash
 npm start
 ```
 
 ## API Endpoints
 
-- `/api/auth` - Kimlik doğrulama
-- `/api/users` - Kullanıcı yönetimi
-- `/api/blog` - Blog yazıları
-- `/api/projects` - Projeler
-- `/api/events` - Etkinlikler
-- `/api/jobs` - İş ilanları
-- `/api/forum` - Forum
-- `/api/learning` - Öğrenme kaynakları
+Ana API rotaları şunlardır:
 
-## Veritabanı
+- `/api/auth` - Kayıt olma, giriş yapma ve profil işlemleri.
+- `/api/users` - Kullanıcı listeleme ve detayları.
+- `/api/blog` - Blog yazıları oluşturma, okuma, güncelleme.
+- `/api/projects` - Proje paylaşımları.
+- `/api/events` - Topluluk etkinlikleri.
+- `/api/jobs` - İş ilanları.
+- `/api/forum` - Tartışma forumu.
+- `/api/learning` - Öğrenme kaynakları ve rehberler.
 
-PostgreSQL kullanılmaktadır. Prisma ORM ile yönetilmektedir.
+## Veritabanı ve ORM
+
+Proje veritabanı olarak **PostgreSQL** kullanmaktadır. Veritabanı şeması ve sorguları **Prisma ORM** ile yönetilmektedir.
 
 ## Dosya Yapısı
 
 ```
 src/
-├── controllers/     # Route handler'lar
-├── models/         # Veritabanı modelleri
-├── routes/         # API route'ları
-├── middleware/     # Middleware'ler
-├── services/       # İş mantığı
-├── utils/          # Yardımcı fonksiyonlar
-├── config/         # Konfigürasyon
-├── types/          # TypeScript tipleri
-├── app.ts          # Express app
-└── server.ts       # Server
+├── config/         # Veritabanı ve diğer konfigürasyonlar
+├── controllers/    # İstekleri karşılayan ve yanıt dönen katman
+├── middleware/     # Kimlik doğrulama ve hata yakalama ara katmanları
+├── models/         # (Prisma kullanıldığı için genelde şema dosyaları)
+├── routes/         # API rotalarının tanımları
+├── services/       # İş mantığının bulunduğu katman
+├── utils/          # Yardımcı fonksiyonlar ve araçlar
+├── types/          # TypeScript tip tanımlamaları
+├── app.ts          # Express uygulamasının yapılandırılması
+└── server.ts       # Sunucunun başlatıldığı giriş dosyası
 ```
