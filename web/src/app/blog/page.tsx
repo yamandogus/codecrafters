@@ -1,15 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BlogGrid } from "@/components/blog/blog-card";
 import { BlogFilter, BlogSearch } from "@/components/blog/blog-filter";
-import { blogPosts, blogCategories, getFilteredPosts } from "@/components/blog/blog-data";
+import { blogCategories } from "@/components/blog/blog-data"; // Categories can stay static for now or fetch from API if we had one
+import { blogService, BlogPost } from "@/services/blogService";
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredPosts = getFilteredPosts(blogPosts, selectedCategory, searchTerm);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await blogService.getAll({
+          category: selectedCategory !== "all" ? selectedCategory : undefined,
+          search: searchTerm || undefined
+        });
+        if (response.success && response.data) {
+          setPosts(response.data);
+        } else {
+          setError("Yazılar getirilemedi");
+        }
+      } catch (err) {
+        console.error("Blog fetch error:", err);
+        setError("Bir hata oluştu");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Debounce search
+    const timeoutId = setTimeout(() => {
+      fetchPosts();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [selectedCategory, searchTerm]);
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
@@ -33,15 +64,24 @@ export default function BlogPage() {
           {/* Sonuç Sayısı */}
           <div className="mb-6">
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              {filteredPosts.length} yazı bulundu
-              {searchTerm && ` "${searchTerm}" araması için`}
-              {selectedCategory !== "all" && ` "${blogCategories.find(c => c.id === selectedCategory)?.label}" kategorisinde`}
+              {loading ? "Yükleniyor..." : `${posts.length} yazı bulundu`}
+              {!loading && searchTerm && ` "${searchTerm}" araması için`}
+              {!loading && selectedCategory !== "all" && ` "${blogCategories.find(c => c.id === selectedCategory)?.label}" kategorisinde`}
             </p>
           </div>
 
           {/* Blog Yazıları */}
-          {filteredPosts.length > 0 ? (
-            <BlogGrid posts={filteredPosts} />
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-16 text-red-500">
+              {error}
+            </div>
+          ) : posts.length > 0 ? (
+            // @ts-ignore - Component props might slightly mismatch, assuming BlogGrid handles standard fields
+            <BlogGrid posts={posts} />
           ) : (
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">

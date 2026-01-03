@@ -18,6 +18,8 @@ enum UserRole {
   USER
   ADMIN
   MODERATOR
+  ORGANIZER
+  COMPANY
 }
 
 enum SkillLevel {
@@ -161,6 +163,8 @@ model User {
   followersRelation Follow[] @relation("UserFollowers")
   followingRelation Follow[] @relation("UserFollowing")
   refreshTokens RefreshToken[]
+  jobsPosted  Job[]
+  eventsOrganized Event[] @relation("OrganizedEvents")
   
   @@map("users")
 }
@@ -262,6 +266,8 @@ model Job {
   updatedAt   DateTime @updatedAt
   
   // Relations
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   applications JobApplication[]
   
   @@map("jobs")
@@ -365,6 +371,8 @@ model Event {
   updatedAt   DateTime @updatedAt
   
   // Relations
+  organizerId   String?
+  organizerUser User? @relation("OrganizedEvents", fields: [organizerId], references: [id], onDelete: SetNull)
   registrations EventRegistration[]
   
   @@map("events")

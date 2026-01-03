@@ -8,6 +8,12 @@ import githubRoutes from './modules/github';
 // Import existing routes
 import authRoutes from './routes/auth';
 import userRoutes from './routes/users';
+import blogRoutes from './modules/blog/route';
+import eventsRoutes from './modules/events/route';
+import jobsRoutes from './modules/jobs/route';
+import projectsRoutes from './modules/projects/route';
+import forumRoutes from './modules/forum/route';
+import learningRoutes from './modules/learning/route';
 
 const app = express();
 
@@ -49,16 +55,18 @@ app.get('/health', (req, res) => {
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'CodeCrafters API çalışıyor! 🚀',
     version: '1.0.0',
     endpoints: [
       '/api/auth/register',
-      '/api/auth/login', 
-      '/api/auth/google',
-      '/api/auth/github',
-      '/api/users/profile',
-      '/api/users/list'
+      '/api/auth/login',
+      '/api/blog',
+      '/api/events',
+      '/api/jobs',
+      '/api/projects',
+      '/api/forum',
+      '/api/learning'
     ]
   });
 });
@@ -66,6 +74,12 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api/blog', blogRoutes);
+app.use('/api/events', eventsRoutes);
+app.use('/api/jobs', jobsRoutes);
+app.use('/api/projects', projectsRoutes);
+app.use('/api/forum', forumRoutes);
+app.use('/api/learning', learningRoutes);
 
 // OAuth Routes
 app.use('/api', googleRoutes);

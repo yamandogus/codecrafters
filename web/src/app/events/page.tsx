@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Star, 
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Star,
   ArrowRight,
   Search,
   Video,
@@ -22,6 +22,9 @@ import Image from "next/image";
 export default function EventsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [events, setEvents] = useState<any[]>([]); // Using any for now to match component structure, ideally use Event type
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const categories = [
     { id: "all", name: "Tümü", icon: Calendar, color: "bg-purple-100 dark:bg-purple-900" },
@@ -32,118 +35,42 @@ export default function EventsPage() {
     { id: "conference", name: "Konferans", icon: Globe, color: "bg-indigo-100 dark:bg-indigo-900" }
   ];
 
-  const events = [
-    {
-      id: 1,
-      title: "React Türkiye Hackathon 2024",
-      description: "React ve modern web teknolojileri ile 48 saatlik hackathon. En yaratıcı projeler ödüllendirilecek!",
-      category: "hackathon",
-      startDate: "2024-03-15T09:00:00Z",
-      endDate: "2024-03-17T18:00:00Z",
-      location: "İstanbul Teknik Üniversitesi",
-      isOnline: false,
-      maxParticipants: 100,
-      currentParticipants: 67,
-      organizer: "React Türkiye",
-      tags: ["React", "JavaScript", "Hackathon", "Web Development"],
-      image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=250&fit=crop",
-      status: "upcoming",
-      price: "Ücretsiz"
-    },
-    {
-      id: 2,
-      title: "Node.js ile Backend Geliştirme Workshop",
-      description: "Node.js, Express ve MongoDB kullanarak RESTful API geliştirme workshop'u. Başlangıç seviyesi.",
-      category: "workshop",
-      startDate: "2024-02-28T14:00:00Z",
-      endDate: "2024-02-28T18:00:00Z",
-      location: "Online",
-      isOnline: true,
-      maxParticipants: 50,
-      currentParticipants: 23,
-      organizer: "CodeCrafters",
-      tags: ["Node.js", "Backend", "API", "MongoDB"],
-      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop",
-      status: "upcoming",
-      price: "Ücretsiz"
-    },
-    {
-      id: 3,
-      title: "Yazılım Kariyeri Meetup",
-      description: "Deneyimli yazılımcılarla kariyer sohbeti. Networking ve mentorluk fırsatları.",
-      category: "meetup",
-      startDate: "2024-02-20T19:00:00Z",
-      endDate: "2024-02-20T21:00:00Z",
-      location: "Kadıköy, İstanbul",
-      isOnline: false,
-      maxParticipants: 30,
-      currentParticipants: 18,
-      organizer: "Yazılım Geliştiriciler Derneği",
-      tags: ["Kariyer", "Networking", "Mentorluk"],
-      image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=400&h=250&fit=crop",
-      status: "upcoming",
-      price: "Ücretsiz"
-    },
-    {
-      id: 4,
-      title: "AI ve Machine Learning Webinar",
-      description: "Yapay zeka ve makine öğrenmesi temelleri. Python ve TensorFlow ile pratik örnekler.",
-      category: "webinar",
-      startDate: "2024-02-25T20:00:00Z",
-      endDate: "2024-02-25T21:30:00Z",
-      location: "Online",
-      isOnline: true,
-      maxParticipants: 200,
-      currentParticipants: 145,
-      organizer: "AI Türkiye",
-      tags: ["AI", "Machine Learning", "Python", "TensorFlow"],
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=250&fit=crop",
-      status: "upcoming",
-      price: "Ücretsiz"
-    },
-    {
-      id: 5,
-      title: "DevOps ve Cloud Computing Konferansı",
-      description: "Docker, Kubernetes, AWS ve modern DevOps araçları hakkında kapsamlı konferans.",
-      category: "conference",
-      startDate: "2024-04-10T09:00:00Z",
-      endDate: "2024-04-10T17:00:00Z",
-      location: "Ankara Üniversitesi",
-      isOnline: false,
-      maxParticipants: 150,
-      currentParticipants: 89,
-      organizer: "DevOps Türkiye",
-      tags: ["DevOps", "Docker", "Kubernetes", "AWS", "Cloud"],
-      image: "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=400&h=250&fit=crop",
-      status: "upcoming",
-      price: "₺150"
-    },
-    {
-      id: 6,
-      title: "Frontend Geliştirme Workshop",
-      description: "Modern CSS, JavaScript ES6+ ve React hooks ile interaktif workshop.",
-      category: "workshop",
-      startDate: "2024-03-05T10:00:00Z",
-      endDate: "2024-03-05T16:00:00Z",
-      location: "Online",
-      isOnline: true,
-      maxParticipants: 40,
-      currentParticipants: 32,
-      organizer: "Frontend Türkiye",
-      tags: ["Frontend", "CSS", "JavaScript", "React"],
-      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=250&fit=crop",
-      status: "upcoming",
-      price: "Ücretsiz"
-    }
-  ];
+  /* 
+   * API Integration
+   */
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true);
+      try {
+        const { eventService } = await import("@/services/eventsService");
+        const response = await eventService.getAll({
+          category: selectedCategory !== "all" ? selectedCategory.toUpperCase() : undefined,
+          search: searchTerm || undefined
+        });
 
-  const filteredEvents = events.filter(event => {
-    const matchesCategory = selectedCategory === "all" || event.category === selectedCategory;
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.organizer.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+        if (response.success && response.data) {
+          setEvents(response.data);
+        } else {
+          setError("Etkinlikler getirilemedi");
+        }
+      } catch (err) {
+        console.error("Events fetch error:", err);
+        setError("Bir hata oluştu");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      fetchEvents();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [selectedCategory, searchTerm]);
+
+  // Filter is now handled by API, so we just use the 'events' state directly
+  const filteredEvents = events;
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -192,7 +119,7 @@ export default function EventsPage() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-              Hackathon&apos;lar, workshop&apos;lar, meetup&apos;lar ve konferanslar. 
+              Hackathon&apos;lar, workshop&apos;lar, meetup&apos;lar ve konferanslar.
               Yazılım topluluğunun en güncel etkinliklerini keşfedin.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -245,11 +172,10 @@ export default function EventsPage() {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                  selectedCategory === category.id
-                    ? "bg-green-600 text-white"
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/30"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${selectedCategory === category.id
+                  ? "bg-green-600 text-white"
+                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/30"
+                  }`}
               >
                 <category.icon className="w-4 h-4" />
                 {category.name}
@@ -259,7 +185,11 @@ export default function EventsPage() {
 
           {/* Events Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredEvents.map((event, index) => (
+            {loading ? (
+              <div className="col-span-full flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>
+            ) : filteredEvents.map((event, index) => (
               <motion.div
                 key={event.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -292,14 +222,14 @@ export default function EventsPage() {
                         {categories.find(c => c.id === event.category)?.name}
                       </span>
                     </div>
-                    
+
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                       {event.title}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                       {event.description}
                     </p>
-                    
+
                     <div className="space-y-2 mb-4 text-sm text-gray-500 dark:text-gray-400">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
@@ -324,7 +254,7 @@ export default function EventsPage() {
                     </div>
 
                     <div className="flex flex-wrap gap-1 mb-4">
-                      {event.tags.slice(0, 3).map((tag, tagIndex) => (
+                      {event.tags.slice(0, 3).map((tag: string, tagIndex: number) => (
                         <span key={tagIndex} className="inline-flex items-center px-2 py-1 rounded text-xs font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300">
                           {tag}
                         </span>
@@ -369,12 +299,12 @@ export default function EventsPage() {
               Kendi Etkinliğinizi Düzenleyin
             </h2>
             <p className="text-lg md:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-              Topluluk için workshop, meetup veya hackathon düzenleyin. 
+              Topluluk için workshop, meetup veya hackathon düzenleyin.
               Deneyimlerinizi paylaşın ve birlikte öğrenin.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-white text-green-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
@@ -383,9 +313,9 @@ export default function EventsPage() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
+              <Button
+                size="lg"
+                variant="outline"
                 className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-3 text-lg font-semibold"
                 asChild
               >
