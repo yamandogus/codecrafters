@@ -28,7 +28,7 @@ passport.deserializeUser(async (id: string, done: VerifyCallback) => {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID!,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-  callbackURL: "/api/auth/google/callback"
+  callbackURL: `${process.env.API_URL || 'http://localhost:3001'}/api/auth/google/callback`
 }, async (accessToken: string, refreshToken: string, profile: GoogleProfile, done: VerifyCallback) => {
   try {
     const user = await googleService.handleGoogleAuth(profile as any);
@@ -42,7 +42,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID!,
   clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-  callbackURL: "/api/auth/github/callback"
+  callbackURL: `${process.env.API_URL || 'http://localhost:3001'}/api/auth/github/callback`
 }, async (accessToken: string, refreshToken: string, profile: GitHubProfile, done: VerifyCallback) => {
   try {
     const user = await githubService.handleGitHubAuth(profile as any);
