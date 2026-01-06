@@ -1,5 +1,7 @@
 // API Client - Backend ile iletişim için temel yapılandırma
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+// Hardcoded for debugging to ensure we hit the correct endpoint
+const API_BASE_URL = 'http://localhost:3001/api';
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -48,7 +50,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
@@ -86,6 +88,7 @@ class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
+        console.error(`[API Error] Request to ${url} failed with status ${response.status} - ${response.statusText}`);
         throw new Error(data.message || 'Bir hata oluştu');
       }
 

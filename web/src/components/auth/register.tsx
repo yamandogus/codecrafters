@@ -15,7 +15,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export function Register() {
   const router = useRouter();
-  const { register: registerUser, loading, error,clearAuthError } = useAuth();
+  const { register: registerUser, loading, error, clearAuthError } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -24,7 +24,7 @@ export function Register() {
     confirmPassword: "",
     acceptTerms: false,
   });
-  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   // Zaten giriş yapmışsa ana sayfaya yönlendir - Test için devre dışı
   // useEffect(() => {
@@ -44,26 +44,26 @@ export function Register() {
   }, [error, clearAuthError]);
 
   const validateForm = () => {
-    const errors: {[key: string]: string} = {};
-    
+    const errors: { [key: string]: string } = {};
+
     if (!formData.name.trim()) {
       errors.name = "Ad gerekli";
     } else if (formData.name.trim().length < 2) {
       errors.name = "Ad en az 2 karakter olmalı";
     }
-    
+
     if (!formData.surname.trim()) {
       errors.surname = "Soyad gerekli";
     } else if (formData.surname.trim().length < 2) {
       errors.surname = "Soyad en az 2 karakter olmalı";
     }
-    
+
     if (!formData.email) {
       errors.email = "E-posta adresi gerekli";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = "Geçerli bir e-posta adresi girin";
     }
-    
+
     if (!formData.password) {
       errors.password = "Şifre gerekli";
     } else if (formData.password.length < 8) {
@@ -71,17 +71,17 @@ export function Register() {
     } else if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?])/.test(formData.password)) {
       errors.password = "Şifre en az 1 büyük harf, 1 sayı ve 1 özel karakter içermeli";
     }
-    
+
     if (!formData.confirmPassword) {
       errors.confirmPassword = "Şifre tekrarı gerekli";
     } else if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = "Şifreler eşleşmiyor";
     }
-    
+
     if (!formData.acceptTerms) {
       errors.acceptTerms = "Kullanım şartlarını kabul etmelisiniz";
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -89,12 +89,12 @@ export function Register() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     const fieldValue = type === 'checkbox' ? checked : value;
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: fieldValue
     }));
-    
+
     // Hata mesajını temizle
     if (formErrors[name]) {
       setFormErrors(prev => ({
@@ -105,17 +105,19 @@ export function Register() {
   };
 
   const handleOAuthLogin = (provider: 'google' | 'github') => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+      ? (process.env.NEXT_PUBLIC_API_URL.endsWith('/api') ? process.env.NEXT_PUBLIC_API_URL : `${process.env.NEXT_PUBLIC_API_URL}/api`)
+      : 'http://localhost:3001/api';
     window.location.href = `${apiUrl}/auth/${provider}`;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     try {
       const userData = {
         name: formData.name.trim(),
@@ -124,21 +126,21 @@ export function Register() {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
       };
-      
+
       // Debug: Gönderilecek veriyi kontrol et
       console.log('Sending register data:', userData);
-      
+
       const result = await registerUser(userData);
-      
+
       if (result.type === 'user/register/fulfilled') {
         toast.success("Kayıt Başarılı", {
           description: `CodeCrafters'e hoş geldiniz!`,
         });
-        
+
         // Access user role from the result payload for immediate redirection
         const payload = result.payload as { user: { role: 'USER' | 'ADMIN' | 'MODERATOR' } };
         const userRole = payload.user.role;
-        
+
         // Role-based redirection (same as login)
         switch (userRole) {
           case 'ADMIN':
@@ -158,7 +160,7 @@ export function Register() {
     }
   };
   return (
-        <Card className="shadow-input mx-auto w-full max-w-md rounded-none p-4 md:rounded-2xl md:p-8 bg-card">
+    <Card className="shadow-input mx-auto w-full max-w-md rounded-none p-4 md:rounded-2xl md:p-8 bg-card">
       <h2 className="text-xl font-bold text-card-foreground">
         CodeCrafters&apos;a Katılın
       </h2>
@@ -170,11 +172,11 @@ export function Register() {
         <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
           <LabelInputContainer>
             <Label htmlFor="name">Ad</Label>
-            <Input 
-              id="name" 
+            <Input
+              id="name"
               name="name"
-              placeholder="Ahmet" 
-              type="text" 
+              placeholder="Ahmet"
+              type="text"
               value={formData.name}
               onChange={handleInputChange}
               className={formErrors.name ? "border-red-500" : ""}
@@ -186,11 +188,11 @@ export function Register() {
           </LabelInputContainer>
           <LabelInputContainer>
             <Label htmlFor="surname">Soyad</Label>
-            <Input 
-              id="surname" 
+            <Input
+              id="surname"
               name="surname"
-              placeholder="Yılmaz" 
-              type="text" 
+              placeholder="Yılmaz"
+              type="text"
               value={formData.surname}
               onChange={handleInputChange}
               className={formErrors.surname ? "border-red-500" : ""}
@@ -203,11 +205,11 @@ export function Register() {
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">E-posta Adresi</Label>
-          <Input 
-            id="email" 
+          <Input
+            id="email"
             name="email"
-            placeholder="ornek@codecrafters.com" 
-            type="email" 
+            placeholder="ornek@codecrafters.com"
+            type="email"
             value={formData.email}
             onChange={handleInputChange}
             className={formErrors.email ? "border-red-500" : ""}
@@ -219,11 +221,11 @@ export function Register() {
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Şifre</Label>
-          <Input 
-            id="password" 
+          <Input
+            id="password"
             name="password"
-            placeholder="••••••••" 
-            type="password" 
+            placeholder="••••••••"
+            type="password"
             value={formData.password}
             onChange={handleInputChange}
             className={formErrors.password ? "border-red-500" : ""}
@@ -264,11 +266,11 @@ export function Register() {
             <Link href="/terms" className="text-purple-600 hover:text-purple-500">
               Kullanım Şartları
             </Link>
-                         &apos;nı ve{" "}
-             <Link href="/privacy" className="text-purple-600 hover:text-purple-500">
-               Gizlilik Politikası
-             </Link>
-             &apos;nı kabul ediyorum
+            &apos;nı ve{" "}
+            <Link href="/privacy" className="text-purple-600 hover:text-purple-500">
+              Gizlilik Politikası
+            </Link>
+            &apos;nı kabul ediyorum
           </label>
         </div>
         {formErrors.acceptTerms && (
@@ -312,11 +314,11 @@ export function Register() {
             <BottomGradient />
           </button>
         </div>
-        
+
         <div className="mt-6 text-center">
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Zaten hesabınız var mı?{" "}
-            <Link 
+            <Link
               href="/auth/login"
               className="font-medium text-purple-600 hover:text-purple-500"
             >

@@ -29,8 +29,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // Debug middleware to log all requests
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+  console.log(`[DEBUG] Incoming Request: ${req.method} ${req.url}`);
+  console.log(`[DEBUG] Full URL: ${req.originalUrl}`);
   next();
+});
+
+// Diagnostic route
+app.get('/api/test-debug', (req, res) => {
+  res.json({ message: 'API is working correctly', url: req.url });
 });
 
 // Session configuration for OAuth
