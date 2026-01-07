@@ -15,7 +15,7 @@ import { Facebook, Instagram, Linkedin, Moon, Send, Sun, Twitter, Github, Mail, 
 import { useTheme } from "next-themes";
 import Link from "next/link"
 
-function Footerdemo() {
+function FooterComponent() {
   const { theme, setTheme } = useTheme();
   const [email, setEmail] = React.useState("")
   const [isSubscribed, setIsSubscribed] = React.useState(false)
@@ -34,7 +34,7 @@ function Footerdemo() {
   }
 
   return (
-    <footer className="relative border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-foreground transition-all duration-300">
+    <footer className="relative border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-foreground transition-all duration-300 mt-10">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
       
@@ -236,4 +236,4 @@ function Footerdemo() {
   )
 }
 
-export { Footerdemo } 
+export default FooterComponent; 

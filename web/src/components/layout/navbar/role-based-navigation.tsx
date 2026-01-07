@@ -13,7 +13,11 @@ import {
   Briefcase,
   Heart,
   User,
-  Activity
+  Activity,
+  Info,
+  Mail,
+  Newspaper,
+  LayoutGrid
 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 
@@ -41,7 +45,7 @@ export const getRoleBasedNavigation = (userRole?: string): NavigationItem[] => {
       title: "Özellikler",
       description: "Platform özellikleri",
       href: "#",
-      icon: null,
+      icon: LayoutGrid,
       role: 'ALL',
       children: [
         {
@@ -92,21 +96,21 @@ export const getRoleBasedNavigation = (userRole?: string): NavigationItem[] => {
       title: "Blog",
       description: "Yazılım ve teknoloji makaleleri",
       href: "/blog",
-      icon: FileText,
+      icon: Newspaper,
       role: 'ALL'
     },
     {
       title: "İletişim",
       description: "Bizimle iletişime geçin",
       href: "/contact",
-      icon: null,
+      icon: Mail,
       role: 'ALL'
     },
     {
       title: "Hakkımızda",
       description: "CodeCrafters hakkında bilgi",
       href: "/about",
-      icon: null,
+      icon: Info,
       role: 'ALL'
     }
   ];

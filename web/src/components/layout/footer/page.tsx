@@ -1,9 +1,9 @@
-import { Footerdemo } from "@/components/ui/footer-section";
+import FooterComponent from "@/components/ui/footer-section";
 
 const Footer = () => {
   return (
     <div className="block">
-      <Footerdemo />
+      <FooterComponent />
     </div>
   );
 }

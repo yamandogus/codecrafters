@@ -29,25 +29,25 @@ export default function AboutPage() {
       icon: Heart,
       title: "Topluluk Odaklı",
       description: "Herkesin katkıda bulunabileceği açık ve kapsayıcı bir ortam yaratıyoruz.",
-      color: "bg-red-100 dark:bg-red-900/30"
+      color: "bg-gray-100 dark:bg-gray-800"
     },
     {
       icon: Code,
       title: "Kaliteli Kod",
       description: "En iyi pratikleri takip eden, sürdürülebilir ve ölçeklenebilir kod yazımını teşvik ediyoruz.",
-      color: "bg-blue-100 dark:bg-blue-900/30"
+      color: "bg-gray-100 dark:bg-gray-800"
     },
     {
       icon: Target,
       title: "Sürekli Öğrenme",
       description: "Teknolojinin hızla değiştiği dünyada sürekli gelişim ve öğrenmeyi destekliyoruz.",
-      color: "bg-green-100 dark:bg-green-900/30"
+      color: "bg-gray-100 dark:bg-gray-800"
     },
     {
       icon: Users,
       title: "Mentorluk",
       description: "Deneyimli geliştiricilerin yeni başlayanlara rehberlik etmesini sağlıyoruz.",
-      color: "bg-purple-100 dark:bg-purple-900/30"
+      color: "bg-gray-100 dark:bg-gray-800"
     }
   ];
 
@@ -75,7 +75,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-purple-50 via-violet-50 to-pink-50 dark:from-purple-950/30 dark:via-violet-950/30 dark:to-pink-950/30">
+      <section className="relative py-20 px-4 bg-gray-50 dark:bg-gray-900/50">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="container mx-auto max-w-6xl text-center relative">
           <motion.div
@@ -85,7 +85,7 @@ export default function AboutPage() {
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               Yazılım Geliştirme{" "}
-              <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-primary">
                 Topluluğu
               </span>
             </h1>
@@ -95,7 +95,7 @@ export default function AboutPage() {
                öğrenmelerine yardımcı oluyoruz.
              </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 Topluluğa Katıl
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -274,7 +274,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 text-white">
+      <section className="py-20 px-4 bg-slate-900 text-white">
         <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -284,14 +284,14 @@ export default function AboutPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Topluluğumuzun Bir Parçası Olun
             </h2>
-            <p className="text-lg md:text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Yazılım geliştirme yolculuğunuzda size rehberlik eden modern araçlar 
               ve topluluk desteği ile kariyerinizi hızlandırın.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+                className="bg-white text-slate-900 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                 asChild
               >
                 <Link href="/register">
@@ -302,7 +302,7 @@ export default function AboutPage() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-3 text-lg font-semibold"
+                className="border-white text-black px-8 py-3 text-lg font-semibold"
                 asChild
               >
                 <Link href="/contact">Daha Fazla Bilgi</Link>

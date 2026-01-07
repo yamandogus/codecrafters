@@ -44,7 +44,7 @@ export function AuthGuard({ children, roles = [] }: AuthGuardProps) {
 
   if (!ready) return null;
 
-  if (roles.length > 0 && user && !roles.includes(user.role)) return null;
+  if (roles.length > 0 && user && !roles.includes(user.role || '')) return null;
 
   return <>{children}</>;
 }

@@ -85,11 +85,11 @@ export const Navbar = () => {
 
   return (
     <section
-      className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 transition-shadow duration-200 ${
-        isScrolled ? "shadow-md" : "shadow-none"
+      className={`sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 py-3 transition-all duration-300 ${
+        isScrolled ? "shadow-sm border-border/50" : "shadow-none border-transparent"
       }`}
     >
-      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
           <Link
             href="/"
@@ -101,31 +101,42 @@ export const Navbar = () => {
           </Link>
 
           <NavigationMenu className="hidden lg:block">
-            <NavigationMenuList>
+            <NavigationMenuList className="gap-2">
               {navigation.map((item, index) => {
                 if (item.children && item.children.length > 0) {
                   return (
                     <NavigationMenuItem key={index}>
-                      <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                      <NavigationMenuTrigger className="bg-transparent hover:bg-accent/50 data-[state=open]:bg-accent/50 h-10 px-4 text-sm font-medium transition-colors">
+                        <div className="flex items-center gap-2">
+                          {item.icon && <item.icon className="h-4 w-4" />}
+                          <span>{item.title}</span>
+                        </div>
+                      </NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <div className="grid w-[600px] grid-cols-2 p-3">
+                        <div className="grid w-[600px] grid-cols-2 p-4 gap-2">
                           {item.children.map((child, childIndex) => (
                             <NavigationMenuLink
-                              href={child.href}
+                              asChild
                               key={childIndex}
-                              className="rounded-md p-3 transition-colors hover:bg-muted/70"
                             >
-                              <div className="flex items-center gap-2">
-                                {child.icon && <child.icon className="h-4 w-4" />}
-                                <div>
-                                  <p className="mb-1 font-semibold text-foreground">
-                                    {child.title}
-                                  </p>
-                                  <p className="text-sm text-muted-foreground">
-                                    {child.description}
-                                  </p>
+                              <Link
+                                href={child.href}
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground group"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="flex items-center justify-center w-8 h-8 rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
+                                    {child.icon && <child.icon className="h-4 w-4" />}
+                                  </div>
+                                  <div>
+                                    <div className="text-sm font-medium leading-none mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                                      {child.title}
+                                    </div>
+                                    <p className="line-clamp-1 text-xs leading-snug text-muted-foreground group-hover:text-muted-foreground/80">
+                                      {child.description}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
+                              </Link>
                             </NavigationMenuLink>
                           ))}
                         </div>
@@ -135,12 +146,16 @@ export const Navbar = () => {
                 } else {
                   return (
                     <NavigationMenuItem key={index}>
-                      <NavigationMenuLink
-                        href={item.href}
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        {item.title}
-                      </NavigationMenuLink>
+                      <Link href={item.href} legacyBehavior passHref>
+                        <NavigationMenuLink
+                          className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-accent/50 h-10 px-4 text-sm font-medium transition-colors`}
+                        >
+                          <div className="flex items-center gap-2">
+                            {item.icon && <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />}
+                            <span>{item.title}</span>
+                          </div>
+                        </NavigationMenuLink>
+                      </Link>
                     </NavigationMenuItem>
                   );
                 }
@@ -155,12 +170,12 @@ export const Navbar = () => {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="data-[state=checked]:bg-primary cursor-pointer"
+                className="rounded-full hover:bg-accent/50 transition-colors"
               >
                 {theme === "dark" ? (
-                  <Sun className="h-4 w-4 text-yellow-500" />
+                  <Sun className="h-5 w-5 text-yellow-500 transition-all duration-300 rotate-0 scale-100" />
                 ) : (
-                  <Moon className="h-4 w-4 text-blue-500" />
+                  <Moon className="h-5 w-5 text-blue-500 transition-all duration-300 rotate-0 scale-100" />
                 )}
               </Button>
             </div>
@@ -168,12 +183,10 @@ export const Navbar = () => {
             {isAuthenticated && user ? (
               <>
                 {/* Notifications */}
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
+                <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-accent/50 transition-colors">
+                  <Bell className="h-5 w-5 text-muted-foreground" />
                   {notifications > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs text-white flex items-center justify-center">
-                      {notifications}
-                    </span>
+                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background animate-pulse" />
                   )}
                 </Button>
 
@@ -182,28 +195,33 @@ export const Navbar = () => {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 px-2"
+                      className="flex items-center gap-3 pl-2 pr-4 h-12 rounded-full hover:bg-accent/50 transition-all border border-transparent hover:border-border/50"
                     >
-                      <Avatar className="h-8 w-8">
+                      <Avatar className="h-8 w-8 border-2 border-background shadow-sm">
                         <AvatarImage src="" alt={`${user.name} ${user.surname}`} />
-                        <AvatarFallback>
+                        <AvatarFallback className="bg-gradient-to-br from-purple-500 to-blue-500 text-white font-medium">
                           {user.name[0]}{user.surname[0]}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="hidden md:block text-sm font-medium">
-                        {user.name} {user.surname}
-                      </span>
-                      <ChevronDown className="h-4 w-4" />
+                      <div className="flex flex-col items-start text-left">
+                        <span className="text-sm font-semibold leading-none">
+                          {user.name}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground leading-none mt-1">
+                          @{user.username}
+                        </span>
+                      </div>
+                      <ChevronDown className="h-3 w-3 text-muted-foreground ml-1" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>
+                  <DropdownMenuContent align="end" className="w-64 p-2">
+                    <DropdownMenuLabel className="font-normal p-2">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
                           {user.name} {user.surname}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          @{user.username}
+                          {user.email || `@${user.username}`}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -213,9 +231,9 @@ export const Navbar = () => {
                         return <DropdownMenuSeparator key={index} />;
                       }
                       return (
-                        <DropdownMenuItem asChild key={index}>
-                          <Link href={item.href} className="flex items-center">
-                            {item.icon && <item.icon className="mr-2 h-4 w-4" />}
+                        <DropdownMenuItem asChild key={index} className="cursor-pointer rounded-md p-2.5">
+                          <Link href={item.href} className="flex items-center gap-2">
+                            {item.icon && <item.icon className="h-4 w-4 text-muted-foreground" />}
                             <span>{item.title}</span>
                           </Link>
                         </DropdownMenuItem>
@@ -224,7 +242,7 @@ export const Navbar = () => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={logout}
-                      className="text-red-600 focus:text-red-600"
+                      className="text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/30 cursor-pointer rounded-md p-2.5"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Çıkış Yap</span>
@@ -234,10 +252,10 @@ export const Navbar = () => {
               </>
             ) : (
               <>
-                <Button variant="outline" asChild>
+                <Button variant="ghost" asChild className="hover:bg-accent/50">
                   <Link href="/auth/login">Giriş Yap</Link>
                 </Button>
-                <Button asChild>
+                <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
                   <Link href="/auth/register">Ücretsiz Başla</Link>
                 </Button>
               </>
@@ -245,110 +263,111 @@ export const Navbar = () => {
           </div>
           <Sheet>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="outline" size="icon">
-                <MenuIcon className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="hover:bg-accent/50">
+                <MenuIcon className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="top" className="max-h-screen overflow-auto">
-              <SheetHeader>
-                <SheetTitle>
-                  <span className="text-lg font-semibold tracking-tighter">
-                    CodeCrafters
-                  </span>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-0">
+              <SheetHeader className="p-6 border-b bg-muted/30">
+                <SheetTitle className="text-left">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-gradient-to-tr from-purple-600 to-blue-600 p-1.5 rounded-lg">
+                      <span className="text-white font-bold text-lg leading-none">C</span>
+                    </div>
+                    <span className="text-xl font-bold tracking-tight">CodeCrafters</span>
+                  </div>
                 </SheetTitle>
               </SheetHeader>
-              <div className="flex flex-col p-4">
-                <Accordion type="single" collapsible className="mt-4 mb-2">
-                  {navigation.map((item, index) => {
-                    if (item.children && item.children.length > 0) {
-                      return (
-                        <AccordionItem value={`nav-${index}`} className="border-none" key={index}>
-                          <AccordionTrigger className="text-base hover:no-underline">
-                            {item.title}
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <div className="grid md:grid-cols-2">
-                              {item.children.map((child, childIndex) => (
-                                <a
-                                  href={child.href}
-                                  key={childIndex}
-                                  className="rounded-md p-3 transition-colors hover:bg-muted/70"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    {child.icon && <child.icon className="h-4 w-4" />}
-                                    <div>
-                                      <p className="mb-1 font-semibold text-foreground">
-                                        {child.title}
-                                      </p>
-                                      <p className="text-sm text-muted-foreground">
-                                        {child.description}
-                                      </p>
+              <div className="flex flex-col h-full">
+                <div className="flex-1 overflow-auto py-6 px-4">
+                  <Accordion type="single" collapsible className="w-full">
+                    {navigation.map((item, index) => {
+                      if (item.children && item.children.length > 0) {
+                        return (
+                          <AccordionItem value={`nav-${index}`} className="border-b-0 mb-2" key={index}>
+                            <AccordionTrigger className="hover:bg-accent/50 px-4 py-2 rounded-md hover:no-underline [&[data-state=open]]:bg-accent/50">
+                              <div className="flex items-center gap-3 text-base">
+                                {item.icon && <item.icon className="h-5 w-5 text-muted-foreground" />}
+                                {item.title}
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="pb-0 pt-1">
+                              <div className="flex flex-col gap-1 pl-4">
+                                {item.children.map((child, childIndex) => (
+                                  <a
+                                    href={child.href}
+                                    key={childIndex}
+                                    className="flex items-center gap-3 p-3 rounded-md hover:bg-accent transition-colors group"
+                                  >
+                                    <div className="flex items-center justify-center w-8 h-8 rounded-md bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                                      {child.icon && <child.icon className="h-4 w-4" />}
                                     </div>
-                                  </div>
-                                </a>
-                              ))}
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      );
-                    }
-                    return null;
-                  })}
-                </Accordion>
-                <div className="flex flex-col gap-6">
-                  {navigation.map((item, index) => {
-                    if (!item.children || item.children.length === 0) {
+                                    <div className="flex flex-col">
+                                      <span className="text-sm font-medium">{child.title}</span>
+                                      <span className="text-xs text-muted-foreground line-clamp-1">{child.description}</span>
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      }
                       return (
-                        <a href={item.href} className="font-medium" key={index}>
-                          {item.title}
-                        </a>
+                        <div key={index} className="mb-2">
+                          <Link
+                            href={item.href}
+                            className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-accent/50 transition-colors text-base font-medium"
+                          >
+                            {item.icon && <item.icon className="h-5 w-5 text-muted-foreground" />}
+                            {item.title}
+                          </Link>
+                        </div>
                       );
-                    }
-                    return null;
-                  })}
+                    })}
+                  </Accordion>
                 </div>
-                <div className="mt-6 flex flex-col gap-4">
+
+                <div className="p-4 border-t bg-muted/30 mt-auto">
                   {isAuthenticated && user ? (
-                    <>
-                      <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-                        <Avatar className="h-10 w-10">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-background border shadow-sm">
+                        <Avatar className="h-10 w-10 border">
                           <AvatarImage src="" alt={`${user.name} ${user.surname}`} />
-                          <AvatarFallback>
+                          <AvatarFallback className="bg-primary/10 text-primary">
                             {user.name[0]}{user.surname[0]}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <p className="font-medium text-sm">{user.name} {user.surname}</p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{user.name} {user.surname}</p>
+                          <p className="text-xs text-muted-foreground truncate">
                             @{user.username}
                           </p>
                         </div>
+                        <Button variant="ghost" size="icon" onClick={logout} className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                          <LogOut className="h-4 w-4" />
+                        </Button>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         {quickActions.map((action, index) => (
-                          <Button variant="outline" size="sm" asChild key={index}>
-                            <Link href={action.href}>{action.title}</Link>
+                          <Button variant="outline" size="sm" asChild key={index} className="justify-start h-9">
+                            <Link href={action.href}>
+                              {action.icon && <action.icon className="h-3.5 w-3.5 mr-2 text-muted-foreground" />}
+                              {action.title}
+                            </Link>
                           </Button>
                         ))}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={logout}
-                          className="text-red-600 border-red-200 hover:bg-red-50"
-                        >
-                          Çıkış Yap
-                        </Button>
                       </div>
-                    </>
+                    </div>
                   ) : (
-                    <>
-                      <Button variant="outline" asChild>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button variant="outline" asChild className="w-full">
                         <Link href="/auth/login">Giriş Yap</Link>
                       </Button>
-                      <Button asChild>
+                      <Button asChild className="w-full bg-primary text-primary-foreground">
                         <Link href="/auth/register">Ücretsiz Başla</Link>
                       </Button>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>

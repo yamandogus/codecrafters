@@ -23,28 +23,28 @@ export default function ContactPage() {
       icon: MapPin,
       title: "Adres",
       description: "Türkiye'nin Her Yerinde",
-      bgColor: "bg-purple-100 dark:bg-purple-900",
+      bgColor: "bg-gray-100 dark:bg-gray-800",
       iconColor: "text-purple-600 dark:text-purple-400"
     },
     {
       icon: Mail,
       title: "E-posta İle",
       description: "destek@codecrafters.com",
-      bgColor: "bg-blue-100 dark:bg-blue-900", 
+      bgColor: "bg-gray-100 dark:bg-gray-800", 
       iconColor: "text-blue-600 dark:text-blue-400"
     },
     {
       icon: Phone,
       title: "Bizi Arayın",
       description: "+90 XXX XXX XX XX",
-      bgColor: "bg-green-100 dark:bg-green-900",
+      bgColor: "bg-gray-100 dark:bg-gray-800",
       iconColor: "text-green-600 dark:text-green-400"
     },
     {
       icon: Clock,
       title: "Çalışma Saatleri",
       description: "24/7 Topluluk Desteği",
-      bgColor: "bg-orange-100 dark:bg-orange-900",
+      bgColor: "bg-gray-100 dark:bg-gray-800",
       iconColor: "text-orange-600 dark:text-orange-400"
     }
   ];
@@ -64,7 +64,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-purple-50 via-violet-50 to-pink-50 dark:from-purple-950/30 dark:via-violet-950/30 dark:to-pink-950/30">
+      <section className="relative py-20 px-4 bg-gray-50 dark:bg-gray-900/50">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="container mx-auto max-w-6xl text-center relative">
           <motion.div
@@ -75,7 +75,7 @@ export default function ContactPage() {
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               Sizden{" "}
-              <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-primary">
                 Haber Almaktan
               </span>{" "}
               Memnuniyet Duyarız
@@ -85,11 +85,11 @@ export default function ContactPage() {
               Topluluğa nasıl katkıda bulunabileceğinizi öğrenmek için bize ulaşın.
             </p>
             <div className="flex justify-center gap-4">
-              <Button className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Mail className="w-4 h-4 mr-2" />
                 İletişime Geç
               </Button>
-              <Button variant="outline" className="border-purple-200 hover:border-purple-300">
+              <Button variant="outline">
                 <Users className="w-4 h-4 mr-2" />
                 Topluluğa Katıl
               </Button>
@@ -125,7 +125,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Partnership */}
-      <section className="py-16 px-4 bg-gray-50 dark:bg-gray-900/50">
+      <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
@@ -207,7 +207,7 @@ export default function ContactPage() {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                   >
                     Mesajı Gönder
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -223,7 +223,7 @@ export default function ContactPage() {
               transition={{ duration: 0.6 }}
               className="space-y-6"
             >
-              <Card className="p-8 bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-950/30 dark:to-violet-950/30">
+              <Card className="p-8 bg-gray-50 dark:bg-gray-900">
                 <div className="mb-4">
                   <Users className="w-12 h-12 text-purple-600 mb-4" />
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -237,10 +237,10 @@ export default function ContactPage() {
 
               {/* Additional Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Card className="p-6 bg-blue-50 dark:bg-blue-950/30 hover:shadow-lg transition-all duration-300 cursor-pointer group">
+                <Card className="p-6 bg-gray-50 dark:bg-gray-900 hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-0">
                     <div className="mb-4">
-                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
                         <Heart className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                       </div>
                       <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
@@ -256,10 +256,10 @@ export default function ContactPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="p-6 bg-green-50 dark:bg-green-950/30 hover:shadow-lg transition-all duration-300 cursor-pointer group">
+                <Card className="p-6 bg-gray-50 dark:bg-gray-900 hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-0">
                     <div className="mb-4">
-                      <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
                         <Heart className="w-6 h-6 text-green-600 dark:text-green-400" />
                       </div>
                       <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
@@ -281,7 +281,7 @@ export default function ContactPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 px-4 bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 text-white relative overflow-hidden">
+      <section className="py-20 px-4 bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         <div className="container mx-auto max-w-6xl text-center relative">
           <motion.div
@@ -294,14 +294,14 @@ export default function ContactPage() {
               <br />
               Kariyerinizi Hızlandırın
             </h2>
-            <p className="text-lg md:text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Bağışınız, yazılım öğrenen kişilere kaynak sağlamak ve açık kaynak projeler 
               geliştirmek için kullanılacaktır.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
                 size="lg" 
-                className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+                className="bg-white text-slate-900 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
               >
                 Hemen Katıl ve Topluluğun Büyümesine Katkı Sağla
                 <ArrowRight className="w-5 h-5 ml-2" />

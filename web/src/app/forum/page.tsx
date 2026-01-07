@@ -131,7 +131,7 @@ export default function ForumPage() {
           <Card>
             <CardContent className="p-6">
                              <div className="flex items-center gap-4">
-                 <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full">
+                 <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-full">
                    <MessageCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                  </div>
                                  <div>
@@ -144,7 +144,7 @@ export default function ForumPage() {
            <Card>
              <CardContent className="p-6">
                <div className="flex items-center gap-4">
-                 <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
+                 <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-full">
                    <Users className="h-6 w-6 text-green-600 dark:text-green-400" />
                  </div>
                  <div>
@@ -157,7 +157,7 @@ export default function ForumPage() {
            <Card>
              <CardContent className="p-6">
                <div className="flex items-center gap-4">
-                 <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full">
+                 <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-full">
                    <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                  </div>
                  <div>
