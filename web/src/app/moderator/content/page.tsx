@@ -82,24 +82,20 @@ const pendingContent: ContentItem[] = [
   }
 ];
 
+import { AuthGuard } from "@/components/auth/auth-guard";
+
 export default function ModeratorContentPage() {
-  const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
+  return (
+    <AuthGuard roles={['MODERATOR', 'ADMIN']}>
+      <ModeratorContent />
+    </AuthGuard>
+  );
+}
+
+function ModeratorContent() {
+  const { user } = useSelector((s: RootState) => s.user);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("pending");
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/auth/login');
-      return;
-    }
-    const role = user?.role;
-    if (role !== 'MODERATOR' && role !== 'ADMIN') {
-      router.replace('/');
-    }
-  }, [isAuthenticated, user, router]);
-
-  const role = user?.role;
-  if (!isAuthenticated || (role !== 'MODERATOR' && role !== 'ADMIN')) return null;
 
   const getTypeIcon = (type: string) => {
     switch (type) {

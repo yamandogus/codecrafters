@@ -6,14 +6,15 @@ import googleRoutes from './modules/google';
 import githubRoutes from './modules/github';
 
 // Import existing routes
-import authRoutes from './routes/auth';
-import userRoutes from './routes/users';
+import authRoutes from './modules/auth/route';
+import userRoutes from './modules/user/route';
 import blogRoutes from './modules/blog/route';
 import eventsRoutes from './modules/events/route';
 import jobsRoutes from './modules/jobs/route';
 import projectsRoutes from './modules/projects/route';
 import forumRoutes from './modules/forum/route';
 import learningRoutes from './modules/learning/route';
+import dashboardRoutes from './modules/dashboard/route';
 
 const app = express();
 
@@ -78,14 +79,15 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api', authRoutes);
-app.use('/api', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/forum', forumRoutes);
 app.use('/api/learning', learningRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // OAuth Routes
 app.use('/api', googleRoutes);

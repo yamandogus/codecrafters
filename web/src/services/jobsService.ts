@@ -42,5 +42,9 @@ export const jobService = {
 
     apply: (id: string, data: any) => {
         return apiClient.post(`/jobs/${id}/apply`, data);
+    },
+
+    getMyApplications: () => {
+        return apiClient.get<any[]>("/jobs/applications/me");
     }
 };

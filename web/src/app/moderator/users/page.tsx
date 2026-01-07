@@ -104,25 +104,21 @@ const users: User[] = [
   }
 ];
 
+import { AuthGuard } from "@/components/auth/auth-guard";
+
 export default function ModeratorUsersPage() {
-  const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
+  return (
+    <AuthGuard roles={['MODERATOR', 'ADMIN']}>
+      <ModeratorUsersContent />
+    </AuthGuard>
+  );
+}
+
+function ModeratorUsersContent() {
+  const { user } = useSelector((s: RootState) => s.user);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/auth/login');
-      return;
-    }
-    const role = user?.role;
-    if (role !== 'MODERATOR' && role !== 'ADMIN') {
-      router.replace('/');
-    }
-  }, [isAuthenticated, user, router]);
-
-  const role = user?.role;
-  if (!isAuthenticated || (role !== 'MODERATOR' && role !== 'ADMIN')) return null;
 
   const getRoleColor = (userRole: string) => {
     switch (userRole) {

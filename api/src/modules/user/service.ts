@@ -24,6 +24,23 @@ export class UserService {
         provider: true,
         createdAt: true,
         updatedAt: true,
+        skills: true,
+        achievements: true,
+        projectsCreated: {
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: { title: true, description: true, createdAt: true, category: true }
+        },
+        blogPosts: {
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: { title: true, excerpt: true, createdAt: true }
+        },
+        // İstatistikler
+        projects: true,
+        events: true,
+        followers: true,
+        following: true,
       },
     });
 
@@ -125,16 +142,16 @@ export class UserService {
   // Kullanıcı listesi (admin veya genel liste)
   async getUsers(page: number = 1, limit: number = 10, search?: string) {
     const skip = (page - 1) * limit;
-    
+
     const where = search
       ? {
-          OR: [
-            { name: { contains: search, mode: 'insensitive' as const } },
-            { surname: { contains: search, mode: 'insensitive' as const } },
-            { username: { contains: search, mode: 'insensitive' as const } },
-            { email: { contains: search, mode: 'insensitive' as const } },
-          ],
-        }
+        OR: [
+          { name: { contains: search, mode: 'insensitive' as const } },
+          { surname: { contains: search, mode: 'insensitive' as const } },
+          { username: { contains: search, mode: 'insensitive' as const } },
+          { email: { contains: search, mode: 'insensitive' as const } },
+        ],
+      }
       : {};
 
     const [users, total] = await Promise.all([
@@ -190,7 +207,18 @@ export class UserService {
         avatar: true,
         provider: true,
         createdAt: true,
-        // Kullanıcının blog yazıları, projeleri vs. de eklenebilir
+        skills: true,
+        achievements: true,
+        projectsCreated: {
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: { title: true, description: true, createdAt: true, category: true }
+        },
+        // İstatistikler
+        projects: true,
+        events: true,
+        followers: true,
+        following: true,
       },
     });
 

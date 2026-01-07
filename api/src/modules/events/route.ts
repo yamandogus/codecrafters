@@ -7,6 +7,10 @@ const controller = new EventController();
 
 // Public routes
 router.get("/", (req, res) => controller.getAll(req, res));
+
+// Protected routes (User)
+router.get("/my-registrations", authenticate, (req, res) => controller.getMyRegistrations(req, res));
+
 router.get("/:id", (req, res) => controller.getById(req, res));
 
 // Protected routes (Admin / Moderator only for management)

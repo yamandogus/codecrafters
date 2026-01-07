@@ -1,13 +1,27 @@
 "use client";
 
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 import { CardHoverEffect } from "./card";
 import Header from "./header";
 import CommunityShowcase from "./community-showcase";
 import { InfiniteMovingCards } from '../ui/infinite-moving-cards';
+import UserDashboard from '../dashboard/user-dashboard';
 
 // This is the current user home page content
 export default function UserHome() {
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
+
+  if (isAuthenticated) {
+    return (
+      <div className="container max-w-7xl mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-8">Hoş Geldiniz 👋</h1>
+        <UserDashboard />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <Header />

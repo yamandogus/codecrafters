@@ -86,4 +86,14 @@ export class JobController {
             return res.status(500).json({ success: false, message: "Başvurular getirilirken hata oluştu" });
         }
     }
+
+    async getMyApplications(req: any, res: Response) {
+        try {
+            const userId = req.user.userId;
+            const result = await jobService.getUserApplications(userId);
+            return res.status(200).json({ success: true, data: result });
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Başvurularım getirilirken hata oluştu" });
+        }
+    }
 }

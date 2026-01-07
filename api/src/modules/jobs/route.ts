@@ -7,6 +7,10 @@ const controller = new JobController();
 
 // Public routes
 router.get("/", (req, res) => controller.getAll(req, res));
+
+// Protected routes (User)
+router.get("/applications/me", authenticate, (req, res) => controller.getMyApplications(req, res));
+
 router.get("/:id", (req, res) => controller.getById(req, res));
 
 // Admin routes

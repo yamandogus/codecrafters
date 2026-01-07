@@ -123,4 +123,20 @@ export class EventService {
 
         return transaction[0];
     }
+
+    async getUserRegistrations(userId: string) {
+        return prisma.event.findMany({
+            where: {
+                registrations: {
+                    some: { userId }
+                }
+            },
+            include: {
+                registrations: {
+                    where: { userId }
+                }
+            },
+            orderBy: { startDate: 'asc' },
+        });
+    }
 }

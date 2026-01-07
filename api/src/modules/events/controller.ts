@@ -82,4 +82,14 @@ export class EventController {
             return res.status(status).json({ success: false, message: error.message || "İptal hatası" });
         }
     }
+
+    async getMyRegistrations(req: any, res: Response) {
+        try {
+            const userId = req.user.userId;
+            const result = await eventService.getUserRegistrations(userId);
+            return res.status(200).json({ success: true, data: result });
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Kayıtlı etkinlikler getirilirken hata oluştu" });
+        }
+    }
 }

@@ -113,4 +113,25 @@ export class JobService {
             orderBy: { appliedAt: 'desc' }
         });
     }
+
+    async getUserApplications(userId: string) {
+        return prisma.jobApplication.findMany({
+            where: { userId },
+            include: {
+                job: {
+                    select: {
+                        id: true,
+                        title: true,
+                        company: true,
+                        location: true,
+                        type: true,
+                        category: true,
+                        status: true,
+                        createdAt: true
+                    }
+                }
+            },
+            orderBy: { appliedAt: 'desc' }
+        });
+    }
 }

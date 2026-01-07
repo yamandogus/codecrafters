@@ -1,27 +1,26 @@
 "use client";
 
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { AuthGuard } from '@/components/auth/auth-guard';
 
 export default function ModeratorPage() {
-  const { user, isAuthenticated } = useSelector((s: RootState) => s.user);
   const router = useRouter();
 
+  // Redirect to dashboard logic remains, but wrapped in AuthGuard for role check first
+  return (
+    <AuthGuard roles={['MODERATOR', 'ADMIN']}>
+      <ModeratorRedirect />
+    </AuthGuard>
+  );
+}
+
+function ModeratorRedirect() {
+  const router = useRouter();
+  
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/auth/login');
-      return;
-    }
-    const role = user?.role;
-    if (role !== 'MODERATOR' && role !== 'ADMIN') {
-      router.replace('/');
-      return;
-    }
-    // Redirect to dashboard
     router.replace('/moderator/dashboard');
-  }, [isAuthenticated, user, router]);
+  }, [router]);
 
   return null;
 }

@@ -6,6 +6,7 @@ const router = Router();
 const userController = new UserController();
 
 // Korumalı rotalar (authentication gerekli)
+router.get("/me", authenticate, (req, res) => userController.getProfile(req, res));
 router.get("/profile", authenticate, (req, res) => userController.getProfile(req, res));
 router.put("/profile", authenticate, (req, res) => userController.updateProfile(req, res));
 router.put("/change-password", authenticate, (req, res) => userController.changePassword(req, res));

@@ -50,5 +50,9 @@ export const eventService = {
 
     unregister: (id: string) => {
         return apiClient.delete(`/events/${id}/register`);
+    },
+
+    getMyRegistrations: () => {
+        return apiClient.get<Event[]>("/events/my-registrations");
     }
 };
