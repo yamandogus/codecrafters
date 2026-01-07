@@ -1,13 +1,18 @@
 import { Request, Response } from "express";
 import { UpdateProfileSchema, ChangePasswordSchema } from "../../dto/userDto";
 import { UserService } from "./service";
+import { AppError } from "../../types";
+import { ZodError } from "zod";
 
 const userService = new UserService();
 
 export class UserController {
   // Kendi profilini getir
-  async getProfile(req: any, res: Response) {
+  async getProfile(req: Request, res: Response) {
     try {
+      if (!req.user) {
+        return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+      }
       const userId = req.user.userId; // Auth middleware'den geliyor
       const user = await userService.getProfile(userId);
 
@@ -16,18 +21,22 @@ export class UserController {
         message: "Profil başarıyla getirildi",
         data: user,
       });
-    } catch (error: any) {
-      const status = error.status || 500;
+    } catch (error) {
+      const appError = error as AppError;
+      const status = appError.status || 500;
       return res.status(status).json({
         success: false,
-        message: error?.message || "Profil getirilirken bir hata oluştu",
+        message: appError.message || "Profil getirilirken bir hata oluştu",
       });
     }
   }
 
   // Profilini güncelle
-  async updateProfile(req: any, res: Response) {
+  async updateProfile(req: Request, res: Response) {
     try {
+      if (!req.user) {
+        return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+      }
       const userId = req.user.userId;
       const validated = UpdateProfileSchema.parse(req.body);
 
@@ -38,25 +47,29 @@ export class UserController {
         message: "Profil başarıyla güncellendi",
         data: updatedUser,
       });
-    } catch (error: any) {
-      if (error?.errors) {
+    } catch (error) {
+      if (error instanceof ZodError) {
         return res.status(400).json({ 
           success: false, 
           message: "Validasyon hatası",
-          errors: error.errors 
+          errors: error.issues 
         });
       }
-      const status = error.status || 500;
+      const appError = error as AppError;
+      const status = appError.status || 500;
       return res.status(status).json({
         success: false,
-        message: error?.message || "Profil güncellenirken bir hata oluştu",
+        message: appError.message || "Profil güncellenirken bir hata oluştu",
       });
     }
   }
 
   // Şifre değiştir
-  async changePassword(req: any, res: Response) {
+  async changePassword(req: Request, res: Response) {
     try {
+      if (!req.user) {
+        return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+      }
       const userId = req.user.userId;
       const validated = ChangePasswordSchema.parse(req.body);
 
@@ -66,18 +79,19 @@ export class UserController {
         success: true,
         message: result.message,
       });
-    } catch (error: any) {
-      if (error?.errors) {
+    } catch (error) {
+      if (error instanceof ZodError) {
         return res.status(400).json({ 
           success: false, 
           message: "Validasyon hatası",
-          errors: error.errors 
+          errors: error.issues 
         });
       }
-      const status = error.status || 400;
+      const appError = error as AppError;
+      const status = appError.status || 400;
       return res.status(status).json({
         success: false,
-        message: error?.message || "Şifre değiştirilirken bir hata oluştu",
+        message: appError.message || "Şifre değiştirilirken bir hata oluştu",
       });
     }
   }
@@ -97,10 +111,11 @@ export class UserController {
         data: result.users,
         pagination: result.pagination,
       });
-    } catch (error: any) {
+    } catch (error) {
+      const appError = error as AppError;
       return res.status(500).json({
         success: false,
-        message: error?.message || "Kullanıcı listesi getirilirken bir hata oluştu",
+        message: appError.message || "Kullanıcı listesi getirilirken bir hata oluştu",
       });
     }
   }
@@ -116,11 +131,58 @@ export class UserController {
         message: "Kullanıcı başarıyla getirildi",
         data: user,
       });
-    } catch (error: any) {
-      const status = error.status || 500;
+    } catch (error) {
+      const appError = error as AppError;
+      const status = appError.status || 500;
       return res.status(status).json({
         success: false,
-        message: error?.message || "Kullanıcı getirilirken bir hata oluştu",
+        message: appError.message || "Kullanıcı getirilirken bir hata oluştu",
+      });
+    }
+  }
+
+  // Kullanıcıya ait projeleri getir
+  async getMyProjects(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+      }
+      const userId = req.user.userId;
+      const projects = await userService.getUserProjects(userId);
+
+      return res.status(200).json({
+        success: true,
+        message: "Projeler başarıyla getirildi",
+        data: projects,
+      });
+    } catch (error) {
+      const appError = error as AppError;
+      return res.status(500).json({
+        success: false,
+        message: appError.message || "Projeler getirilirken bir hata oluştu",
+      });
+    }
+  }
+
+  // Kullanıcı istatistiklerini getir
+  async getMyStats(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+      }
+      const userId = req.user.userId;
+      const stats = await userService.getUserStats(userId);
+
+      return res.status(200).json({
+        success: true,
+        message: "İstatistikler başarıyla getirildi",
+        data: stats,
+      });
+    } catch (error) {
+      const appError = error as AppError;
+      return res.status(500).json({
+        success: false,
+        message: appError.message || "İstatistikler getirilirken bir hata oluştu",
       });
     }
   }

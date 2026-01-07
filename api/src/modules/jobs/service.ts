@@ -1,4 +1,4 @@
-import { PrismaClient, JobCategory, JobType, JobStatus } from "@prisma/client";
+import { PrismaClient, JobCategory, JobType, JobStatus, Prisma } from "@prisma/client";
 import { CreateJobDTO, UpdateJobDTO, ApplyJobDTO } from "../../dto/jobsDto";
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ export class JobService {
     }
 
     async getAll(filters?: { category?: string; search?: string; type?: string }) {
-        const where: any = { status: JobStatus.ACTIVE };
+        const where: Prisma.JobWhereInput = { status: JobStatus.ACTIVE };
 
         if (filters?.category && filters.category !== 'all') {
             where.category = filters.category as JobCategory;

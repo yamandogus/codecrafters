@@ -13,7 +13,6 @@ import {
   ProfileSettings,
   ProfileStats,
   ProfileContact,
-  ProfileOverviewEditor,
 } from "./index";
 
 // Re-export ProfileUser for backward compatibility
@@ -25,7 +24,6 @@ interface ProfileViewProps {
 }
 
 export default function ProfileView({ user, isEditable = false }: ProfileViewProps) {
-  const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [userData, setUserData] = useState<ProfileUser>(user);
 
@@ -45,8 +43,8 @@ export default function ProfileView({ user, isEditable = false }: ProfileViewPro
       <ProfileHeader
         user={userData}
         isEditable={isEditable}
-        isEditing={isEditing}
-        onEditToggle={() => setIsEditing(!isEditing)}
+        isEditing={false}
+        onEditToggle={() => {}}
       />
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -87,18 +85,11 @@ export default function ProfileView({ user, isEditable = false }: ProfileViewPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                {!isEditable || !isEditing ? (
-                  <ProfileOverview user={userData} />
-                ) : (
-                  <ProfileOverviewEditor
-                    user={userData}
-                    onSaved={(u) => {
-                      setUserData(u);
-                      setIsEditing(false);
-                    }}
-                    onCancel={() => setIsEditing(false)}
-                  />
-                )}
+                <ProfileOverview 
+                  user={userData} 
+                  isEditable={isEditable}
+                  onUpdate={(u) => setUserData(u)}
+                />
               </motion.div>
             )}
 
@@ -108,7 +99,10 @@ export default function ProfileView({ user, isEditable = false }: ProfileViewPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <ProfileActivity recentActivity={userData.recentActivity} />
+                <ProfileActivity 
+                  recentActivity={userData.recentActivity} 
+                  isEditable={isEditable}
+                />
               </motion.div>
             )}
 
@@ -118,7 +112,11 @@ export default function ProfileView({ user, isEditable = false }: ProfileViewPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <ProfileProjects count={userData.stats.projects} />
+                <ProfileProjects 
+                  user={userData} 
+                  isEditable={isEditable}
+                  onUpdate={(u) => setUserData(u)}
+                />
               </motion.div>
             )}
 
@@ -163,7 +161,11 @@ export default function ProfileView({ user, isEditable = false }: ProfileViewPro
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <ProfileContact user={userData} />
+              <ProfileContact 
+                user={userData} 
+                isEditable={isEditable}
+                onUpdate={(u) => setUserData(u)}
+              />
             </motion.div>
           </div>
         </div>

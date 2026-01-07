@@ -1,4 +1,4 @@
-import { PrismaClient, EventCategory, EventStatus } from "@prisma/client";
+import { PrismaClient, EventCategory, EventStatus, Prisma } from "@prisma/client";
 import { CreateEventDTO, UpdateEventDTO } from "../../dto/eventsDto";
 
 const prisma = new PrismaClient();
@@ -17,7 +17,7 @@ export class EventService {
     }
 
     async getAll(filters?: { category?: string; search?: string }) {
-        const where: any = { status: { not: EventStatus.CANCELLED } };
+        const where: Prisma.EventWhereInput = { status: { not: EventStatus.CANCELLED } };
 
         if (filters?.category && filters.category !== 'all') {
             where.category = filters.category as EventCategory;

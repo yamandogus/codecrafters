@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { GitHubOAuthService } from './service';
-import { OAuthResponse } from '../../dto/oauthDto';
+import { OAuthResponse, OAuthUser } from '../../dto/oauthDto';
 
 export class GitHubOAuthController {
   private githubService: GitHubOAuthService;
@@ -18,7 +18,7 @@ export class GitHubOAuthController {
   // Handle GitHub OAuth callback
   handleGitHubCallback = async (req: Request, res: Response): Promise<void> => {
     try {
-      const user = req.user as any;
+      const user = req.user as OAuthUser | undefined;
       
       if (!user) {
         const response: OAuthResponse = {

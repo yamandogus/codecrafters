@@ -59,4 +59,14 @@ export interface ProfileUser {
     date: string;
     icon: React.ReactNode | LucideIcon;
   }[];
+  projects?: {
+    id: string | number;
+    title: string;
+    description: string;
+    category?: string;
+    createdAt: string;
+    tech?: string[];
+    demo?: string;
+    github?: string;
+  }[];
 }

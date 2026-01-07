@@ -3,13 +3,15 @@ import { Strategy as GoogleStrategy, Profile as GoogleProfile, VerifyCallback } 
 import { Strategy as GitHubStrategy, Profile as GitHubProfile } from 'passport-github2';
 import { GoogleOAuthService } from '../modules/google/service';
 import { GitHubOAuthService } from '../modules/github/service';
+import { OAuthUser } from '../dto/oauthDto';
 
 const googleService = new GoogleOAuthService();
 const githubService = new GitHubOAuthService();
 
 // Serialize user for session
-passport.serializeUser((user: any, done: VerifyCallback) => {
-  done(null, user.id);
+passport.serializeUser((user: unknown, done: VerifyCallback) => {
+  const oauthUser = user as OAuthUser;
+  done(null, oauthUser.id);
 });
 
 // Deserialize user from session
@@ -18,7 +20,20 @@ passport.deserializeUser(async (id: string, done: VerifyCallback) => {
     const { PrismaClient } = await import('@prisma/client');
     const prisma = new PrismaClient();
     const user = await prisma.user.findUnique({ where: { id } });
-    done(null, user as any);
+    if (!user) {
+      return done(new Error('User not found'), false);
+    }
+    const oauthUser: OAuthUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      surname: user.surname || undefined,
+      avatar: user.avatar || undefined,
+      provider: (user.provider as 'google' | 'github' | 'local') || 'local',
+      username: user.username,
+      isVerified: user.isVerified
+    };
+    done(null, oauthUser);
   } catch (error) {
     done(error, false);
   }
@@ -31,7 +46,14 @@ passport.use(new GoogleStrategy({
   callbackURL: `${process.env.API_URL || 'http://localhost:3001'}/api/auth/google/callback`
 }, async (accessToken: string, refreshToken: string, profile: GoogleProfile, done: VerifyCallback) => {
   try {
-    const user = await googleService.handleGoogleAuth(profile as any);
+    const googleProfile = {
+      id: profile.id,
+      displayName: profile.displayName,
+      name: profile.name,
+      emails: profile.emails,
+      photos: profile.photos
+    };
+    const user = await googleService.handleGoogleAuth(googleProfile);
     done(null, user);
   } catch (error) {
     done(error, false);
@@ -45,7 +67,18 @@ passport.use(new GitHubStrategy({
   callbackURL: `${process.env.API_URL || 'http://localhost:3001'}/api/auth/github/callback`
 }, async (accessToken: string, refreshToken: string, profile: GitHubProfile, done: VerifyCallback) => {
   try {
-    const user = await githubService.handleGitHubAuth(profile as any);
+    if (!profile.username) {
+      return done(new Error('GitHub username is required'), false);
+    }
+    const githubProfile = {
+      id: profile.id,
+      username: profile.username,
+      displayName: profile.displayName,
+      profileUrl: profile.profileUrl,
+      emails: profile.emails,
+      photos: profile.photos
+    };
+    const user = await githubService.handleGitHubAuth(githubProfile);
     done(null, user);
   } catch (error) {
     done(error, false);

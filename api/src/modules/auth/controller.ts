@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { LoginSchema, RegisterSchema } from "../../dto/authDto";
 import { AuthService } from "./service";
+import { AppError } from "../../types";
+import { ZodError } from "zod";
 
 const authService = new AuthService();
 
 export class AuthController {
-  async register(req: any, res: any) {
+  async register(req: Request, res: Response) {
     try {
       const validated = RegisterSchema.parse(req.body);
 
@@ -16,18 +18,19 @@ export class AuthController {
         message: "Kayıt başarılı",
         data: result,
       });
-    } catch (error: any) {
-      if (error?.error) {
+    } catch (error) {
+      if (error instanceof ZodError) {
         return res.status(400).json({
           success: false,
-          message: error.message,
-          data: error.error,
+          message: "Validasyon hatası",
+          errors: error.issues,
         });
       }
-      const status = error.status || 400;
+      const appError = error as AppError;
+      const status = appError.status || 400;
       return res.status(status).json({
         success: false,
-        message: error?.message || "Kayıt sırasında bir hata oluştu",
+        message: appError.message || "Kayıt sırasında bir hata oluştu",
       });
     }
   }
@@ -42,14 +45,15 @@ export class AuthController {
         message: "Giriş başarılı",
         data: result,
       });
-    } catch (error: any) {
-      if (error?.errors) {
-        return res.status(400).json({ success: false, errors: error.errors });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ success: false, errors: error.issues });
       }
-      const status = error?.status || 401;
+      const appError = error as AppError;
+      const status = appError.status || 401;
       return res.status(status).json({
         success: false,
-        message: error?.message || "Giriş sırasında bir hata oluştu",
+        message: appError.message || "Giriş sırasında bir hata oluştu",
       });
     }
   }
@@ -62,9 +66,10 @@ export class AuthController {
       }
       const result = await authService.refresh(refreshToken);
       return res.status(200).json({ success: true, message: 'Token yenilendi', data: result });
-    } catch (error: any) {
-      const status = error?.status || 401;
-      return res.status(status).json({ success: false, message: error?.message || 'Yenileme sırasında hata oluştu' });
+    } catch (error) {
+      const appError = error as AppError;
+      const status = appError.status || 401;
+      return res.status(status).json({ success: false, message: appError.message || 'Yenileme sırasında hata oluştu' });
     }
   }
 }

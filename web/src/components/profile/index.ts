@@ -6,7 +6,10 @@ import ProfileEvents from "./components/ProfileEvents";
 import ProfileSettings from "./components/ProfileSettings";
 import ProfileStats from "./components/ProfileStats";
 import ProfileContact from "./components/ProfileContact";
-import ProfileOverviewEditor from "./components/ProfileOverviewEditor";
+import AboutEditor from "./components/AboutEditor";
+import SkillsEditor from "./components/SkillsEditor";
+import AchievementsEditor from "./components/AchievementsEditor";
+import ContactEditor from "./components/ContactEditor";
 
 
 export {
@@ -18,5 +21,8 @@ export {
   ProfileSettings,
   ProfileStats,
   ProfileContact,
-  ProfileOverviewEditor,
+  AboutEditor,
+  SkillsEditor,
+  AchievementsEditor,
+  ContactEditor,
 }

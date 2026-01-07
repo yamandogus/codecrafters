@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { AppError } from "../../types";
 
 const prisma = new PrismaClient();
 
@@ -34,9 +35,7 @@ export class AuthService {
       where: { email },
     });
     if (existing) {
-      const e: any = new Error(
-        "Bu e-posta ile zaten kayıtlı bir kullanıcı var"
-      );
+      const e = new Error("Bu e-posta ile zaten kayıtlı bir kullanıcı var") as AppError;
       e.status = 400;
       throw e;
     }
@@ -66,7 +65,7 @@ export class AuthService {
       },
     });
 
-    const accessToken = this.signAccessToken({ userId: newUser.id, email: newUser.email, role: (newUser as any).role });
+    const accessToken = this.signAccessToken({ userId: newUser.id, email: newUser.email, role: newUser.role });
     const refreshToken = this.signRefreshToken({ userId: newUser.id });
 
     await prisma.refreshToken.create({
@@ -85,7 +84,7 @@ export class AuthService {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      const e: any = new Error("Geçersiz e-posta veya şifre");
+      const e = new Error("Geçersiz e-posta veya şifre") as AppError;
       e.status = 401;
       throw e;
     }
@@ -93,7 +92,7 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(password, user.password || '');
 
     if (!user.password || !isPasswordValid) {
-      const e: any = new Error("Geçersiz e-posta veya şifre");
+      const e = new Error("Geçersiz e-posta veya şifre") as AppError;
       e.status = 401;
       throw e;
     }
@@ -139,7 +138,7 @@ export class AuthService {
       });
 
       if (!stored || !stored.user) {
-        const e: any = new Error("Geçersiz veya süresi dolmuş yenileme tokenı");
+        const e = new Error("Geçersiz veya süresi dolmuş yenileme tokenı") as AppError;
         e.status = 401;
         throw e;
       }
@@ -162,8 +161,8 @@ export class AuthService {
       const newAccess = this.signAccessToken({ userId: stored.user.id, email: stored.user.email, role: stored.user.role });
 
       return { token: newAccess, refreshToken: newRefresh };
-    } catch (err: any) {
-      const e: any = new Error("Yenileme başarısız");
+    } catch (err) {
+      const e = new Error("Yenileme başarısız") as AppError;
       e.status = 401;
       throw e;
     }

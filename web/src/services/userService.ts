@@ -12,6 +12,9 @@ export class UserService {
     website: string;
     github: string;
     linkedin: string;
+    phone?: string;
+    skills?: { name: string; level: string; color: string }[];
+    achievements?: { title: string; description?: string; icon?: string; date?: string }[];
   }>): Promise<ProfileUser | null> {
     try {
       const response = await apiClient.put<UserResponse>('/users/profile', data);
@@ -117,7 +120,43 @@ export class UserService {
       stats: stats,
       skills: data.skills || [], // Assuming backend returns matching shape or empty
       achievements: data.achievements || [], // Assuming backend returns matching shape or empty
-      recentActivity: recentActivity.slice(0, 5) // Limit to 5
+      recentActivity: recentActivity.slice(0, 5), // Limit to 5
+      projects: data.projectsCreated?.map((p: ProjectData) => ({
+        id: p.id,
+        title: p.title,
+        description: p.description,
+        category: p.category,
+        createdAt: p.createdAt,
+        tech: p.tech || p.technologies || [],
+        demo: p.demo,
+        github: p.github || p.githubUrl
+      })) || []
     };
+  }
+
+  static async getMyStats(): Promise<{ projects: number; events: number; favorites: number } | null> {
+    try {
+      const response = await apiClient.get<{ projects: number; events: number; favorites: number }>('/users/me/stats');
+      if (response.success && response.data) {
+        return response.data;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching user stats:', error);
+      return null;
+    }
+  }
+
+  static async getMyProjects() {
+    try {
+      const response = await apiClient.get<ProjectData[]>('/users/me/projects');
+      if (response.success && response.data) {
+        return response.data;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching user projects:', error);
+      return [];
+    }
   }
 }

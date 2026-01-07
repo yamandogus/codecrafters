@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { CreateLearningDTO, UpdateLearningDTO } from "../../dto/learningDto";
 
 const prisma = new PrismaClient();
@@ -13,7 +13,7 @@ export class LearningService {
     }
 
     async getAll(filters?: { category?: string; search?: string }) {
-        const where: any = { isActive: true };
+        const where: Prisma.LearningResourceWhereInput = { isActive: true };
 
         if (filters?.category && filters.category !== 'all') {
             where.category = filters.category;

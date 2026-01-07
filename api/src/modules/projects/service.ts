@@ -1,4 +1,4 @@
-import { PrismaClient, ProjectCategory } from "@prisma/client";
+import { PrismaClient, ProjectCategory, Prisma } from "@prisma/client";
 import { CreateProjectDTO, UpdateProjectDTO } from "../../dto/projectsDto";
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ export class ProjectService {
     }
 
     async getAll(filters?: { category?: string; search?: string }) {
-        const where: any = { isActive: true };
+        const where: Prisma.ProjectWhereInput = { isActive: true };
 
         if (filters?.category && filters.category !== 'all') {
             where.category = filters.category as ProjectCategory;

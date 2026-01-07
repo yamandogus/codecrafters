@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import { LearningService } from "./service";
 import { CreateResultSchema, UpdateResultSchema } from "../../dto/learningDto";
+import { AppError } from "../../types";
+import { ZodError } from "zod";
 
 const learningService = new LearningService();
 
 export class LearningController {
-    async create(req: any, res: Response) {
+    async create(req: Request, res: Response) {
         try {
             const validated = CreateResultSchema.parse(req.body);
             const result = await learningService.create(validated);
             return res.status(201).json({ success: true, message: "Kaynak oluşturuldu", data: result });
-        } catch (error: any) {
-            if (error?.errors) return res.status(400).json({ success: false, errors: error.errors });
+        } catch (error) {
+            if (error instanceof ZodError) return res.status(400).json({ success: false, errors: error.issues });
             return res.status(500).json({ success: false, message: "Hata oluştu" });
         }
     }
@@ -37,25 +39,27 @@ export class LearningController {
         }
     }
 
-    async update(req: any, res: Response) {
+    async update(req: Request, res: Response) {
         try {
             const { id } = req.params;
             const validated = UpdateResultSchema.parse(req.body);
             const result = await learningService.update(id, validated);
             return res.status(200).json({ success: true, message: "Kaynak güncellendi", data: result });
-        } catch (error: any) {
-            const status = error.status || 500;
-            return res.status(status).json({ success: false, message: error.message || "Güncelleme hatası" });
+        } catch (error) {
+            const appError = error as AppError;
+            const status = appError.status || 500;
+            return res.status(status).json({ success: false, message: appError.message || "Güncelleme hatası" });
         }
     }
 
-    async delete(req: any, res: Response) {
+    async delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
             await learningService.delete(id);
             return res.status(200).json({ success: true, message: "Kaynak silindi" });
-        } catch (error: any) {
-            return res.status(500).json({ success: false, message: "Silme hatası" });
+        } catch (error) {
+            const appError = error as AppError;
+            return res.status(appError.status || 500).json({ success: false, message: appError.message || "Silme hatası" });
         }
     }
 }

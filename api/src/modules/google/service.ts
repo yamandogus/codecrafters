@@ -69,14 +69,14 @@ export class GoogleOAuthService {
     return username;
   }
 
-  private mapToOAuthUser(user: any): OAuthUser {
+  private mapToOAuthUser(user: { id: string; email: string; name: string; surname: string | null; avatar: string | null; provider: string | null; username: string; isVerified: boolean }): OAuthUser {
     return {
       id: user.id,
       email: user.email,
       name: user.name,
-      surname: user.surname,
-      avatar: user.avatar,
-      provider: user.provider || 'google',
+      surname: user.surname || undefined,
+      avatar: user.avatar || undefined,
+      provider: user.provider as 'google' | 'local' | 'github' || 'local',
       username: user.username,
       isVerified: user.isVerified
     };

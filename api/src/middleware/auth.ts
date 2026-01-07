@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { AuthenticatedRequest, AppError, AuthenticatedUser } from '../types';
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ interface JwtPayload {
   exp?: number;
 }
 
-export const authenticate = async (req: any, res: Response, next: NextFunction) => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
     
@@ -59,14 +60,15 @@ export const authenticate = async (req: any, res: Response, next: NextFunction) 
     }
 
     // Kullanıcı bilgilerini request nesnesine ekle
-    req.user = {
+    const authenticatedUser: AuthenticatedUser = {
       userId: user.id,
       email: user.email,
       name: user.name,
       surname: user.surname,
       username: user.username,
-      role: (decoded as JwtPayload).role || user.role,
+      role: user.role,
     };
+    req.user = authenticatedUser;
 
     next();
   } catch (error) {
@@ -84,15 +86,16 @@ export const authenticate = async (req: any, res: Response, next: NextFunction) 
       });
     }
 
+    const appError = error as AppError;
     return res.status(500).json({
       success: false,
-      message: 'Token doğrulaması sırasında hata oluştu'
+      message: appError.message || 'Token doğrulaması sırasında hata oluştu'
     });
   }
 };
 
 // Opsiyonel authentication - token varsa kontrol et, yoksa devam et
-export const optionalAuth = async (req: any, res: Response, next: NextFunction) => {
+export const optionalAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
     
@@ -127,14 +130,15 @@ export const optionalAuth = async (req: any, res: Response, next: NextFunction) 
 
     if (user) {
       // Kullanıcı bilgilerini request nesnesine ekle
-      req.user = {
+      const authenticatedUser: AuthenticatedUser = {
         userId: user.id,
         email: user.email,
         name: user.name,
         surname: user.surname,
         username: user.username,
-        role: (decoded as JwtPayload).role || user.role,
+        role: user.role,
       };
+      req.user = authenticatedUser;
     }
 
     next();
@@ -145,11 +149,11 @@ export const optionalAuth = async (req: any, res: Response, next: NextFunction) 
 };
 
 export const authorizeRoles = (...roles: string[]) => {
-  return (req: any, res: Response, next: NextFunction) => {
-    const userRole: string | undefined = req?.user?.role;
-    if (!userRole) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
       return res.status(403).json({ success: false, message: 'Yetkisiz erişim' });
     }
+    const userRole = req.user.role;
     if (!roles.includes(userRole)) {
       return res.status(403).json({ success: false, message: 'Bu işlem için yetkiniz yok' });
     }

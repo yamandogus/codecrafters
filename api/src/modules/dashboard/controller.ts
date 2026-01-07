@@ -1,11 +1,14 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { DashboardService } from "./service";
 
 const dashboardService = new DashboardService();
 
 export class DashboardController {
-    async getUserDashboard(req: any, res: Response) {
+    async getUserDashboard(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const userId = req.user.userId;
             const result = await dashboardService.getUserDashboardStats(userId);
             return res.status(200).json({ success: true, data: result });

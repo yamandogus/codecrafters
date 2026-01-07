@@ -6,7 +6,9 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // Serialize user for session
-passport.serializeUser((user: any, done) => {
+import { OAuthUser } from '../dto/oauthDto';
+
+passport.serializeUser((user: OAuthUser, done) => {
   done(null, user.id);
 });
 

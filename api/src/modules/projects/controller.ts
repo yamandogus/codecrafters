@@ -1,20 +1,25 @@
 import { Request, Response } from "express";
 import { ProjectService } from "./service";
 import { CreateProjectSchema, UpdateProjectSchema } from "../../dto/projectsDto";
+import { AppError } from "../../types";
+import { ZodError } from "zod";
 
 const projectService = new ProjectService();
 
 export class ProjectController {
-    async create(req: any, res: Response) {
+    async create(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const validated = CreateProjectSchema.parse(req.body);
             const userId = req.user.userId;
 
             const result = await projectService.create(userId, validated);
 
             return res.status(201).json({ success: true, message: "Proje oluşturuldu", data: result });
-        } catch (error: any) {
-            if (error?.errors) return res.status(400).json({ success: false, errors: error.errors });
+        } catch (error) {
+            if (error instanceof ZodError) return res.status(400).json({ success: false, errors: error.issues });
             return res.status(500).json({ success: false, message: "Proje oluşturulurken hata oluştu" });
         }
     }
@@ -40,30 +45,38 @@ export class ProjectController {
         }
     }
 
-    async update(req: any, res: Response) {
+    async update(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const { id } = req.params;
             const userId = req.user.userId;
             const userRole = req.user.role;
             const validated = UpdateProjectSchema.parse(req.body);
             const result = await projectService.update(id, userId, validated, userRole);
             return res.status(200).json({ success: true, message: "Proje güncellendi", data: result });
-        } catch (error: any) {
-            const status = error.status || 500;
-            return res.status(status).json({ success: false, message: error.message || "Güncelleme hatası" });
+        } catch (error) {
+            const appError = error as AppError;
+            const status = appError.status || 500;
+            return res.status(status).json({ success: false, message: appError.message || "Güncelleme hatası" });
         }
     }
 
-    async delete(req: any, res: Response) {
+    async delete(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const { id } = req.params;
             const userId = req.user.userId;
             const userRole = req.user.role;
             await projectService.delete(id, userId, userRole);
             return res.status(200).json({ success: true, message: "Proje silindi" });
-        } catch (error: any) {
-            const status = error.status || 500;
-            return res.status(status).json({ success: false, message: error.message || "Silme hatası" });
+        } catch (error) {
+            const appError = error as AppError;
+            const status = appError.status || 500;
+            return res.status(status).json({ success: false, message: appError.message || "Silme hatası" });
         }
     }
 }

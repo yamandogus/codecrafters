@@ -54,6 +54,10 @@ export interface ProjectData {
     description: string;
     createdAt: string;
     updatedAt?: string;
+    category?: string;
+    tech?: string[];
+    demo?: string;
+    github?: string;
     technologies?: string[];
     githubUrl?: string;
     liveUrl?: string;

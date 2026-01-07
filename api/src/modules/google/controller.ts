@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { GoogleOAuthService } from './service';
-import { OAuthResponse } from '../../dto/oauthDto';
+import { OAuthResponse, OAuthUser } from '../../dto/oauthDto';
 
 export class GoogleOAuthController {
   private googleService: GoogleOAuthService;
@@ -18,7 +18,7 @@ export class GoogleOAuthController {
   // Handle Google OAuth callback
   handleGoogleCallback = async (req: Request, res: Response): Promise<void> => {
     try {
-      const user = req.user as any;
+      const user = req.user as OAuthUser | undefined;
       
       if (!user) {
         const response: OAuthResponse = {

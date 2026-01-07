@@ -1,4 +1,4 @@
-import { PrismaClient, ForumCategory } from "@prisma/client";
+import { PrismaClient, ForumCategory, Prisma } from "@prisma/client";
 import { CreateForumPostDTO, UpdateForumPostDTO } from "../../dto/forumDto";
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ export class ForumService {
     }
 
     async getAll(filters?: { category?: string; search?: string }) {
-        const where: any = { isActive: true };
+        const where: Prisma.ForumPostWhereInput = { isActive: true };
 
         if (filters?.category && filters.category !== 'all') {
             where.category = filters.category as ForumCategory;

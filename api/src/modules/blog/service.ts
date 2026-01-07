@@ -1,4 +1,4 @@
-import { PrismaClient, BlogCategory } from "@prisma/client";
+import { PrismaClient, BlogCategory, Prisma } from "@prisma/client";
 import { CreateBlogDTO, UpdateBlogDTO } from "../../dto/blogDto";
 
 const prisma = new PrismaClient();
@@ -41,7 +41,7 @@ export class BlogService {
     }
 
     async getAll(filters?: { category?: string; search?: string }) {
-        const where: any = { isPublished: true };
+        const where: Prisma.BlogPostWhereInput = { isPublished: true };
 
         if (filters?.category && filters.category !== 'all') {
             where.category = filters.category as BlogCategory;

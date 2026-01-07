@@ -1,8 +1,13 @@
-import { Shield, Share2, Heart, X, Edit3 } from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { Shield, Share2, Heart, X, Edit3, Calendar, Code, Star } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ProfileUser } from "../types";
 import { formatDate } from "../utils";
+import { UserService } from "@/services/userService";
+import Link from "next/link";
 
 interface ProfileHeaderProps {
   user: ProfileUser;
@@ -17,6 +22,20 @@ export default function ProfileHeader({
   isEditing, 
   onEditToggle 
 }: ProfileHeaderProps) {
+  const [stats, setStats] = useState<{ projects: number; events: number; favorites: number } | null>(null);
+
+  useEffect(() => {
+    if (isEditable) {
+      UserService.getMyStats().then(setStats);
+    }
+  }, [isEditable]);
+
+  const displayStats = stats || {
+    projects: user.stats.projects,
+    events: user.stats.events,
+    favorites: 0,
+  };
+
   return (
     <div className="relative h-64 bg-gradient-to-r from-green-600 to-emerald-600 rounded-b-3xl">
       <Image
@@ -52,9 +71,30 @@ export default function ProfileHeader({
               )}
             </div>
             <p className="text-white/80">@{user.username}</p>
-            <p className="text-white/70 text-sm">
+            <p className="text-white/70 text-sm mb-3">
               {user.location} • {formatDate(user.joinDate)} tarihinde katıldı
             </p>
+            
+            {/* İstatistikler - Sadece kendi profilinde göster */}
+            {isEditable && (
+              <div className="flex items-center gap-6 mt-4 pt-4 border-t border-white/20">
+                <Link href="/my-events" className="flex items-center gap-2 hover:text-green-200 transition-colors">
+                  <Calendar className="w-4 h-4" />
+                  <span className="font-semibold">{displayStats.events}</span>
+                  <span className="text-sm text-white/80">Etkinliklerim</span>
+                </Link>
+                <Link href="/projects" className="flex items-center gap-2 hover:text-green-200 transition-colors">
+                  <Code className="w-4 h-4" />
+                  <span className="font-semibold">{displayStats.projects}</span>
+                  <span className="text-sm text-white/80">Projelerim</span>
+                </Link>
+                <div className="flex items-center gap-2 hover:text-green-200 transition-colors cursor-pointer">
+                  <Star className="w-4 h-4" />
+                  <span className="font-semibold">{displayStats.favorites}</span>
+                  <span className="text-sm text-white/80">Favorilerim</span>
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20">

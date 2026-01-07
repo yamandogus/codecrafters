@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
 import { BlogService } from "./service";
 import { CreateBlogSchema, UpdateBlogSchema } from "../../dto/blogDto";
+import { AppError } from "../../types";
+import { ZodError } from "zod";
 
 const blogService = new BlogService();
 
 export class BlogController {
-    async create(req: any, res: Response) {
+    async create(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const validated = CreateBlogSchema.parse(req.body);
             const userId = req.user.userId; // Middleware'den gelen user id
 
@@ -17,9 +22,9 @@ export class BlogController {
                 message: "Blog yazısı başarıyla oluşturuldu",
                 data: result,
             });
-        } catch (error: any) {
-            if (error?.errors) {
-                return res.status(400).json({ success: false, errors: error.errors });
+        } catch (error) {
+            if (error instanceof ZodError) {
+                return res.status(400).json({ success: false, errors: error.issues });
             }
             return res.status(500).json({
                 success: false,
@@ -72,8 +77,11 @@ export class BlogController {
         }
     }
 
-    async update(req: any, res: Response) {
+    async update(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const { id } = req.params;
             const userId = req.user.userId;
             const userRole = req.user.role;
@@ -86,17 +94,21 @@ export class BlogController {
                 message: "Blog yazısı güncellendi",
                 data: result,
             });
-        } catch (error: any) {
-            const status = error.status || 500;
+        } catch (error) {
+            const appError = error as AppError;
+            const status = appError.status || 500;
             return res.status(status).json({
                 success: false,
-                message: error.message || "Güncelleme sırasında hata oluştu",
+                message: appError.message || "Güncelleme sırasında hata oluştu",
             });
         }
     }
 
-    async delete(req: any, res: Response) {
+    async delete(req: Request, res: Response) {
         try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: "Yetkisiz erişim" });
+            }
             const { id } = req.params;
             const userId = req.user.userId;
             const userRole = req.user.role;
@@ -107,11 +119,12 @@ export class BlogController {
                 success: true,
                 message: "Blog yazısı silindi",
             });
-        } catch (error: any) {
-            const status = error.status || 500;
+        } catch (error) {
+            const appError = error as AppError;
+            const status = appError.status || 500;
             return res.status(status).json({
                 success: false,
-                message: error.message || "Silme işlemi sırasında hata oluştu",
+                message: appError.message || "Silme işlemi sırasında hata oluştu",
             });
         }
     }

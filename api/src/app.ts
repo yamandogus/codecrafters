@@ -99,9 +99,15 @@ app.use('*', (req, res) => {
 });
 
 // Error handler
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+import { AppError } from './types';
+
+app.use((err: AppError, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ 
+    success: false,
+    message: err.message || 'Something went wrong!' 
+  });
 });
 
 export default app;
