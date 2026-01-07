@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { AuthGuard } from '@/components/auth/auth-guard';
+import { useEffect } from 'react';
 
 export default function ModeratorPage() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function ModeratorPage() {
 
 function ModeratorRedirect() {
   const router = useRouter();
-  
+
   useEffect(() => {
     router.replace('/moderator/dashboard');
   }, [router]);

@@ -1,20 +1,18 @@
 "use client";
 
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  FileText, 
-  MessageSquare, 
-  Calendar, 
-  Eye, 
-  CheckCircle, 
+import {
+  FileText,
+  MessageSquare,
+  Calendar,
+  Eye,
+  CheckCircle,
   AlertTriangle,
   Flag,
   Clock,
@@ -93,8 +91,6 @@ export default function ModeratorContentPage() {
 }
 
 function ModeratorContent() {
-  const { user } = useSelector((s: RootState) => s.user);
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState("pending");
 
   const getTypeIcon = (type: string) => {
@@ -217,20 +213,20 @@ function ModeratorContent() {
             <Eye className="h-4 w-4 mr-1" />
             Detaylar
           </Button>
-          
+
           {content.status === 'pending' || content.status === 'flagged' ? (
             <>
-              <Button 
-                size="sm" 
-                variant="outline" 
+              <Button
+                size="sm"
+                variant="outline"
                 className="text-green-600 hover:text-green-700"
                 onClick={() => handleApprove(content.id)}
               >
                 <ThumbsUp className="h-4 w-4 mr-1" />
                 Onayla
               </Button>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 className="text-red-600 hover:text-red-700"
                 onClick={() => handleReject(content.id)}
@@ -277,7 +273,7 @@ function ModeratorContent() {
             <p className="text-xs text-muted-foreground">Moderasyon gereken</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Raporlanan</CardTitle>

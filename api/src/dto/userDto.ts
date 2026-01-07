@@ -39,6 +39,32 @@ export const UpdateProfileSchema = z.object({
     .url("Geçerli bir LinkedIn URL'i giriniz")
     .optional()
     .or(z.literal("")),
+  skills: z.array(z.object({
+    name: z.string(),
+    level: z.string(), // "Beginner" | "Intermediate" | "Advanced" | "Expert"
+    color: z.string().optional()
+  })).optional(),
+  achievements: z.array(z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    icon: z.string().optional(),
+    date: z.string().optional() // ISO date string
+  })).optional(),
+  experience: z.array(z.object({
+    title: z.string(),
+    company: z.string(),
+    startDate: z.string(), // ISO date
+    endDate: z.string().nullable().optional(), // ISO date or null
+    description: z.string().optional()
+  })).optional(),
+  education: z.array(z.object({
+    school: z.string(),
+    degree: z.string(),
+    field: z.string(),
+    startDate: z.string(), // ISO date
+    endDate: z.string().nullable().optional(), // ISO date or null
+    description: z.string().optional()
+  })).optional(),
 });
 
 export const ChangePasswordSchema = z

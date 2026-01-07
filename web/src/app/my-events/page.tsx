@@ -2,20 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Clock, 
-  Star, 
-  ArrowRight,
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Clock,
   Search,
   Video,
-  Globe,
-  Trophy,
-  BookOpen,
   Download
 } from "lucide-react";
 import Link from "next/link";
@@ -49,12 +43,12 @@ function MyEventsContent() {
       try {
         const response = await eventService.getMyRegistrations();
         if (response.success && response.data) {
-          const adaptedEvents = response.data.map((event: any) => ({
+          const adaptedEvents = response.data.map((event: Event) => ({
             ...event,
             registrationDate: event.registrations?.[0]?.registeredAt,
             registrationStatus: event.registrations?.[0]?.status || 'confirmed',
             ticketUrl: "#"
-          }));
+          } as MyEvent));
           setEvents(adaptedEvents);
         }
       } catch (error) {
@@ -74,8 +68,8 @@ function MyEventsContent() {
       // Backend status: UPCOMING, ONGOING, COMPLETED, CANCELLED
       // Tab IDs: upcoming, ongoing, completed, cancelled
       const matchesTab = event.status?.toLowerCase() === selectedTab;
-      
-      const matchesSearch = 
+
+      const matchesSearch =
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -136,18 +130,16 @@ function MyEventsContent() {
             <button
               key={tab.id}
               onClick={() => setSelectedTab(tab.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-2 ${
-                selectedTab === tab.id
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-2 ${selectedTab === tab.id
+                ? "bg-green-50 text-green-700"
+                : "text-gray-600 hover:bg-gray-50"
+                }`}
             >
               {tab.name}
-              <span className={`px-2 py-0.5 rounded-full text-xs ${
-                selectedTab === tab.id
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-600"
-              }`}>
+              <span className={`px-2 py-0.5 rounded-full text-xs ${selectedTab === tab.id
+                ? "bg-green-100 text-green-700"
+                : "bg-gray-100 text-gray-600"
+                }`}>
                 {tab.count}
               </span>
             </button>
@@ -239,10 +231,9 @@ function MyEventsContent() {
 
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full ${
-                        event.registrationStatus === 'confirmed' ? 'bg-green-500' : 
+                      <span className={`w-2 h-2 rounded-full ${event.registrationStatus === 'confirmed' ? 'bg-green-500' :
                         event.registrationStatus === 'pending' ? 'bg-yellow-500' : 'bg-gray-500'
-                      }`} />
+                        }`} />
                       <span className="text-sm text-gray-600">
                         Kayıt: {event.registrationDate ? new Date(event.registrationDate).toLocaleDateString('tr-TR') : '-'}
                       </span>
@@ -265,8 +256,8 @@ function MyEventsContent() {
             <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Etkinlik Bulunamadı</h3>
             <p className="text-gray-500 mb-6">
-              {selectedTab === 'upcoming' 
-                ? "Henüz kayıt olduğunuz yaklaşan bir etkinlik yok." 
+              {selectedTab === 'upcoming'
+                ? "Henüz kayıt olduğunuz yaklaşan bir etkinlik yok."
                 : "Bu kategoride etkinlik bulunmuyor."}
             </p>
             <Button className="bg-green-600 hover:bg-green-700" asChild>

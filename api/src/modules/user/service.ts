@@ -67,10 +67,50 @@ export class UserService {
     }
 
     // Profili güncelle
+    const { skills, achievements, experience, education, ...userData } = data;
+
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        ...data,
+        ...userData,
+        skills: skills ? {
+          deleteMany: {},
+          create: skills.map(skill => ({
+            name: skill.name,
+            level: skill.level as any, // Enum cast might be needed if using mapped types, relying on DTO-Schema match
+            color: skill.color
+          }))
+        } : undefined,
+        achievements: achievements ? {
+          deleteMany: {},
+          create: achievements.map(a => ({
+            title: a.title,
+            description: a.description,
+            icon: a.icon,
+            earnedAt: a.date ? new Date(a.date) : new Date()
+          }))
+        } : undefined,
+        experience: experience ? {
+          deleteMany: {},
+          create: experience.map(e => ({
+            title: e.title,
+            company: e.company,
+            startDate: new Date(e.startDate),
+            endDate: e.endDate ? new Date(e.endDate) : null,
+            description: e.description
+          }))
+        } : undefined,
+        education: education ? {
+          deleteMany: {},
+          create: education.map(e => ({
+            school: e.school,
+            degree: e.degree,
+            field: e.field,
+            startDate: new Date(e.startDate),
+            endDate: e.endDate ? new Date(e.endDate) : null,
+            description: e.description
+          }))
+        } : undefined,
         updatedAt: new Date(),
       },
       select: {
@@ -88,6 +128,10 @@ export class UserService {
         provider: true,
         createdAt: true,
         updatedAt: true,
+        skills: true,
+        achievements: true,
+        experience: true,
+        education: true,
       },
     });
 

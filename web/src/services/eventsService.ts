@@ -1,4 +1,5 @@
 import { apiClient } from "./api";
+import { EventRegistration } from "@/types/api-types";
 
 export interface Event {
     id: string;
@@ -17,7 +18,7 @@ export interface Event {
     image?: string;
     status: 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
     price?: string;
-    registrations?: any[];
+    registrations?: EventRegistration[];
 }
 
 export const eventService = {

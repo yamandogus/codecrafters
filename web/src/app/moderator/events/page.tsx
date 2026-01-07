@@ -3,18 +3,18 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Calendar, 
-  Clock, 
-  Users, 
-  MapPin, 
-  Eye, 
-  CheckCircle, 
+import {
+  Calendar,
+  Clock,
+  Users,
+  MapPin,
+  Eye,
+  CheckCircle,
   XCircle,
   AlertTriangle,
   Plus,
@@ -107,8 +107,6 @@ export default function ModeratorEventsPage() {
 }
 
 function ModeratorEventsContent() {
-  const { user } = useSelector((s: RootState) => s.user);
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState("pending");
 
   const getStatusColor = (status: string) => {
@@ -182,7 +180,7 @@ function ModeratorEventsContent() {
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-sm text-muted-foreground">{event.description}</p>
-        
+
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
@@ -274,7 +272,7 @@ function ModeratorEventsContent() {
             <p className="text-xs text-muted-foreground">Moderasyon gereken</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Raporlanan</CardTitle>

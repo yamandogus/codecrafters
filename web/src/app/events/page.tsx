@@ -18,13 +18,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Event as EventType } from "@/services/eventsService";
 
 export default function EventsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [events, setEvents] = useState<any[]>([]); // Using any for now to match component structure, ideally use Event type
+  const [events, setEvents] = useState<EventType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   const categories = [
     { id: "all", name: "Tümü", icon: Calendar, color: "bg-purple-100 dark:bg-purple-900" },
@@ -199,7 +200,7 @@ export default function EventsPage() {
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer group">
                   <div className="relative">
                     <Image
-                      src={event.image}
+                      src={event.image || '/placeholder.png'}
                       alt={event.title}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       width={400}

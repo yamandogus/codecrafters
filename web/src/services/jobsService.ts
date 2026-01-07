@@ -1,4 +1,5 @@
 import { apiClient } from "./api";
+import { JobApplicationData, JobApplication } from "@/types/api-types";
 
 export interface Job {
     id: string;
@@ -40,11 +41,11 @@ export const jobService = {
         return apiClient.delete(`/jobs/${id}`);
     },
 
-    apply: (id: string, data: any) => {
+    apply: (id: string, data: JobApplicationData) => {
         return apiClient.post(`/jobs/${id}/apply`, data);
     },
 
     getMyApplications: () => {
-        return apiClient.get<any[]>("/jobs/applications/me");
+        return apiClient.get<JobApplication[]>("/jobs/applications/me");
     }
 };

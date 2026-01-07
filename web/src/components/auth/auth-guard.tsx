@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { toast } from 'sonner';
+import AuthService from '@/services/auth';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -14,27 +14,35 @@ interface AuthGuardProps {
 export function AuthGuard({ children, roles = [] }: AuthGuardProps) {
   const { user, isAuthenticated, loading } = useSelector((state: RootState) => state.user);
   const router = useRouter();
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // If loading, wait.
-    // However, if we rely on Redux persist, loading might be false initially but isAuthenticated false/true correctly.
-    // If we have an async check, we should handle loading state.
-    // Assuming 'loading' in user slice covers initial auth check or login process.
-    
-    if (!isAuthenticated) {
-      // toast.error("Bu sayfaya erişmek için giriş yapmalısınız."); // Can be annoying on direct link load if handled poorly
+    const check = async () => {
+      if (loading) return;
+      if (isAuthenticated) {
+        setReady(true);
+        return;
+      }
+      const token = AuthService.getToken();
+      if (token) {
+        const valid = AuthService.isAuthenticated();
+        if (!valid) {
+          const refreshed = await AuthService.refreshTokens();
+          if (refreshed) {
+            setReady(true);
+            return;
+          }
+        } else {
+          setReady(true);
+          return;
+        }
+      }
       router.replace('/auth/login');
-      return;
-    }
+    };
+    check();
+  }, [isAuthenticated, loading, router]);
 
-    if (roles.length > 0 && user && !roles.includes(user.role)) {
-      toast.error("Bu sayfaya erişim yetkiniz yok.");
-      router.replace('/');
-    }
-  }, [isAuthenticated, user, router, roles]);
-
-  // Render nothing while redirecting
-  if (!isAuthenticated) return null;
+  if (!ready) return null;
 
   if (roles.length > 0 && user && !roles.includes(user.role)) return null;
 

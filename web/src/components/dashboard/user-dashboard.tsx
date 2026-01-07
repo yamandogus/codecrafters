@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
 import { dashboardService, DashboardData } from "@/services/dashboardService";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent,} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Calendar, 

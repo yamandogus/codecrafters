@@ -3,18 +3,18 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { 
-  Users, 
-  Shield, 
-  AlertTriangle, 
-  Eye, 
+import {
+  Users,
+  Shield,
+  AlertTriangle,
+  Eye,
   Mail,
   Calendar,
   Clock,
@@ -115,8 +115,6 @@ export default function ModeratorUsersPage() {
 }
 
 function ModeratorUsersContent() {
-  const { user } = useSelector((s: RootState) => s.user);
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -171,8 +169,8 @@ function ModeratorUsersContent() {
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+
     switch (activeTab) {
       case 'reported':
         return matchesSearch && user.reportCount > 0;
@@ -269,11 +267,11 @@ function ModeratorUsersContent() {
             <MessageSquare className="h-4 w-4 mr-1" />
             Mesaj
           </Button>
-          
+
           {userData.status === 'active' ? (
             <>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 className="text-yellow-600 hover:text-yellow-700"
                 onClick={() => handleWarn(userData.id)}
@@ -281,8 +279,8 @@ function ModeratorUsersContent() {
                 <AlertTriangle className="h-4 w-4 mr-1" />
                 Uyar
               </Button>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 className="text-orange-600 hover:text-orange-700"
                 onClick={() => handleSuspend(userData.id)}
@@ -290,8 +288,8 @@ function ModeratorUsersContent() {
                 <UserX className="h-4 w-4 mr-1" />
                 Askıya Al
               </Button>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 className="text-red-600 hover:text-red-700"
                 onClick={() => handleBan(userData.id)}
@@ -301,8 +299,8 @@ function ModeratorUsersContent() {
               </Button>
             </>
           ) : userData.status === 'suspended' || userData.status === 'pending' ? (
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               variant="outline"
               className="text-green-600 hover:text-green-700"
               onClick={() => handleActivate(userData.id)}
@@ -360,7 +358,7 @@ function ModeratorUsersContent() {
             <p className="text-xs text-muted-foreground">Online ve aktif</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Raporlanan</CardTitle>

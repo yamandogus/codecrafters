@@ -154,6 +154,8 @@ model User {
   // ilişkiler
   skills            UserSkill[]
   achievements      UserAchievement[]
+  experience        UserExperience[]
+  education         UserEducation[]
   jobApplications   JobApplication[]
   projectsCreated   Project[]
   eventsRegistered  EventRegistration[]
@@ -221,6 +223,35 @@ model Follow {
 
   @@unique([followerId, followingId])
   @@map("follows")
+}
+
+model UserExperience {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  company     String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_experience")
+}
+
+model UserEducation {
+  id          String    @id @default(cuid())
+  userId      String
+  school      String
+  degree      String
+  field       String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_education")
 }
 
 // ========================================
