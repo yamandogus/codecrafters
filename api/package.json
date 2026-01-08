@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
+    "prebuild": "npm ci --include=dev && prisma generate",
     "build": "tsc",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -54,6 +55,6 @@
     "typescript": "^5.5.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.18.0 <23.0.0"
   }
 }
