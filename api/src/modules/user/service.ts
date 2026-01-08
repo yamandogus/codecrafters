@@ -118,10 +118,8 @@ export class UserService {
 
       // Experience ve Education güncellemeleri
       if (experience !== undefined) {
-        // @ts-expect-error - Prisma transaction tipi henüz güncellenmemiş olabilir
         await tx.userExperience.deleteMany({ where: { userId } });
         if (experience.length > 0) {
-          // @ts-expect-error
           await tx.userExperience.createMany({
             data: experience.map(e => ({
               userId,
@@ -136,10 +134,8 @@ export class UserService {
       }
 
       if (education !== undefined) {
-        // @ts-expect-error - Prisma transaction tipi henüz güncellenmemiş olabilir
         await tx.userEducation.deleteMany({ where: { userId } });
         if (education.length > 0) {
-          // @ts-expect-error
           await tx.userEducation.createMany({
             data: education.map(e => ({
               userId,
