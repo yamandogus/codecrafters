@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Upload Middleware - Bu dosyayı kendiniz dolduracaksınız

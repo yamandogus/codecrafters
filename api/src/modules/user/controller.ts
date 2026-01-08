@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UpdateProfileSchema, ChangePasswordSchema } from "../../dto/userDto";
-import { UserService } from "./service";
-import { AppError } from "../../types";
+import { UpdateProfileSchema, ChangePasswordSchema } from "../../dto/userDto.js";
+import { UserService } from "./service.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const userService = new UserService();
@@ -49,10 +49,10 @@ export class UserController {
       });
     } catch (error) {
       if (error instanceof ZodError) {
-        return res.status(400).json({ 
-          success: false, 
+        return res.status(400).json({
+          success: false,
           message: "Validasyon hatası",
-          errors: error.issues 
+          errors: error.issues
         });
       }
       const appError = error as AppError;
@@ -81,10 +81,10 @@ export class UserController {
       });
     } catch (error) {
       if (error instanceof ZodError) {
-        return res.status(400).json({ 
-          success: false, 
+        return res.status(400).json({
+          success: false,
           message: "Validasyon hatası",
-          errors: error.issues 
+          errors: error.issues
         });
       }
       const appError = error as AppError;

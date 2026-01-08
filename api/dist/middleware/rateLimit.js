@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Rate Limit Middleware - Bu dosyayı kendiniz dolduracaksınız

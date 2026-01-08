@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // ForumPost Model - Bu dosyayı kendiniz dolduracaksınız

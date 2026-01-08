@@ -1,3 +1,3 @@
-export { UserController } from './controller';
-export { UserService } from './service';
-export { default as userRoutes } from './route';
+export { UserController } from './controller.js';
+export { UserService } from './service.js';
+export { default as userRoutes } from './route.js';

@@ -1,5 +1,5 @@
 import { PrismaClient, BlogCategory, Prisma } from "@prisma/client";
-import { CreateBlogDTO, UpdateBlogDTO } from "../../dto/blogDto";
+import { CreateBlogDTO, UpdateBlogDTO } from "../../dto/blogDto.js";
 
 const prisma = new PrismaClient();
 

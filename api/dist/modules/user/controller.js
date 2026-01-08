@@ -1,5 +1,5 @@
-import { UpdateProfileSchema, ChangePasswordSchema } from "../../dto/userDto";
-import { UserService } from "./service";
+import { UpdateProfileSchema, ChangePasswordSchema } from "../../dto/userDto.js";
+import { UserService } from "./service.js";
 import { ZodError } from "zod";
 const userService = new UserService();
 export class UserController {

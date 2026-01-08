@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Validation Middleware - Bu dosyayı kendiniz dolduracaksınız

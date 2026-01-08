@@ -1,5 +1,5 @@
 import { PrismaClient, JobCategory, JobType, JobStatus, Prisma } from "@prisma/client";
-import { CreateJobDTO, UpdateJobDTO, ApplyJobDTO } from "../../dto/jobsDto";
+import { CreateJobDTO, UpdateJobDTO, ApplyJobDTO } from "../../dto/jobsDto.js";
 
 const prisma = new PrismaClient();
 

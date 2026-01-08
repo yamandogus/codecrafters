@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { CreateLearningDTO, UpdateLearningDTO } from "../../dto/learningDto";
+import { CreateLearningDTO, UpdateLearningDTO } from "../../dto/learningDto.js";
 
 const prisma = new PrismaClient();
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { GoogleOAuthController } from './controller';
+import { GoogleOAuthController } from './controller.js';
 const router = Router();
 const googleController = new GoogleOAuthController();
 // Google OAuth routes

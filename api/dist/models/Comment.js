@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Comment Model - Bu dosyayı kendiniz dolduracaksınız

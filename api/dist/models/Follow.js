@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Follow Model - Bu dosyayı kendiniz dolduracaksınız

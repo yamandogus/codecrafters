@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { EventService } from "./service";
-import { CreateEventSchema, UpdateEventSchema } from "../../dto/eventsDto";
-import { AppError } from "../../types";
+import { EventService } from "./service.js";
+import { CreateEventSchema, UpdateEventSchema } from "../../dto/eventsDto.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const eventService = new EventService();

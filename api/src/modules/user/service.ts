@@ -1,7 +1,7 @@
-import { UpdateProfileDTO, ChangePasswordDTO } from "../../dto/userDto";
+import { UpdateProfileDTO, ChangePasswordDTO } from "../../dto/userDto.js";
 import bcrypt from "bcrypt";
 import { PrismaClient, SkillLevel } from "@prisma/client";
-import { AppError, mapSkillLevel } from "../../types";
+import { AppError, mapSkillLevel } from "../../types/index.js";
 
 const prisma = new PrismaClient();
 
@@ -79,7 +79,7 @@ export class UserService {
           ...userData,
           skills: skills ? {
             deleteMany: {},
-            create: skills.map(skill => ({
+            create: skills.map((skill: any) => ({
               name: skill.name,
               level: mapSkillLevel(skill.level),
               color: skill.color
@@ -87,7 +87,7 @@ export class UserService {
           } : undefined,
           achievements: achievements ? {
             deleteMany: {},
-            create: achievements.map(a => ({
+            create: achievements.map((a: any) => ({
               title: a.title,
               description: a.description,
               icon: a.icon,
@@ -121,7 +121,7 @@ export class UserService {
         await tx.userExperience.deleteMany({ where: { userId } });
         if (experience.length > 0) {
           await tx.userExperience.createMany({
-            data: experience.map(e => ({
+            data: experience.map((e: any) => ({
               userId,
               title: e.title,
               company: e.company,
@@ -137,7 +137,7 @@ export class UserService {
         await tx.userEducation.deleteMany({ where: { userId } });
         if (education.length > 0) {
           await tx.userEducation.createMany({
-            data: education.map(e => ({
+            data: education.map((e: any) => ({
               userId,
               school: e.school,
               degree: e.degree,

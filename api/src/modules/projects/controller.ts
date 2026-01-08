@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { ProjectService } from "./service";
-import { CreateProjectSchema, UpdateProjectSchema } from "../../dto/projectsDto";
-import { AppError } from "../../types";
+import { ProjectService } from "./service.js";
+import { CreateProjectSchema, UpdateProjectSchema } from "../../dto/projectsDto.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const projectService = new ProjectService();

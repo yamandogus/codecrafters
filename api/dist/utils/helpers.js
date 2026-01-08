@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Helpers Utility - Bu dosyayı kendiniz dolduracaksınız

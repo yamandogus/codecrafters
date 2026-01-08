@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { BlogService } from "./service";
-import { CreateBlogSchema, UpdateBlogSchema } from "../../dto/blogDto";
-import { AppError } from "../../types";
+import { BlogService } from "./service.js";
+import { CreateBlogSchema, UpdateBlogSchema } from "../../dto/blogDto.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const blogService = new BlogService();

@@ -46,10 +46,10 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { 
-  getRoleBasedNavigation, 
-  getRoleBasedUserMenu, 
-  getRoleBasedQuickActions 
+import {
+  getRoleBasedNavigation,
+  getRoleBasedUserMenu,
+  getRoleBasedQuickActions
 } from "./role-based-navigation";
 
 export const Navbar = () => {
@@ -85,9 +85,8 @@ export const Navbar = () => {
 
   return (
     <section
-      className={`sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 py-3 transition-all duration-300 ${
-        isScrolled ? "shadow-sm border-border/50" : "shadow-none border-transparent"
-      }`}
+      className={`sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 py-3 transition-all duration-300 ${isScrolled ? "shadow-sm border-border/50" : "shadow-none border-transparent"
+        }`}
     >
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
@@ -146,7 +145,7 @@ export const Navbar = () => {
                 } else {
                   return (
                     <NavigationMenuItem key={index}>
-                      <Link href={item.href} legacyBehavior passHref>
+                      <Link href={item.href}>
                         <NavigationMenuLink
                           className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-accent/50 h-10 px-4 text-sm font-medium transition-colors`}
                         >

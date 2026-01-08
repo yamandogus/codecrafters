@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // BlogPost Model - Bu dosyayı kendiniz dolduracaksınız

@@ -1,5 +1,5 @@
-import { EventService } from "./service";
-import { CreateEventSchema, UpdateEventSchema } from "../../dto/eventsDto";
+import { EventService } from "./service.js";
+import { CreateEventSchema, UpdateEventSchema } from "../../dto/eventsDto.js";
 import { ZodError } from "zod";
 const eventService = new EventService();
 export class EventController {

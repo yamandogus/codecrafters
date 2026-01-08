@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { GoogleProfile, OAuthUser } from '../../dto/oauthDto';
+import { GoogleProfile, OAuthUser } from '../../dto/oauthDto.js';
 import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
@@ -60,12 +60,12 @@ export class GoogleOAuthService {
   private async generateUniqueUsername(baseUsername: string): Promise<string> {
     let username = baseUsername;
     let counter = 1;
-    
+
     while (await prisma.user.findUnique({ where: { username } })) {
       username = `${baseUsername}_${counter}`;
       counter++;
     }
-    
+
     return username;
   }
 

@@ -1,4 +1,4 @@
-import { GitHubOAuthService } from './service';
+import { GitHubOAuthService } from './service.js';
 export class GitHubOAuthController {
     constructor() {
         // Redirect to GitHub OAuth

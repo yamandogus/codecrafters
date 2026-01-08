@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // EventRegistration Model - Bu dosyayı kendiniz dolduracaksınız

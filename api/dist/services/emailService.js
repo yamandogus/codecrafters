@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // Email Service - Bu dosyayı kendiniz dolduracaksınız

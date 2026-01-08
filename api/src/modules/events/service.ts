@@ -1,5 +1,5 @@
 import { PrismaClient, EventCategory, EventStatus, Prisma } from "@prisma/client";
-import { CreateEventDTO, UpdateEventDTO } from "../../dto/eventsDto";
+import { CreateEventDTO, UpdateEventDTO } from "../../dto/eventsDto.js";
 
 const prisma = new PrismaClient();
 

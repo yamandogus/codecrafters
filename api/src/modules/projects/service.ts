@@ -1,5 +1,5 @@
 import { PrismaClient, ProjectCategory, Prisma } from "@prisma/client";
-import { CreateProjectDTO, UpdateProjectDTO } from "../../dto/projectsDto";
+import { CreateProjectDTO, UpdateProjectDTO } from "../../dto/projectsDto.js";
 
 const prisma = new PrismaClient();
 

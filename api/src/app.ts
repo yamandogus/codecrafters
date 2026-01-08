@@ -1,20 +1,20 @@
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
-import passport from './config/passport';
-import googleRoutes from './modules/google';
-import githubRoutes from './modules/github';
+import passport from './config/passport.js';
+import googleRoutes from './modules/google/index.js';
+import githubRoutes from './modules/github/index.js';
 
 // Import existing routes
-import authRoutes from './modules/auth/route';
-import userRoutes from './modules/user/route';
-import blogRoutes from './modules/blog/route';
-import eventsRoutes from './modules/events/route';
-import jobsRoutes from './modules/jobs/route';
-import projectsRoutes from './modules/projects/route';
-import forumRoutes from './modules/forum/route';
-import learningRoutes from './modules/learning/route';
-import dashboardRoutes from './modules/dashboard/route';
+import authRoutes from './modules/auth/route.js';
+import userRoutes from './modules/user/route.js';
+import blogRoutes from './modules/blog/route.js';
+import eventsRoutes from './modules/events/route.js';
+import jobsRoutes from './modules/jobs/route.js';
+import projectsRoutes from './modules/projects/route.js';
+import forumRoutes from './modules/forum/route.js';
+import learningRoutes from './modules/learning/route.js';
+import dashboardRoutes from './modules/dashboard/route.js';
 
 const app = express();
 
@@ -99,14 +99,14 @@ app.use('*', (req, res) => {
 });
 
 // Error handler
-import { AppError } from './types';
+import { AppError } from './types/index.js';
 
 app.use((err: AppError, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
   const status = err.status || err.statusCode || 500;
-  res.status(status).json({ 
+  res.status(status).json({
     success: false,
-    message: err.message || 'Something went wrong!' 
+    message: err.message || 'Something went wrong!'
   });
 });
 

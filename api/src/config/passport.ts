@@ -1,9 +1,9 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile as GoogleProfile, VerifyCallback } from 'passport-google-oauth20';
 import { Strategy as GitHubStrategy, Profile as GitHubProfile } from 'passport-github2';
-import { GoogleOAuthService } from '../modules/google/service';
-import { GitHubOAuthService } from '../modules/github/service';
-import { OAuthUser } from '../dto/oauthDto';
+import { GoogleOAuthService } from '../modules/google/service.js';
+import { GitHubOAuthService } from '../modules/github/service.js';
+import { OAuthUser } from '../dto/oauthDto.js';
 
 const googleService = new GoogleOAuthService();
 const githubService = new GitHubOAuthService();

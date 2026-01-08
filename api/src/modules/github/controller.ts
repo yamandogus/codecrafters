@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { GitHubOAuthService } from './service';
-import { OAuthResponse, OAuthUser } from '../../dto/oauthDto';
+import { GitHubOAuthService } from './service.js';
+import { OAuthResponse, OAuthUser } from '../../dto/oauthDto.js';
 
 export class GitHubOAuthController {
   private githubService: GitHubOAuthService;
@@ -19,7 +19,7 @@ export class GitHubOAuthController {
   handleGitHubCallback = async (req: Request, res: Response): Promise<void> => {
     try {
       const user = req.user as OAuthUser | undefined;
-      
+
       if (!user) {
         const response: OAuthResponse = {
           success: false,
@@ -48,7 +48,7 @@ export class GitHubOAuthController {
 
       // Redirect to frontend with token
       res.redirect(`${process.env.FRONTEND_URL}/auth/success?token=${token}`);
-      
+
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
       res.redirect(`${process.env.FRONTEND_URL}/auth/error?message=server_error`);

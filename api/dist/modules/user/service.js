@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-import { mapSkillLevel } from "../../types";
+import { mapSkillLevel } from "../../types/index.js";
 const prisma = new PrismaClient();
 export class UserService {
     // Kullanıcı profilini getir
@@ -70,7 +70,7 @@ export class UserService {
                     ...userData,
                     skills: skills ? {
                         deleteMany: {},
-                        create: skills.map(skill => ({
+                        create: skills.map((skill) => ({
                             name: skill.name,
                             level: mapSkillLevel(skill.level),
                             color: skill.color
@@ -78,7 +78,7 @@ export class UserService {
                     } : undefined,
                     achievements: achievements ? {
                         deleteMany: {},
-                        create: achievements.map(a => ({
+                        create: achievements.map((a) => ({
                             title: a.title,
                             description: a.description,
                             icon: a.icon,
@@ -111,7 +111,7 @@ export class UserService {
                 await tx.userExperience.deleteMany({ where: { userId } });
                 if (experience.length > 0) {
                     await tx.userExperience.createMany({
-                        data: experience.map(e => ({
+                        data: experience.map((e) => ({
                             userId,
                             title: e.title,
                             company: e.company,
@@ -126,7 +126,7 @@ export class UserService {
                 await tx.userEducation.deleteMany({ where: { userId } });
                 if (education.length > 0) {
                     await tx.userEducation.createMany({
-                        data: education.map(e => ({
+                        data: education.map((e) => ({
                             userId,
                             school: e.school,
                             degree: e.degree,

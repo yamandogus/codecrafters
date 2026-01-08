@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { LoginSchema, RegisterSchema } from "../../dto/authDto";
-import { AuthService } from "./service";
-import { AppError } from "../../types";
+import { LoginSchema, RegisterSchema } from "../../dto/authDto.js";
+import { AuthService } from "./service.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const authService = new AuthService();

@@ -1,4 +1,4 @@
-import { GoogleOAuthService } from './service';
+import { GoogleOAuthService } from './service.js';
 export class GoogleOAuthController {
     constructor() {
         // Redirect to Google OAuth

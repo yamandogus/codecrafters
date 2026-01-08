@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { GitHubOAuthController } from './controller';
+import { GitHubOAuthController } from './controller.js';
 
 const router = Router();
 const githubController = new GitHubOAuthController();

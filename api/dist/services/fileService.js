@@ -1,2 +1,2 @@
-"use strict";
+export {};
 // File Service - Bu dosyayı kendiniz dolduracaksınız

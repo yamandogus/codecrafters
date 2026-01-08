@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { UserController } from "./controller";
-import { authenticate } from "../../middleware/auth";
+import { UserController } from "./controller.js";
+import { authenticate } from "../../middleware/auth.js";
 const router = Router();
 const userController = new UserController();
 // Korumalı rotalar (authentication gerekli)

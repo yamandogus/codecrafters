@@ -1,5 +1,5 @@
-import { BlogService } from "./service";
-import { CreateBlogSchema, UpdateBlogSchema } from "../../dto/blogDto";
+import { BlogService } from "./service.js";
+import { CreateBlogSchema, UpdateBlogSchema } from "../../dto/blogDto.js";
 import { ZodError } from "zod";
 const blogService = new BlogService();
 export class BlogController {

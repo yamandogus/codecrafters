@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { ForumService } from "./service";
-import { CreateForumPostSchema, UpdateForumPostSchema } from "../../dto/forumDto";
-import { AppError } from "../../types";
+import { ForumService } from "./service.js";
+import { CreateForumPostSchema, UpdateForumPostSchema } from "../../dto/forumDto.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const forumService = new ForumService();

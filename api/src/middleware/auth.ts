@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthenticatedRequest, AppError, AuthenticatedUser } from '../types';
+import { AuthenticatedRequest, AppError, AuthenticatedUser } from '../types/index.js';
 
 const prisma = new PrismaClient();
 
@@ -16,7 +16,7 @@ interface JwtPayload {
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
@@ -25,7 +25,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     }
 
     const token = authHeader.substring(7); // "Bearer " kısmını çıkar
-    
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -35,7 +35,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     // Token'ı doğrula
     const decoded = jwt.verify(
-      token, 
+      token,
       process.env.JWT_ACCESS_SECRET || 'dev-secret'
     ) as JwtPayload;
 
@@ -78,7 +78,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         message: 'Geçersiz token'
       });
     }
-    
+
     if (error instanceof jwt.TokenExpiredError) {
       return res.status(401).json({
         success: false,
@@ -98,20 +98,20 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 export const optionalAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return next(); // Token yoksa devam et
     }
 
     const token = authHeader.substring(7);
-    
+
     if (!token) {
       return next(); // Token yoksa devam et
     }
 
     // Token'ı doğrula
     const decoded = jwt.verify(
-      token, 
+      token,
       process.env.JWT_ACCESS_SECRET || 'dev-secret'
     ) as JwtPayload;
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { JobService } from "./service";
-import { CreateJobSchema, UpdateJobSchema, ApplyJobSchema } from "../../dto/jobsDto";
-import { AppError } from "../../types";
+import { JobService } from "./service.js";
+import { CreateJobSchema, UpdateJobSchema, ApplyJobSchema } from "../../dto/jobsDto.js";
+import { AppError } from "../../types/index.js";
 import { ZodError } from "zod";
 
 const jobService = new JobService();

@@ -1,5 +1,5 @@
-import { JobService } from "./service";
-import { CreateJobSchema, UpdateJobSchema, ApplyJobSchema } from "../../dto/jobsDto";
+import { JobService } from "./service.js";
+import { CreateJobSchema, UpdateJobSchema, ApplyJobSchema } from "../../dto/jobsDto.js";
 import { ZodError } from "zod";
 const jobService = new JobService();
 export class JobController {

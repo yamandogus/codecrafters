@@ -1,5 +1,5 @@
-import { LearningService } from "./service";
-import { CreateResultSchema, UpdateResultSchema } from "../../dto/learningDto";
+import { LearningService } from "./service.js";
+import { CreateResultSchema, UpdateResultSchema } from "../../dto/learningDto.js";
 import { ZodError } from "zod";
 const learningService = new LearningService();
 export class LearningController {

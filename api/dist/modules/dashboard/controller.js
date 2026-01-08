@@ -1,4 +1,4 @@
-import { DashboardService } from "./service";
+import { DashboardService } from "./service.js";
 const dashboardService = new DashboardService();
 export class DashboardController {
     async getUserDashboard(req, res) {

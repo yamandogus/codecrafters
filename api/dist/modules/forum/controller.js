@@ -1,5 +1,5 @@
-import { ForumService } from "./service";
-import { CreateForumPostSchema, UpdateForumPostSchema } from "../../dto/forumDto";
+import { ForumService } from "./service.js";
+import { CreateForumPostSchema, UpdateForumPostSchema } from "../../dto/forumDto.js";
 import { ZodError } from "zod";
 const forumService = new ForumService();
 export class ForumController {

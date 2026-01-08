@@ -1,9 +1,9 @@
-import { LoginDTO, RegisterDTO } from "../../dto/authDto";
+import { LoginDTO, RegisterDTO } from "../../dto/authDto.js";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { AppError } from "../../types";
+import { AppError } from "../../types/index.js";
 
 const prisma = new PrismaClient();
 
@@ -27,7 +27,7 @@ export class AuthService {
 
   async register(data: RegisterDTO) {
     const { name, surname, email, password } = data;
-    
+
     // Debug: Gelen veriyi kontrol et
     console.log('Register data:', { name, surname, email });
 
@@ -40,10 +40,10 @@ export class AuthService {
       throw e;
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     // Use full email as username
     const username = email;
-    
+
     // Create new user
     const newUser = await prisma.user.create({
       data: {

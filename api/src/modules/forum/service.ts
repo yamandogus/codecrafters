@@ -1,5 +1,5 @@
 import { PrismaClient, ForumCategory, Prisma } from "@prisma/client";
-import { CreateForumPostDTO, UpdateForumPostDTO } from "../../dto/forumDto";
+import { CreateForumPostDTO, UpdateForumPostDTO } from "../../dto/forumDto.js";
 
 const prisma = new PrismaClient();
 

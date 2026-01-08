@@ -1,5 +1,5 @@
-import { LoginSchema, RegisterSchema } from "../../dto/authDto";
-import { AuthService } from "./service";
+import { LoginSchema, RegisterSchema } from "../../dto/authDto.js";
+import { AuthService } from "./service.js";
 import { ZodError } from "zod";
 const authService = new AuthService();
 export class AuthController {

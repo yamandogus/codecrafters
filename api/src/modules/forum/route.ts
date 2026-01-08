@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { ForumController } from "./controller";
-import { authenticate } from "../../middleware/auth";
+import { ForumController } from "./controller.js";
+import { authenticate } from "../../middleware/auth.js";
 
 const router = Router();
 const controller = new ForumController();

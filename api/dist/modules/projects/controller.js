@@ -1,5 +1,5 @@
-import { ProjectService } from "./service";
-import { CreateProjectSchema, UpdateProjectSchema } from "../../dto/projectsDto";
+import { ProjectService } from "./service.js";
+import { CreateProjectSchema, UpdateProjectSchema } from "../../dto/projectsDto.js";
 import { ZodError } from "zod";
 const projectService = new ProjectService();
 export class ProjectController {
