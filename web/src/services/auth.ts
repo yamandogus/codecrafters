@@ -6,12 +6,11 @@ export class AuthService {
     try {
       const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
       
-      // Başarılı giriş durumunda token'ı localStorage'a kaydet
-      if (response.success && response.data?.token) {
-        localStorage.setItem('auth_token', response.data.token);
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken);
-        }
+      // Session-based auth kullanılıyor, token localStorage'a kaydetmeye gerek yok
+      // Session cookie otomatik olarak tarayıcıda saklanacak
+      if (response.success && response.data?.user) {
+        // Session-based auth için dummy token
+        localStorage.setItem('auth_token', 'session-based');
       }
       
       return response;
@@ -42,12 +41,16 @@ export class AuthService {
   // Kullanıcı çıkış
   static async logout(): Promise<void> {
     try {
-      // Token'ı localStorage'dan kaldır
+      // Backend'e logout isteği gönder (session'ı destroy etmek için)
+      await apiClient.post('/auth/logout', {});
+    } catch (error) {
+      console.error('Backend logout hatası:', error);
+      // Backend hatası olsa bile devam et
+    } finally {
+      // Token'ları localStorage'dan kaldır
       localStorage.removeItem('auth_token');
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('persist:root'); // Redux persist'ten de temizle
-    } catch {
-      console.error('Logout hatası');
     }
   }
 
@@ -80,19 +83,10 @@ export class AuthService {
 
   // Kullanıcının giriş yapıp yapmadığını kontrol et
   static isAuthenticated(): boolean {
+    // Session-based auth için token kontrolü yapmıyoruz
+    // Backend'deki /auth/check endpoint'i kullanılmalı
     const token = this.getToken();
-    if (!token) return false;
-
-    try {
-      // JWT token'ın geçerliliğini kontrol et (basit exp kontrolü)
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const currentTime = Date.now() / 1000;
-      
-      return payload.exp > currentTime;
-    } catch {
-      // Token decode edilemezse false döner
-      return false;
-    }
+    return token === 'session-based';
   }
 
   // Token'dan kullanıcı bilgilerini al

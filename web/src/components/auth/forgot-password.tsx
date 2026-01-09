@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
@@ -8,18 +8,48 @@ import { Card } from "../ui/card";
 import { toast } from "sonner";
 
 export function ForgotPassword() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
-    console.log("Password reset requested for email:", email);
-    toast("Şifre Sıfırlama İsteği Gönderildi", {
-      description: `Eğer ${email} adresi sistemde kayıtlıysa, şifre sıfırlama bağlantısı gönderilecektir.`,
-      action: {
-        label: "Kapat",
-        onClick: () => console.log("Kapat tıklandı"),
-      },
-    });
+    setLoading(true);
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL 
+        ? (process.env.NEXT_PUBLIC_API_URL.endsWith('/api') 
+            ? process.env.NEXT_PUBLIC_API_URL 
+            : `${process.env.NEXT_PUBLIC_API_URL}/api`)
+        : 'http://localhost:3001/api';
+
+      // Note: Backend endpoint not implemented yet, this is a placeholder
+      // When implemented, uncomment the following:
+      /*
+      const response = await fetch(`${apiUrl}/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Şifre sıfırlama isteği gönderilemedi');
+      }
+      */
+
+      toast.success("Şifre Sıfırlama İsteği Gönderildi", {
+        description: `Eğer ${email} adresi sistemde kayıtlıysa, şifre sıfırlama bağlantısı gönderilecektir.`,
+      });
+      
+      setEmail("");
+    } catch (error) {
+      toast.error("Hata", {
+        description: error instanceof Error ? error.message : "Bir hata oluştu. Lütfen tekrar deneyin.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <Card className="shadow-input mx-auto w-full max-w-md rounded-none p-4 md:rounded-2xl md:p-8 bg-card">
@@ -33,14 +63,24 @@ export function ForgotPassword() {
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">E-posta Adresi</Label>
-          <Input name="email" id="email" placeholder="ornek@codecrafters.com" type="email" required />
+          <Input 
+            name="email" 
+            id="email" 
+            placeholder="ornek@codecrafters.com" 
+            type="email" 
+            required 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+          />
         </LabelInputContainer>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-purple-600 to-purple-800 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-gradient-to-br dark:from-purple-700 dark:to-purple-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-purple-600 to-purple-800 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-gradient-to-br dark:from-purple-700 dark:to-purple-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
+          disabled={loading}
         >
-          Sıfırlama Bağlantısı Gönder &rarr;
+          {loading ? "Gönderiliyor..." : "Sıfırlama Bağlantısı Gönder"} &rarr;
           <BottomGradient />
         </button>
 

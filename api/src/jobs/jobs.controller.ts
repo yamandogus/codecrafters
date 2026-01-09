@@ -52,4 +52,10 @@ export class JobsController {
   async getApplications(@Param('id') id: string) {
     return this.jobsService.getApplications(id);
   }
+
+  @Get('applications/me')
+  @UseGuards(AuthenticatedGuard)
+  async getMyApplications(@Req() req: { user: { id: string } }) {
+    return this.jobsService.getMyApplications(req.user.id);
+  }
 }

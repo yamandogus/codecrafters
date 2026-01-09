@@ -20,6 +20,6 @@ export interface DashboardData {
 
 export const dashboardService = {
     getUserDashboard: () => {
-        return apiClient.get<DashboardData>("/dashboard/user");
+        return apiClient.get<DashboardData>("/users/dashboard");
     }
 };

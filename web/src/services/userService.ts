@@ -43,7 +43,7 @@ export class UserService {
 
   static async getUserByUsername(username: string): Promise<ProfileUser | null> {
     try {
-      const response = await apiClient.get<UserResponse>(`/users/${username}`);
+      const response = await apiClient.get<UserResponse>(`/users/username/${username}`);
       if (response.success && response.data) {
         return this.adaptUser(response.data);
       }
@@ -54,17 +54,17 @@ export class UserService {
     }
   }
 
-  private static adaptUser(data: UserResponse): ProfileUser {
+  private static adaptUser(data: any): ProfileUser {
     // Combine name and surname if needed, or just use name if surname is missing
     const fullName = data.surname ? `${data.name} ${data.surname}` : data.name;
 
-    // Adapt stats
+    // Adapt stats - use _count if available, otherwise use array lengths
     const stats = {
-      projects: data.projectsCreated?.length || 0,
-      events: data.events?.length || 0, // Assuming events relation
-      followers: data.followers?.length || 0, // Assuming followers relation
-      following: data.following?.length || 0, // Assuming following relation
-      posts: data.blogPosts?.length || 0,
+      projects: data._count?.projectsCreated || data.projectsCreated?.length || 0,
+      events: data._count?.eventsRegistered || (data.eventsRegistered?.length) || 0,
+      followers: data._count?.followersRelation || data.followers?.length || 0,
+      following: data._count?.followingRelation || data.following?.length || 0,
+      posts: data._count?.blogPosts || data.blogPosts?.length || 0,
       likes: 0 // Not available in backend response yet
     };
 

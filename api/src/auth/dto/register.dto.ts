@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, MaxLength } from "class-validator"
+import { IsEmail, IsNotEmpty, IsString, MinLength, MaxLength, IsOptional } from "class-validator"
 
 export class RegisterDto {
   @IsEmail()
@@ -6,10 +6,10 @@ export class RegisterDto {
   email: string
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(3)
   @MaxLength(20)
-  username: string
+  username?: string
 
   @IsString()
   @IsNotEmpty()
@@ -19,4 +19,13 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   name: string
+
+  @IsString()
+  @IsOptional()
+  surname?: string
+
+  // Frontend'den gelen confirmPassword'ü kabul et ama validate etme
+  @IsString()
+  @IsOptional()
+  confirmPassword?: string
 }

@@ -1,7 +1,7 @@
 import { Injectable, ConflictException, UnauthorizedException } from "@nestjs/common"
 import * as bcrypt from "bcrypt"
 import { UsersService } from "../users/users.service"
-import type { RegisterDto } from "./dto/register.dto"
+import { RegisterDto } from "./dto/register.dto"
 
 @Injectable()
 export class AuthService {
@@ -13,16 +13,34 @@ export class AuthService {
       throw new ConflictException("Email already exists")
     }
 
-    const existingUsername = await this.usersService.findByUsername(registerDto.username)
-    if (existingUsername) {
-      throw new ConflictException("Username already exists")
+    // Username yoksa email'den otomatik oluştur
+    let username = registerDto.username
+    if (!username) {
+      const baseUsername = registerDto.email.split("@")[0]
+      username = baseUsername
+      let counter = 1
+      
+      // Username unique olana kadar dene
+      while (await this.usersService.findUsernameExists(username)) {
+        username = `${baseUsername}${counter}`
+        counter++
+      }
+    } else {
+      // Username varsa kontrol et
+      const existingUsername = await this.usersService.findUsernameExists(username)
+      if (existingUsername) {
+        throw new ConflictException("Username already exists")
+      }
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10)
 
     const user = await this.usersService.create({
-      ...registerDto,
+      email: registerDto.email,
+      username,
       password: hashedPassword,
+      name: registerDto.name,
+      surname: registerDto.surname,
     })
 
     const { password, ...result } = user

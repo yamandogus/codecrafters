@@ -26,13 +26,26 @@ export interface UserResponse {
     twitter?: string;
     createdAt: string;
     updatedAt?: string;
+    isVerified?: boolean;
+    isMentor?: boolean;
     skills?: SkillData[];
     achievements?: AchievementData[];
+    experience?: any[];
+    education?: any[];
     projectsCreated?: ProjectData[];
     blogPosts?: BlogPostData[];
     events?: EventData[];
+    eventsRegistered?: any[];
     followers?: UserResponse[];
     following?: UserResponse[];
+    _count?: {
+        projectsCreated?: number;
+        eventsRegistered?: number;
+        followersRelation?: number;
+        followingRelation?: number;
+        blogPosts?: number;
+        forumPosts?: number;
+    };
 }
 
 export interface SkillData {

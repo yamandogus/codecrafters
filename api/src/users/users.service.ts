@@ -83,6 +83,14 @@ export class UsersService {
         education: {
           orderBy: { startDate: "desc" },
         },
+        projectsCreated: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        },
+        blogPosts: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        },
         _count: {
           select: {
             blogPosts: true,
@@ -90,6 +98,7 @@ export class UsersService {
             projectsCreated: true,
             followersRelation: true,
             followingRelation: true,
+            eventsRegistered: true,
           },
         },
       },
@@ -121,6 +130,14 @@ export class UsersService {
         education: {
           orderBy: { startDate: "desc" },
         },
+        projectsCreated: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        },
+        blogPosts: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        },
         _count: {
           select: {
             blogPosts: true,
@@ -128,6 +145,7 @@ export class UsersService {
             projectsCreated: true,
             followersRelation: true,
             followingRelation: true,
+            eventsRegistered: true,
           },
         },
       },
@@ -139,6 +157,14 @@ export class UsersService {
 
     const { password, ...userWithoutPassword } = user
     return userWithoutPassword
+  }
+
+  // Username kontrolü için ayrı metod (findByUsername exception fırlatıyor)
+  async findUsernameExists(username: string): Promise<boolean> {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    })
+    return !!user
   }
 
   async create(createUserData: {
@@ -393,5 +419,143 @@ export class UsersService {
     })
 
     return follows.map((f) => f.following)
+  }
+
+  async findByGoogleId(googleId: string) {
+    return this.prisma.user.findUnique({
+      where: { googleId },
+    })
+  }
+
+  async findByGithubId(githubId: string) {
+    return this.prisma.user.findUnique({
+      where: { githubId },
+    })
+  }
+
+  async createOAuthUser(data: {
+    email: string
+    name: string
+    surname?: string
+    googleId?: string
+    githubId?: string
+    provider: "google" | "github"
+    avatar?: string
+  }) {
+    // Generate unique username from email
+    const baseUsername = data.email.split("@")[0]
+    let username = baseUsername
+    let counter = 1
+
+    // Ensure username is unique
+    while (await this.prisma.user.findUnique({ where: { username } })) {
+      username = `${baseUsername}${counter}`
+      counter++
+    }
+
+    return this.prisma.user.create({
+      data: {
+        email: data.email,
+        username,
+        name: data.name,
+        surname: data.surname,
+        googleId: data.googleId,
+        githubId: data.githubId,
+        provider: data.provider,
+        avatar: data.avatar,
+        isVerified: true, // OAuth users are verified
+      },
+    })
+  }
+
+  async updateOAuthUser(userId: string, data: {
+    googleId?: string
+    githubId?: string
+    provider?: "google" | "github"
+    avatar?: string
+  }) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data,
+    })
+  }
+
+  async getDashboard(userId: string) {
+    const [applications, eventRegistrations] = await Promise.all([
+      this.prisma.jobApplication.findMany({
+        where: { userId },
+        include: {
+          job: {
+            select: {
+              id: true,
+              title: true,
+              company: true,
+              location: true,
+              type: true,
+              category: true,
+              status: true,
+            },
+          },
+        },
+        orderBy: { appliedAt: "desc" },
+        take: 5, // Son 5 başvuru
+      }),
+      this.prisma.eventRegistration.findMany({
+        where: { userId },
+        include: {
+          event: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              startDate: true,
+              endDate: true,
+              location: true,
+              isOnline: true,
+              image: true,
+              status: true,
+            },
+          },
+        },
+        orderBy: { registeredAt: "desc" },
+      }),
+    ])
+
+    // Sadece yaklaşan etkinlikleri filtrele (startDate bugünden sonra)
+    const now = new Date()
+    const upcomingEvents = eventRegistrations
+      .filter(reg => new Date(reg.event.startDate) >= now)
+      .map(reg => reg.event)
+      .slice(0, 5) // İlk 5 yaklaşan etkinlik
+
+    // Toplam sayılar
+    const [totalApplications, totalEvents] = await Promise.all([
+      this.prisma.jobApplication.count({ where: { userId } }),
+      this.prisma.eventRegistration.count({ where: { userId } }),
+    ])
+
+    return {
+      stats: {
+        totalApplications,
+        totalEvents,
+      },
+      recentApplications: applications.map(app => ({
+        id: app.id,
+        status: app.status,
+        appliedAt: app.appliedAt.toISOString(),
+        job: app.job,
+      })),
+      upcomingEvents: upcomingEvents.map(event => ({
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        startDate: event.startDate.toISOString(),
+        endDate: event.endDate.toISOString(),
+        location: event.location,
+        isOnline: event.isOnline,
+        image: event.image,
+        status: event.status,
+      })),
+    }
   }
 }

@@ -245,4 +245,40 @@ export class EventsService {
       orderBy: { registeredAt: "desc" },
     })
   }
+
+  async getMyRegistrations(userId: string) {
+    const registrations = await this.prisma.eventRegistration.findMany({
+      where: { userId },
+      include: {
+        event: {
+          include: {
+            organizerUser: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                avatar: true,
+              },
+            },
+            _count: {
+              select: { registrations: true },
+            },
+          },
+        },
+      },
+      orderBy: { registeredAt: "desc" },
+    })
+
+    // Map registrations to include event data with registration info
+    return registrations.map(reg => ({
+      ...reg.event,
+      registrations: [{
+        id: reg.id,
+        registeredAt: reg.registeredAt,
+        status: reg.status,
+        experience: reg.experience,
+        motivation: reg.motivation,
+      }],
+    }))
+  }
 }

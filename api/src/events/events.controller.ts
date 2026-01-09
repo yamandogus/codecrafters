@@ -58,4 +58,10 @@ export class EventsController {
   async unregister(@Param('id') id: string, @Req() req: { user: { id: string } }) {
     return this.eventsService.unregisterFromEvent(id, req.user.id)
   }
+
+  @Get('my-registrations')
+  @UseGuards(AuthenticatedGuard)
+  async getMyRegistrations(@Req() req: { user: { id: string } }) {
+    return this.eventsService.getMyRegistrations(req.user.id);
+  }
 }

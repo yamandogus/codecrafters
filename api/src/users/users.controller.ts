@@ -12,14 +12,27 @@ export class UsersController {
     return this.usersService.findAll(query)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findById(id);
+  // Specific routes MUST come before :id parameter route
+  @UseGuards(AuthenticatedGuard)
+  @Get("me")
+  getMe(@Req() req: { user: { id: string } }) {
+    return this.usersService.findById(req.user.id);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('dashboard')
+  getDashboard(@Req() req: { user: { id: string } }) {
+    return this.usersService.getDashboard(req.user.id);
   }
 
   @Get('username/:username')
   findByUsername(@Param('username') username: string) {
     return this.usersService.findByUsername(username);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findById(id);
   }
 
   @UseGuards(AuthenticatedGuard)

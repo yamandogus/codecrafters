@@ -167,7 +167,7 @@ export const getRoleBasedNavigation = (userRole?: string): NavigationItem[] => {
         {
           title: "Admin Dashboard",
           description: "Sistem yönetimi ana paneli",
-          href: "/admin/dashboard",
+          href: "/admin",
           icon: BarChart3,
           role: 'ADMIN'
         },
@@ -214,8 +214,14 @@ export const getRoleBasedNavigation = (userRole?: string): NavigationItem[] => {
 export const getRoleBasedUserMenu = (userRole?: string): UserMenuItem[] => {
   const baseUserMenu: UserMenuItem[] = [
     {
+      title: "Dashboard",
+      href: userRole === 'ADMIN' ? "/admin" : userRole === 'MODERATOR' ? "/moderator/dashboard" : "/dashboard",
+      icon: Activity,
+      role: 'ALL'
+    },
+    {
       title: "Profilim",
-      href: "/profile",
+      href: "/profile/me",
       icon: User,
       role: 'ALL'
     },
@@ -260,7 +266,7 @@ export const getRoleBasedUserMenu = (userRole?: string): UserMenuItem[] => {
   if (userRole === 'ADMIN') {
     baseUserMenu.push({
       title: "Admin Panel",
-      href: "/admin/dashboard",
+      href: "/admin",
       icon: Settings,
       role: 'ADMIN'
     });
@@ -294,8 +300,14 @@ export const getRoleBasedUserMenu = (userRole?: string): UserMenuItem[] => {
 export const getRoleBasedQuickActions = (userRole?: string): UserMenuItem[] => {
   const baseActions: UserMenuItem[] = [
     {
+      title: "Dashboard",
+      href: userRole === 'ADMIN' ? "/admin" : userRole === 'MODERATOR' ? "/moderator/dashboard" : "/dashboard",
+      icon: Activity,
+      role: 'ALL'
+    },
+    {
       title: "Profilim",
-      href: "/profile",
+      href: "/profile/me",
       icon: User,
       role: 'ALL'
     },
@@ -319,7 +331,7 @@ export const getRoleBasedQuickActions = (userRole?: string): UserMenuItem[] => {
   if (userRole === 'ADMIN') {
     baseActions.push({
       title: "Admin Panel", 
-      href: "/admin/dashboard",
+      href: "/admin",
       icon: Settings,
       role: 'ADMIN'
     });

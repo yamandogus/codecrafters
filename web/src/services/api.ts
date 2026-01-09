@@ -56,6 +56,7 @@ class ApiClient {
         'Content-Type': 'application/json',
         ...options.headers,
       },
+      credentials: 'include', // Session cookies için gerekli
       ...options,
     };
 
@@ -89,10 +90,29 @@ class ApiClient {
 
       if (!response.ok) {
         console.error(`[API Error] Request to ${url} failed with status ${response.status} - ${response.statusText}`);
-        throw new Error(data.message || 'Bir hata oluştu');
+        console.error('Error details:', data);
+        
+        // Validation error'ları için özel mesaj
+        if (Array.isArray(data.message)) {
+          const errorMessages = data.message.join(', ');
+          throw new Error(errorMessages);
+        }
+        
+        throw new Error(data.message || data.error || 'Bir hata oluştu');
       }
 
-      return data;
+      // NestJS response formatını ApiResponse formatına çevir
+      // Eğer zaten ApiResponse formatındaysa olduğu gibi döndür
+      if (data.success !== undefined) {
+        return data;
+      }
+      
+      // NestJS doğrudan obje döndürüyorsa wrapper'a al
+      return {
+        success: true,
+        message: data.message || 'Success',
+        data: data,
+      };
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -103,7 +123,10 @@ class ApiClient {
 
   // GET isteği
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: 'GET' });
+    return this.request<T>(endpoint, { 
+      method: 'GET',
+      credentials: 'include',
+    });
   }
 
   // POST isteği
@@ -111,6 +134,7 @@ class ApiClient {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
+      credentials: 'include',
     });
   }
 

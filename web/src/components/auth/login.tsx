@@ -72,8 +72,80 @@ export function Login() {
   };
 
   const handleOAuthLogin = (provider: 'google' | 'github') => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-    window.location.href = `${apiUrl}/auth/${provider}`;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL 
+      ? (process.env.NEXT_PUBLIC_API_URL.endsWith('/api') 
+          ? process.env.NEXT_PUBLIC_API_URL 
+          : `${process.env.NEXT_PUBLIC_API_URL}/api`)
+      : 'http://localhost:3001/api';
+    
+    const authUrl = `${apiUrl}/auth/${provider}`;
+    
+    // Calculate popup dimensions
+    const width = 500;
+    const height = 600;
+    const left = (window.screen.width / 2) - (width / 2);
+    const top = (window.screen.height / 2) - (height / 2);
+
+    // Open popup window
+    const popup = window.open(
+      authUrl,
+      `${provider}OAuth`,
+      `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=yes,resizable=yes,scrollbars=yes,status=yes`
+    );
+
+    if (!popup) {
+      toast.error("Popup Engellendi", {
+        description: "Lütfen popup'ları etkinleştirin ve tekrar deneyin.",
+      });
+      return;
+    }
+
+    // Monitor popup for completion
+    const checkInterval = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkInterval);
+      }
+    }, 500);
+
+    // Listen for postMessage from callback page
+    const messageHandler = (event: MessageEvent) => {
+      // Verify origin
+      if (event.origin !== window.location.origin) {
+        return;
+      }
+
+      if (event.data.type === 'OAUTH_SUCCESS') {
+        clearInterval(checkInterval);
+        window.removeEventListener('message', messageHandler);
+        popup.close();
+        
+        toast.success("Giriş Başarılı", {
+          description: 'CodeCrafters\'e Hoş Geldiniz!',
+        });
+        
+        // Reload page to update auth state
+        window.location.reload();
+      } else if (event.data.type === 'OAUTH_ERROR') {
+        clearInterval(checkInterval);
+        window.removeEventListener('message', messageHandler);
+        popup.close();
+        
+        toast.error("Giriş Başarısız", {
+          description: event.data.error || 'Kimlik doğrulama başarısız oldu.',
+        });
+      }
+    };
+
+    window.addEventListener('message', messageHandler);
+
+    // Cleanup after 5 minutes
+    setTimeout(() => {
+      clearInterval(checkInterval);
+      window.removeEventListener('message', messageHandler);
+      if (!popup.closed) {
+        popup.close();
+      }
+    }, 300000); // 5 minutes
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -104,11 +176,11 @@ export function Login() {
             router.push("/admin");
             break;
           case 'MODERATOR':
-            router.push("/moderator");
+            router.push("/moderator/dashboard");
             break;
           case 'USER':
           default:
-            router.push("/");
+            router.push("/dashboard");
             break;
         }
       }

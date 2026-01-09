@@ -46,6 +46,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   getRoleBasedNavigation,
   getRoleBasedUserMenu,
@@ -65,8 +66,18 @@ export const Navbar = () => {
   const quickActions = getRoleBasedQuickActions(user?.role);
 
   const logout = async () => {
-    await authLogout();
-    router.push("/");
+    try {
+      await authLogout();
+      toast.success("Çıkış Başarılı", {
+        description: "Güvenli bir şekilde çıkış yaptınız."
+      });
+      router.push("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Çıkış Hatası", {
+        description: "Bir hata oluştu, tekrar deneyin."
+      });
+    }
   };
 
   // Scroll listener

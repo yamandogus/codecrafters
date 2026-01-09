@@ -236,4 +236,24 @@ export class JobsService {
       orderBy: { appliedAt: "desc" },
     })
   }
+
+  async getMyApplications(userId: string) {
+    return this.prisma.jobApplication.findMany({
+      where: { userId },
+      include: {
+        job: {
+          select: {
+            id: true,
+            title: true,
+            company: true,
+            location: true,
+            type: true,
+            category: true,
+            status: true,
+          },
+        },
+      },
+      orderBy: { appliedAt: "desc" },
+    })
+  }
 }
