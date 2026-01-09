@@ -7,7 +7,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ========================================
@@ -167,8 +166,20 @@ model User {
   refreshTokens     RefreshToken[]
   jobsPosted        Job[]
   eventsOrganized   Event[]             @relation("OrganizedEvents")
+  sessions          Session[]
 
   @@map("users")
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model RefreshToken {
